@@ -2322,7 +2322,11 @@ xs_dict *msg_question(snac *user, const char *content, xs_list *attach,
 {
     xs_dict *msg = msg_note(user, content, NULL, NULL, attach, 0, NULL, NULL);
     int max      = 8;
+    const xs_number *max_options = xs_dict_get(srv_config, "max_poll_options");
     xs_set seen;
+
+    if (xs_type(max_options) == XSTYPE_NUMBER)
+        max = xs_number_get(max_options);
 
     msg = xs_dict_set(msg, "type", "Question");
 
