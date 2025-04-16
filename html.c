@@ -212,10 +212,11 @@ xs_str *format_text_with_emoji(snac *user, const char *text, int ems, const char
 
 xs_str *html_date_label(snac *user, const char *date)
 {
-    time_t t = xs_parse_iso_date(date, 0);
+    time_t t;
 
     /* check if a user has actually set a timezone */
-    if (t != 0 && xs_dict_get(user->config, "tz") != NULL) {
+    if (user != NULL && xs_dict_get(user->config, "tz") != NULL &&
+        (t = xs_parse_iso_date(date, 0)) != 0) {
         t += xs_tz_offset(user->tz);
 
         time_t today = time(NULL);
