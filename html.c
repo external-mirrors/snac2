@@ -817,7 +817,13 @@ xs_html *html_note(snac *user, const char *summary,
                         xs_html_text(L("End in 1 hour"))),
                     xs_html_tag("option",
                         xs_html_attr("value", "86400"),
-                        xs_html_text(L("End in 1 day"))))));
+                        xs_html_text(L("End in 1 day"))),
+                    xs_html_tag("option",
+                        xs_html_attr("value", "259200"),
+                        xs_html_text(L("End in 3 days"))),
+                    xs_html_tag("option",
+                        xs_html_attr("value", "31536000"),
+                        xs_html_text(L("End in 1 year"))))));
     }
 
     xs_html_add(form,
@@ -3207,6 +3213,7 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
         xs_html *add_hashtags = xs_html_tag("ul",
             xs_html_attr("class", "snac-more-hashtags"));
 
+        // todo: wafrn hashtags
         xs_list_foreach(tags, tag) {
             const char *type = xs_dict_get(tag, "type");
 
@@ -3856,6 +3863,8 @@ xs_html *html_people_list(snac *user, xs_list *list, const char *header, const c
                 /* free the html, by rendering it... */
                 xs_free(xs_html_render(snac_metadata));
             }
+
+            // todo: add metadata from "attachemnt"->"PropertyValue"
 
             /* buttons */
             xs *btn_form_action = xs_fmt("%s/admin/action", user->actor);

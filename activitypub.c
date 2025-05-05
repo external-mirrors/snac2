@@ -2321,6 +2321,7 @@ xs_dict *msg_question(snac *user, const char *content, xs_list *attach,
 /* creates a Question message */
 {
     xs_dict *msg = msg_note(user, content, NULL, NULL, attach, 0, NULL, NULL);
+    int max_line = 200;
     int max      = 8;
     const xs_number *max_options = xs_dict_get(srv_config, "max_poll_options");
     xs_set seen;
@@ -2345,8 +2346,8 @@ xs_dict *msg_question(snac *user, const char *content, xs_list *attach,
             xs *v2 = xs_dup(v);
             xs *d  = xs_dict_new();
 
-            if (strlen(v2) > 60) {
-                v2[60] = '\0';
+            if (strlen(v2) > max_line) {
+                v2[max_line] = '\0';
                 v2 = xs_str_cat(v2, "...");
             }
 
