@@ -3338,10 +3338,11 @@ xs_html *html_people_list(snac *user, xs_list *list, const char *header, const c
 
             /* content (user bio) */
             const char *c = xs_dict_get(actor, "summary");
+            const xs_val *tag = xs_dict_get(actor, "tag");
 
             if (!xs_is_null(c)) {
                 xs *sc = sanitize(c);
-                sc = replace_shortnames(sc, xs_dict_get(actor, "tag"), 2, proxy);
+                sc = replace_shortnames(sc, tag, 2, proxy);
 
                 xs_html *snac_content = xs_html_tag("div",
                     xs_html_attr("class", "snac-content"));
@@ -3371,13 +3372,22 @@ xs_html *html_people_list(snac *user, xs_list *list, const char *header, const c
 
                 if (!xs_is_null(type) && !xs_is_null(name) &&
                     !xs_is_null(value) && strcmp(type, "PropertyValue") == 0) {
+                    /* both the name and the value can contain emoji */
+                    xs *nam = sanitize(name);
+                    nam = replace_shortnames(nam, tag, 1, proxy);
+
+                    /* todo: sometimes the value is transmitted as markdown and not html ._. */
                     xs *val = sanitize(value);
-                    val = replace_shortnames(val, xs_dict_get(actor, "tag"), 1, proxy);
+                    val = replace_shortnames(val, tag, 1, proxy);
+
+                    /* delete <p> tags, because some software sends them */
+                    val = xs_replace_i(val, "<p>", "");
+                    val = xs_replace_i(val, "</p>", "");
 
                     xs_html_add(snac_metadata,
                         xs_html_tag("span",
                             xs_html_attr("class", "snac-property-name"),
-                            xs_html_text(name)),
+                            xs_html_raw(nam)),
                         xs_html_text(":"),
                         xs_html_raw("&nbsp;"),
                         xs_html_tag("span",
