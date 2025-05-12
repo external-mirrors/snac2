@@ -3357,6 +3357,46 @@ xs_html *html_people_list(snac *user, xs_list *list, const char *header, const c
                 xs_html_add(snac_post, snac_content);
             }
 
+            /* add user metadata */
+            xs_html *snac_metadata = xs_html_tag("div",
+                xs_html_attr("class", "snac-metadata"));
+
+            int count = 0;
+            const xs_val *v;
+            const xs_list *attachment = xs_dict_get(actor, "attachment");
+            xs_list_foreach(attachment, v) {
+                const char *type  = xs_dict_get(v, "type");
+                const char *name  = xs_dict_get(v, "name");
+                const char *value = xs_dict_get(v, "value");
+
+                if (!xs_is_null(type) && !xs_is_null(name) &&
+                    !xs_is_null(value) && strcmp(type, "PropertyValue") == 0) {
+                    xs *val = sanitize(value);
+                    val = replace_shortnames(val, xs_dict_get(actor, "tag"), 1, proxy);
+
+                    xs_html_add(snac_metadata,
+                        xs_html_tag("span",
+                            xs_html_attr("class", "snac-property-name"),
+                            xs_html_text(name)),
+                        xs_html_text(":"),
+                        xs_html_raw("&nbsp;"),
+                        xs_html_tag("span",
+                            xs_html_attr("class", "snac-property-value"),
+                            xs_html_raw(val)),
+                        xs_html_sctag("br", NULL));
+
+                    count++;
+                }
+            }
+
+            if (count > 0) {
+                xs_html_add(snac_post, snac_metadata);
+            }
+            else {
+                /* free the html, by rendering it... */
+                xs_free(xs_html_render(snac_metadata));
+            }
+
             /* buttons */
             xs *btn_form_action = xs_fmt("%s/admin/action", user->actor);
 
