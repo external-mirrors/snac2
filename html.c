@@ -3395,14 +3395,14 @@ xs_html *html_people_list(snac *user, xs_list *list, const char *header, const c
                 count++;
             }
 
-            if (count > 0) {
+            const xs_list *attachment = xs_dict_get(actor, "attachment");
+            if (count > 0 && xs_list_len(attachment) > 0) {
                 xs_html_add(snac_metadata,
                     xs_html_sctag("hr",
                         xs_html_attr("class", "snac-property-divider")));
             }
 
             const xs_val *v;
-            const xs_list *attachment = xs_dict_get(actor, "attachment");
             xs_list_foreach(attachment, v) {
                 const char *type  = xs_dict_get(v, "type");
                 const char *name  = xs_dict_get(v, "name");
