@@ -9,7 +9,8 @@
 - [NodeInfo](https://nodeinfo.diaspora.software/)
   - 2.0 and 2.1.
 - [Webmention](https://www.w3.org/TR/webmention/)
-  - Receive-only. `/webmention-hook` accepts notifications and records them for relevant timelines.
+  - Incoming: `/webmention-hook` accepts notifications and records them for relevant timelines.
+  - Outgoing: links in posts are tried for Webmention hooks.
 
 ## FEP support
 
