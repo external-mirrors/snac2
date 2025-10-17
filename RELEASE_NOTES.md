@@ -10,6 +10,8 @@ Mastodon API: fixed post deletion.
 
 Fixed outbox collection (contributed by byte).
 
+New file FEDERATION.md (contributed by andypiper).
+
 Updated Czech, Spanish and Brazilian Portuguese translations (contributed by pmjv and daltux).
 
 ## 2.83
