@@ -533,6 +533,117 @@ xs_str *mastoapi_id(const xs_dict *msg)
 #define MID_TO_MD5(id) (id + 10)
 
 
+static xs_val *get_count_from_actor(const xs_dict *actor, const char *field_names[], const char *collection_url_field)
+/* helper to extract count from actor dict using various field name variations or from cached collection */
+{
+    xs_val *count = NULL;
+
+    /* try direct field name variations first */
+    for (int i = 0; field_names[i] && xs_type(count) != XSTYPE_NUMBER; i++) {
+        const xs_number *val = xs_dict_get(actor, field_names[i]);
+        if (xs_type(val) == XSTYPE_NUMBER)
+            count = xs_dup(val);
+    }
+
+    /* if not found directly, try to get from cached collection object */
+    if (xs_type(count) != XSTYPE_NUMBER) {
+        const char *url = xs_dict_get(actor, collection_url_field);
+        if (!xs_is_null(url)) {
+            xs *coll = NULL;
+            if (valid_status(object_get(url, &coll))) {
+                const xs_number *total = xs_dict_get(coll, "totalItems");
+                if (xs_type(total) == XSTYPE_NUMBER)
+                    count = xs_dup(total);
+            }
+        }
+    }
+
+    return count;
+}
+
+
+static const xs_list *get_collection_items(snac *snac, const char *collection_url,
+                                           xs_dict **out_collection, xs_dict **out_page)
+/* fetches items from an ActivityPub collection (outbox, etc) with minimal HTTP requests */
+{
+    const xs_list *items = NULL;
+    xs_dict *collection = NULL;
+
+    if (activitypub_request(snac, collection_url, &collection) == 200) {
+        /* check if items are directly embedded */
+        items = xs_dict_get(collection, "orderedItems");
+        if (xs_is_null(items))
+            items = xs_dict_get(collection, "items");
+
+        if (!xs_is_null(items)) {
+            /* items found in main collection - transfer ownership to keep items valid */
+            if (out_collection)
+                *out_collection = collection;
+            return items;
+        }
+
+        /* if no items, try fetching first page (only 1 extra request) */
+        const char *first_url = xs_dict_get(collection, "first");
+        if (!xs_is_null(first_url)) {
+            xs_dict *first_page = NULL;
+            if (activitypub_request(snac, first_url, &first_page) == 200) {
+                items = xs_dict_get(first_page, "orderedItems");
+                if (xs_is_null(items))
+                    items = xs_dict_get(first_page, "items");
+
+                if (!xs_is_null(items)) {
+                    /* items found in first page - transfer ownership to keep items valid */
+                    if (out_page)
+                        *out_page = first_page;
+                    xs_free(collection);
+                    return items;
+                }
+                xs_free(first_page);
+            }
+        }
+        xs_free(collection);
+    }
+
+    return NULL;
+}
+
+
+static const xs_dict *extract_post_from_item(const xs_val *item)
+/* extracts the post object from an outbox item, handling Create/Announce wrappers */
+{
+    if (xs_type(item) != XSTYPE_DICT)
+        return NULL;
+
+    const char *item_type = xs_dict_get(item, "type");
+    const xs_dict *post = item;
+
+    /* if it's an activity, try to get embedded object */
+    if (!xs_is_null(item_type) &&
+        (strcmp(item_type, "Create") == 0 || strcmp(item_type, "Announce") == 0)) {
+        const xs_val *obj = xs_dict_get(item, "object");
+
+        /* only use embedded objects, skip URL references (would need HTTP fetch) */
+        if (!xs_is_null(obj) && xs_type(obj) == XSTYPE_DICT)
+            post = obj;
+        else
+            return NULL;
+    }
+
+    return post;
+}
+
+
+static int is_valid_post_type(const char *post_type)
+/* checks if a type is a valid post type for timeline display */
+{
+    return !xs_is_null(post_type) &&
+           (strcmp(post_type, "Note") == 0 ||
+            strcmp(post_type, "Article") == 0 ||
+            strcmp(post_type, "Question") == 0 ||
+            strcmp(post_type, "Page") == 0);
+}
+
+
 xs_dict *mastoapi_account(snac *logged, const xs_dict *actor)
 /* converts an ActivityPub actor to a Mastodon account */
 {
@@ -661,9 +772,22 @@ xs_dict *mastoapi_account(snac *logged, const xs_dict *actor)
     }
 
     acct = xs_dict_append(acct, "locked", xs_stock(XSTYPE_FALSE));
-    acct = xs_dict_append(acct, "followers_count", xs_stock(0));
-    acct = xs_dict_append(acct, "following_count", xs_stock(0));
-    acct = xs_dict_append(acct, "statuses_count", xs_stock(0));
+
+    /* try to get counts from actor object if available (some servers include these) */
+    const char *fcount_fields[] = { "followersCount", "followers_count", NULL };
+    const char *gcount_fields[] = { "followingCount", "following_count", NULL };
+    const char *scount_fields[] = { "statusesCount", "statuses_count", "totalItems", NULL };
+
+    xs *followers_count = get_count_from_actor(actor, fcount_fields, "followers");
+    xs *following_count = get_count_from_actor(actor, gcount_fields, "following");
+    xs *statuses_count = get_count_from_actor(actor, scount_fields, "outbox");
+
+    acct = xs_dict_append(acct, "followers_count",
+        xs_type(followers_count) == XSTYPE_NUMBER ? followers_count : xs_stock(0));
+    acct = xs_dict_append(acct, "following_count",
+        xs_type(following_count) == XSTYPE_NUMBER ? following_count : xs_stock(0));
+    acct = xs_dict_append(acct, "statuses_count",
+        xs_type(statuses_count) == XSTYPE_NUMBER ? statuses_count : xs_stock(0));
 
     xs *fields = xs_list_new();
     p = xs_dict_get(actor, "attachment");
@@ -1679,6 +1803,11 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
             xs *out   = NULL;
             xs *actor = NULL;
 
+            if (logged_in && strcmp(uid, "familiar_followers") == 0) { /** **/
+                /* familiar followers endpoint - return empty array */
+                out = xs_list_new();
+            }
+            else
             if (logged_in && strcmp(uid, "search") == 0) { /** **/
                 /* search for accounts starting with q */
                 const char *aq = xs_dict_get(args, "q");
@@ -1764,26 +1893,59 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
                 else
                 if (strcmp(opt, "statuses") == 0) { /** **/
                     /* the public list of posts of a user */
+                    const char *limit_s  = xs_dict_get(args, "limit");
+                    const char *o_max_id = xs_dict_get(args, "max_id");
+                    int limit = limit_s ? atoi(limit_s) : 20;
+                    xs *max_id = o_max_id ? xs_tolower_i(xs_dup(o_max_id)) : NULL;
+
+                    srv_debug(1, xs_fmt("account statuses: max_id=%s limit=%d", max_id ? max_id : "(null)", limit));
+
                     xs *timeline = timeline_simple_list(&snac2, "public", 0, 256, NULL);
                     xs_list *p   = timeline;
                     const xs_str *v;
+                    xs_set seen;
+                    int cnt = 0;
+                    int skip_until_max = max_id != NULL;
 
                     out = xs_list_new();
+                    xs_set_init(&seen);
 
-                    while (xs_list_iter(&p, &v)) {
+                    while (xs_list_iter(&p, &v) && cnt < limit) {
                         xs *msg = NULL;
 
                         if (valid_status(timeline_get_by_md5(&snac2, v, &msg))) {
-                            /* add only posts by the author */
-                            if (strcmp(xs_dict_get(msg, "type"), "Note") == 0 &&
-                                xs_startswith(xs_dict_get(msg, "id"), snac2.actor) && is_msg_public(msg)) {
-                                xs *st = mastoapi_status(&snac2, msg);
+                            const char *msg_id = xs_dict_get(msg, "id");
 
-                                if (st)
-                                    out = xs_list_append(out, st);
+                            /* add only posts by the author */
+                            if (!xs_is_null(msg_id) &&
+                                strcmp(xs_dict_get(msg, "type"), "Note") == 0 &&
+                                xs_startswith(xs_dict_get(msg, "id"), snac2.actor) && is_msg_public(msg)) {
+
+                                /* if max_id is set, skip entries until we find it */
+                                if (skip_until_max) {
+                                    xs *mid = mastoapi_id(msg);
+                                    if (strcmp(mid, max_id) == 0) {
+                                        skip_until_max = 0;
+                                        srv_debug(2, xs_fmt("account statuses: found max_id, starting from next post"));
+                                    }
+                                    continue;
+                                }
+
+                                /* deduplicate by message id */
+                                if (xs_set_add(&seen, msg_id) == 1) {
+                                    xs *st = mastoapi_status(&snac2, msg);
+
+                                    if (st) {
+                                        out = xs_list_append(out, st);
+                                        cnt++;
+                                    }
+                                }
                             }
                         }
                     }
+
+                    srv_debug(1, xs_fmt("account statuses: returning %d posts (requested %d)", cnt, limit));
+                    xs_set_free(&seen);
                 }
                 else
                 if (strcmp(opt, "featured_tags") == 0) {
@@ -1815,6 +1977,11 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
                 if (strcmp(opt, "lists") == 0) {
                     out = mastoapi_account_lists(&snac1, uid);
                 }
+                else
+                if (strcmp(opt, "familiar_followers") == 0) {
+                    /* familiar followers - not implemented, return empty array */
+                    out = xs_list_new();
+                }
 
                 user_free(&snac2);
             }
@@ -1827,8 +1994,95 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
                     }
                     else
                     if (strcmp(opt, "statuses") == 0) {
-                        /* we don't serve statuses of others; return the empty list */
+                        /* fetch statuses from remote outbox */
                         out = xs_list_new();
+                        const char *outbox_url = xs_dict_get(actor, "outbox");
+
+                        if (!xs_is_null(outbox_url)) {
+                            /* extract query parameters */
+                            const char *limit_s = xs_dict_get(args, "limit");
+                            const char *exclude_replies_s = xs_dict_get(args, "exclude_replies");
+                            const char *o_max_id = xs_dict_get(args, "max_id");
+
+                            int limit = 20;
+                            if (!xs_is_null(limit_s))
+                                limit = atoi(limit_s);
+                            if (limit == 0 || limit > 40)
+                                limit = 20;
+
+                            int exclude_replies = !xs_is_null(exclude_replies_s) &&
+                                                 strcmp(exclude_replies_s, "true") == 0;
+
+                            xs *max_id = o_max_id ? xs_tolower_i(xs_dup(o_max_id)) : NULL;
+                            int skip_until_max = max_id != NULL;
+
+                            srv_debug(1, xs_fmt("remote account statuses: fetching from %s (max_id=%s limit=%d)",
+                                               outbox_url, max_id ? max_id : "(null)", limit));
+
+                            /* fetch first page only - safer for memory on large instances */
+                            xs *outbox_collection = NULL;
+                            xs *first_page = NULL;
+                            const xs_list *items = get_collection_items(&snac1, outbox_url,
+                                                                        &outbox_collection, &first_page);
+
+                            int count = 0;
+                            int processed = 0;
+
+                            if (!xs_is_null(items) && xs_type(items) == XSTYPE_LIST) {
+                                int total_items = xs_list_len(items);
+                                srv_debug(1, xs_fmt("remote account statuses: got %d items from outbox", total_items));
+
+                                const xs_val *item;
+
+                                xs_list_foreach(items, item) {
+                                    processed++;
+
+                                    if (count >= limit)
+                                        break;
+
+                                    const xs_dict *post = extract_post_from_item(item);
+                                    if (!post)
+                                        continue;
+
+                                    const char *post_type = xs_dict_get(post, "type");
+                                    const char *in_reply_to = xs_dict_get(post, "inReplyTo");
+
+                                    /* apply filters */
+                                    if (exclude_replies && !xs_is_null(in_reply_to))
+                                        continue;
+
+                                    if (is_valid_post_type(post_type)) {
+                                        /* store object locally so mastoapi_id() can generate valid IDs */
+                                        const char *post_id = xs_dict_get(post, "id");
+                                        if (!xs_is_null(post_id))
+                                            object_add(post_id, post);
+
+                                        /* handle pagination with max_id */
+                                        if (skip_until_max) {
+                                            xs *mid = mastoapi_id(post);
+                                            if (!xs_is_null(mid) && strcmp(mid, max_id) == 0) {
+                                                skip_until_max = 0;
+                                                srv_debug(2, xs_fmt("remote account statuses: found max_id at position %d", processed));
+                                            }
+                                            continue;
+                                        }
+
+                                        /* pass logged-in user context to enable media proxying if configured */
+                                        xs *st = mastoapi_status(&snac1, post);
+                                        if (st) {
+                                            out = xs_list_append(out, st);
+                                            count++;
+                                        }
+                                    }
+                                }
+                            }
+                            else {
+                                srv_debug(1, xs_fmt("remote account statuses: no items found in outbox"));
+                            }
+
+                            srv_debug(1, xs_fmt("remote account statuses: processed %d items, returning %d posts (requested %d)",
+                                               processed, count, limit));
+                        }
                     }
                     else
                     if (strcmp(opt, "featured_tags") == 0) {
@@ -1839,6 +2093,11 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
                     else
                     if (strcmp(opt, "lists") == 0) {
                         out = mastoapi_account_lists(&snac1, uid);
+                    }
+                    else
+                    if (strcmp(opt, "familiar_followers") == 0) {
+                        /* familiar followers - not implemented, return empty array */
+                        out = xs_list_new();
                     }
                 }
             }
@@ -2730,8 +2989,9 @@ int mastoapi_post_handler(const xs_dict *req, const char *q_path,
     const char *i_ctype = xs_dict_get(req, "content-type");
 
     if (i_ctype && xs_startswith(i_ctype, "application/json")) {
-        if (!xs_is_null(payload))
+        if (!xs_is_null(payload)) {
             args = xs_json_loads(payload);
+        }
     }
     else if (i_ctype && xs_startswith(i_ctype, "application/x-www-form-urlencoded"))
     {
@@ -2740,11 +3000,24 @@ int mastoapi_post_handler(const xs_dict *req, const char *q_path,
             args    = xs_url_vars(payload);
         }
     }
-    else
+    else if (i_ctype && xs_startswith(i_ctype, "multipart/form-data"))
+    {
+        // Handle multipart/form-data by using p_vars (already parsed by httpd)
+        args = xs_dup(xs_dict_get(req, "p_vars"));
+    }
+
+    /* if args still NULL, try falling back to p_vars or q_vars */
+    if (args == NULL)
         args = xs_dup(xs_dict_get(req, "p_vars"));
 
     if (args == NULL)
+        args = xs_dup(xs_dict_get(req, "q_vars"));
+
+    if (args == NULL) {
+        srv_debug(1, xs_fmt("mastoapi_post_handler: failed to parse args for %s, content-type: %s",
+                           q_path, i_ctype ? i_ctype : "(null)"));
         return HTTP_STATUS_BAD_REQUEST;
+    }
 
     xs *cmd = xs_replace_n(q_path, "/api", "", 1);
 
@@ -2926,7 +3199,12 @@ int mastoapi_post_handler(const xs_dict *req, const char *q_path,
                 /* skip the 'fake' part of the id */
                 mid = MID_TO_MD5(mid);
 
-                if (valid_status(timeline_get_by_md5(&snac, mid, &msg))) {
+                /* try timeline first, then global object store for remote posts */
+                int found = valid_status(timeline_get_by_md5(&snac, mid, &msg));
+                if (!found)
+                    found = valid_status(object_get_by_md5(mid, &msg));
+
+                if (found) {
                     const char *id = xs_dict_get(msg, "id");
 
                     if (op == NULL) {
@@ -3599,11 +3877,31 @@ int mastoapi_put_handler(const xs_dict *req, const char *q_path,
         if (!xs_is_null(payload))
             args = xs_json_loads(payload);
     }
-    else
+    else if (i_ctype && xs_startswith(i_ctype, "application/x-www-form-urlencoded"))
+    {
+        // Some apps send form data instead of json so we should cater for those
+        if (!xs_is_null(payload)) {
+            args    = xs_url_vars(payload);
+        }
+    }
+    else if (i_ctype && xs_startswith(i_ctype, "multipart/form-data"))
+    {
+        // Handle multipart/form-data by using p_vars (already parsed by httpd)
+        args = xs_dup(xs_dict_get(req, "p_vars"));
+    }
+
+    /* if args still NULL, try falling back to p_vars or q_vars */
+    if (args == NULL)
         args = xs_dup(xs_dict_get(req, "p_vars"));
 
     if (args == NULL)
+        args = xs_dup(xs_dict_get(req, "q_vars"));
+
+    if (args == NULL) {
+        srv_debug(1, xs_fmt("mastoapi_put_handler: failed to parse args for %s, content-type: %s",
+                           q_path, i_ctype ? i_ctype : "(null)"));
         return HTTP_STATUS_BAD_REQUEST;
+    }
 
     xs *cmd = xs_replace_n(q_path, "/api", "", 1);
 
@@ -3753,11 +4051,24 @@ int mastoapi_patch_handler(const xs_dict *req, const char *q_path,
             args    = xs_url_vars(payload);
         }
     }
-    else
+    else if (i_ctype && xs_startswith(i_ctype, "multipart/form-data"))
+    {
+        // Handle multipart/form-data by using p_vars (already parsed by httpd)
+        args = xs_dup(xs_dict_get(req, "p_vars"));
+    }
+
+    /* if args still NULL, try falling back to p_vars or q_vars */
+    if (args == NULL)
         args = xs_dup(xs_dict_get(req, "p_vars"));
 
     if (args == NULL)
+        args = xs_dup(xs_dict_get(req, "q_vars"));
+
+    if (args == NULL) {
+        srv_debug(1, xs_fmt("mastoapi_patch_handler: failed to parse args for %s, content-type: %s",
+                           q_path, i_ctype ? i_ctype : "(null)"));
         return HTTP_STATUS_BAD_REQUEST;
+    }
 
     xs *cmd = xs_replace_n(q_path, "/api", "", 1);
 

@@ -118,6 +118,75 @@ int activitypub_request(snac *user, const char *url, xs_dict **data)
 }
 
 
+static xs_dict *actor_get_collections(snac *user, xs_dict *actor, int throttle)
+/* fetches follower/following/statuses counts from an actor's collections and adds them to the actor object */
+{
+    /* only fetch if counts are not already present in the actor object */
+    const xs_number *existing_followers = xs_dict_get(actor, "followers_count");
+    const xs_number *existing_following = xs_dict_get(actor, "following_count");
+    const xs_number *existing_statuses = xs_dict_get(actor, "statuses_count");
+
+    /* skip if we already have all counts */
+    if (xs_type(existing_followers) == XSTYPE_NUMBER &&
+        xs_type(existing_following) == XSTYPE_NUMBER &&
+        xs_type(existing_statuses) == XSTYPE_NUMBER) {
+        return actor;
+    }
+
+    /* CRITICAL: duplicate URLs BEFORE any xs_dict_set calls, as xs_dict_set can reallocate the dict */
+    xs *followers_url = xs_dup(xs_dict_get(actor, "followers"));
+    xs *following_url = xs_dup(xs_dict_get(actor, "following"));
+    xs *outbox_url = xs_dup(xs_dict_get(actor, "outbox"));
+
+    /* only fetch followers count if not already present */
+    if (xs_type(existing_followers) != XSTYPE_NUMBER && !xs_is_null(followers_url)) {
+        xs *followers_coll = NULL;
+        if (activitypub_request(user, followers_url, &followers_coll) == 200) {
+            const xs_number *total = xs_dict_get(followers_coll, "totalItems");
+            if (xs_type(total) == XSTYPE_NUMBER) {
+                xs *total_copy = xs_dup(total);
+                actor = xs_dict_set(actor, "followers_count", total_copy);
+            }
+        }
+        /* throttle to prevent resource exhaustion on low-power devices */
+        if (throttle)
+            usleep(100000); /* 100ms delay between requests */
+    }
+
+    /* only fetch following count if not already present */
+    if (xs_type(existing_following) != XSTYPE_NUMBER && !xs_is_null(following_url)) {
+        xs *following_coll = NULL;
+        if (activitypub_request(user, following_url, &following_coll) == 200) {
+            const xs_number *total = xs_dict_get(following_coll, "totalItems");
+            if (xs_type(total) == XSTYPE_NUMBER) {
+                xs *total_copy = xs_dup(total);
+                actor = xs_dict_set(actor, "following_count", total_copy);
+            }
+        }
+        /* throttle to prevent resource exhaustion on low-power devices */
+        if (throttle)
+            usleep(100000); /* 100ms delay between requests */
+    }
+
+    /* only fetch statuses count if not already present */
+    if (xs_type(existing_statuses) != XSTYPE_NUMBER && !xs_is_null(outbox_url)) {
+        xs *outbox_coll = NULL;
+        if (activitypub_request(user, outbox_url, &outbox_coll) == 200) {
+            const xs_number *total = xs_dict_get(outbox_coll, "totalItems");
+            if (xs_type(total) == XSTYPE_NUMBER) {
+                xs *total_copy = xs_dup(total);
+                actor = xs_dict_set(actor, "statuses_count", total_copy);
+            }
+        }
+        /* throttle to prevent resource exhaustion on low-power devices */
+        if (throttle)
+            usleep(100000); /* 100ms delay between requests */
+    }
+
+    return actor;
+}
+
+
 int actor_request(snac *user, const char *actor, xs_dict **data)
 /* request an actor */
 {
@@ -135,6 +204,9 @@ int actor_request(snac *user, const char *actor, xs_dict **data)
         status = activitypub_request(user, actor, &payload);
 
         if (valid_status(status)) {
+            /* fetch collection counts when initially fetching an actor (no throttle) */
+            payload = actor_get_collections(user, payload, 0);
+
             /* renew data */
             status = actor_add(actor, payload);
 
@@ -3118,8 +3190,12 @@ void process_user_queue_item(snac *user, xs_dict *q_item)
             xs *actor_o = NULL;
             int status;
 
-            if (valid_status((status = activitypub_request(user, actor, &actor_o))))
+            if (valid_status((status = activitypub_request(user, actor, &actor_o)))) {
+                /* refresh collection counts with throttling to prevent resource exhaustion */
+                actor_o = actor_get_collections(user, actor_o, 1);
+
                 actor_add(actor, actor_o);
+            }
             else {
                 if (status == HTTP_STATUS_GONE) {
                     actor_failure(actor, 1);
