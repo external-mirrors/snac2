@@ -87,6 +87,34 @@ xs_dict *xs_httpd_request(FILE *f, xs_str **payload, int *p_size)
         *p_size  = atoi(v);
         *payload = xs_read(f, p_size);
     }
+    else if ((v = xs_dict_get(req, "transfer-encoding")) != NULL &&
+             xs_startswith(v, "chunked")) {
+        /* handle chunked transfer encoding */
+        xs_str *body = xs_str_new(NULL);
+
+        for (;;) {
+            xs *line = xs_strip_i(xs_readline(f));
+
+            /* parse chunk size (in hex) */
+            int chunk_size = strtol(line, NULL, 16);
+
+            if (chunk_size <= 0)
+                break;
+
+            /* read chunk data */
+            xs *chunk = xs_read(f, &chunk_size);
+            if (chunk == NULL)
+                break;
+
+            body = xs_append_m(body, chunk, chunk_size);
+
+            /* read trailing \r\n after chunk data */
+            xs_readline(f);
+        }
+
+        *p_size = xs_size(body) - 1; /* subtract trailing null */
+        *payload = body;
+    }
 
     v = xs_dict_get(req, "content-type");
 
