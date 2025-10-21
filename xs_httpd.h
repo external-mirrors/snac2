@@ -109,7 +109,7 @@ xs_dict *xs_httpd_request(FILE *f, xs_str **payload, int *p_size)
             body = xs_append_m(body, chunk, chunk_size);
 
             /* read trailing \r\n after chunk data */
-            xs_readline(f);
+            xs *dummy = xs_readline(f);
         }
 
         *p_size = xs_size(body) - 1; /* subtract trailing null */
