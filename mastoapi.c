@@ -569,7 +569,7 @@ static const xs_list *get_collection_items(snac *snac, const char *collection_ur
     const xs_list *items = NULL;
     xs_dict *collection = NULL;
 
-    if (activitypub_request(snac, collection_url, &collection) == 200) {
+    if (valid_status(activitypub_request(snac, collection_url, &collection))) {
         /* check if items are directly embedded */
         items = xs_dict_get(collection, "orderedItems");
         if (xs_is_null(items))
@@ -586,7 +586,7 @@ static const xs_list *get_collection_items(snac *snac, const char *collection_ur
         const char *first_url = xs_dict_get(collection, "first");
         if (!xs_is_null(first_url)) {
             xs_dict *first_page = NULL;
-            if (activitypub_request(snac, first_url, &first_page) == 200) {
+            if (valid_status(activitypub_request(snac, first_url, &first_page))) {
                 items = xs_dict_get(first_page, "orderedItems");
                 if (xs_is_null(items))
                     items = xs_dict_get(first_page, "items");

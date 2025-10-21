@@ -141,7 +141,7 @@ static xs_dict *actor_get_collections(snac *user, xs_dict *actor, int throttle)
     /* only fetch followers count if not already present */
     if (xs_type(existing_followers) != XSTYPE_NUMBER && !xs_is_null(followers_url)) {
         xs *followers_coll = NULL;
-        if (activitypub_request(user, followers_url, &followers_coll) == 200) {
+        if (valid_status(activitypub_request(user, followers_url, &followers_coll))) {
             const xs_number *total = xs_dict_get(followers_coll, "totalItems");
             if (xs_type(total) == XSTYPE_NUMBER) {
                 xs *total_copy = xs_dup(total);
@@ -156,7 +156,7 @@ static xs_dict *actor_get_collections(snac *user, xs_dict *actor, int throttle)
     /* only fetch following count if not already present */
     if (xs_type(existing_following) != XSTYPE_NUMBER && !xs_is_null(following_url)) {
         xs *following_coll = NULL;
-        if (activitypub_request(user, following_url, &following_coll) == 200) {
+        if (valid_status(activitypub_request(user, following_url, &following_coll))) {
             const xs_number *total = xs_dict_get(following_coll, "totalItems");
             if (xs_type(total) == XSTYPE_NUMBER) {
                 xs *total_copy = xs_dup(total);
@@ -171,7 +171,7 @@ static xs_dict *actor_get_collections(snac *user, xs_dict *actor, int throttle)
     /* only fetch statuses count if not already present */
     if (xs_type(existing_statuses) != XSTYPE_NUMBER && !xs_is_null(outbox_url)) {
         xs *outbox_coll = NULL;
-        if (activitypub_request(user, outbox_url, &outbox_coll) == 200) {
+        if (valid_status(activitypub_request(user, outbox_url, &outbox_coll))) {
             const xs_number *total = xs_dict_get(outbox_coll, "totalItems");
             if (xs_type(total) == XSTYPE_NUMBER) {
                 xs *total_copy = xs_dup(total);
