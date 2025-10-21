@@ -6,7 +6,7 @@ Implemented more scopes to match other ActivityPub implementations (public, unli
 
 New icons showing instance and actor failures.
 
-Mastodon API: fixed post deletion.
+Mastodon API: Added remote accounts follow metrics and statuses when viewing profiles (contributed by Stefano Marinelli), fixed post deletion.
 
 Fixed outbox collection (contributed by byte).
 
