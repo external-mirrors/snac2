@@ -14,6 +14,8 @@ New file FEDERATION.md (contributed by andypiper).
 
 Updated Czech, Spanish and Brazilian Portuguese translations (contributed by pmjv and daltux).
 
+Fixed manpage typos (contributed by r-ricci).
+
 ## 2.83
 
 After receiving a follow confirmation, a bunch of posts from that account are requested and inserted into the timeline as context.
