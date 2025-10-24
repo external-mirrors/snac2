@@ -54,10 +54,10 @@ struct _payload_data {
     int offset;
 };
 
-static int _data_callback(void *buffer, size_t size,
+static size_t _data_callback(void *buffer, size_t size,
                           size_t nitems, struct _payload_data *pd)
 {
-    int sz = size * nitems;
+    size_t sz = size * nitems;
 
     /* open space */
     pd->size += sz;
@@ -71,14 +71,14 @@ static int _data_callback(void *buffer, size_t size,
 }
 
 
-static int _post_callback(char *buffer, size_t size,
+static size_t _post_callback(char *buffer, size_t size,
                           size_t nitems, struct _payload_data *pd)
 {
     /* size of data left */
-    int sz = pd->size - pd->offset;
+    size_t sz = pd->size - pd->offset;
 
     /* if it's still bigger than the provided space, trim */
-    if (sz > (int) (size * nitems))
+    if (sz > (size_t) (size * nitems))
         sz = size * nitems;
 
     memcpy(buffer, pd->data + pd->offset, sz);
