@@ -3660,8 +3660,9 @@ int activitypub_get_handler(const xs_dict *req, const char *q_path,
     uid = xs_list_get(l, 1);
     if (!user_open(&snac, uid)) {
         /* invalid user */
-        srv_debug(1, xs_fmt("activitypub_get_handler bad user %s", uid));
-        return HTTP_STATUS_NOT_FOUND;
+        status = grave(uid, 0) ? HTTP_STATUS_GONE : HTTP_STATUS_NOT_FOUND;
+        srv_debug(1, xs_fmt("activitypub_get_handler bad user %s %d", uid, status));
+        return status;
     }
 
     p_path = xs_list_get(l, 2);
@@ -3854,8 +3855,9 @@ int activitypub_post_handler(const xs_dict *req, const char *q_path,
     const char *uid = xs_list_get(l, 1);
     if (!user_open(&snac, uid)) {
         /* invalid user */
-        srv_debug(1, xs_fmt("activitypub_post_handler bad user %s", uid));
-        return HTTP_STATUS_NOT_FOUND;
+        status = grave(uid, 0) ? HTTP_STATUS_GONE : HTTP_STATUS_NOT_FOUND;
+        srv_debug(1, xs_fmt("activitypub_post_handler bad user %s %d", uid, status));
+        return status;
     }
 
     /* if it has a digest, check it now, because

@@ -3830,8 +3830,9 @@ int html_get_handler(const xs_dict *req, const char *q_path,
 
     if (!uid || !user_open(&snac, uid)) {
         /* invalid user */
-        srv_debug(1, xs_fmt("html_get_handler bad user %s", uid));
-        return HTTP_STATUS_NOT_FOUND;
+        status = grave(uid, 0) ? HTTP_STATUS_GONE : HTTP_STATUS_NOT_FOUND;
+        srv_debug(1, xs_fmt("html_get_handler bad user %s %d", uid, status));
+        return status;
     }
 
     user = &snac; /* for L() */
