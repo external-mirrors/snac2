@@ -398,6 +398,37 @@ xs_html *html_msg_icon(snac *user, const char *actor_id, const xs_dict *msg,
     return actor_icon;
 }
 
+void html_note_render_visibility(snac* user, xs_html *form, const int scope)
+{
+    // scopes aren't sorted by value unfortunately, so simple math won't work to limit them. using map-like thing here
+    static const int public_scopes[5] = {SCOPE_PUBLIC, SCOPE_UNLISTED, SCOPE_FOLLOWERS, SCOPE_MENTIONED, -1};
+    static const int unlisted_scopes[4] = {SCOPE_UNLISTED, SCOPE_FOLLOWERS, SCOPE_MENTIONED, -1};
+    static const int followers_scopes[3] = {SCOPE_FOLLOWERS, SCOPE_MENTIONED, -1};
+    static const int mentioned_scopes[2] = {SCOPE_MENTIONED, -1};
+    static const int * const scopes[4] = { public_scopes, mentioned_scopes, unlisted_scopes, followers_scopes};
+    static const char * const scopes_tags[4] = { "public", "mentioned", "unlisted", "followers"};
+    static const char * const scopes_names[4] = { "Public", "Direct Message", "Unlisted", "Followers-only"};
+
+    xs_html *paragraph = xs_html_tag("p", xs_html_text(L("Visibility: ")));
+    const int* to_render = scopes[scope];
+    for( int i = 0; to_render[i] != -1; i++ ){
+        const int scope_i = to_render[i];
+        const char* value = scopes_tags[scope_i];
+        const char* name = scopes_names[scope_i];
+        xs_html_add(paragraph,
+            xs_html_tag("label",
+                xs_html_sctag("input",
+                    xs_html_attr("type", "radio"),
+                    xs_html_attr("name", "visibility"),
+                    xs_html_attr("value", value),
+                    xs_html_attr(scope == scope_i ? "checked" : "", NULL)),
+                xs_html_text(" "),
+                xs_html_text(L(name)),
+                xs_html_text(" "))
+        );
+    }
+    xs_html_add(form, paragraph);
+}
 
 xs_html *html_note(snac *user, const char *summary,
                    const char *div_id, const char *form_id,
@@ -455,46 +486,7 @@ xs_html *html_note(snac *user, const char *summary,
                 xs_html_attr("type",  "hidden"),
                 xs_html_attr("name",  "to"),
                 xs_html_attr("value", actor_id)));
-    else {
-        xs_html_add(form,
-            xs_html_tag("p",
-                xs_html_text(L("Visibility: ")),
-                xs_html_tag("label",
-                    xs_html_sctag("input",
-                        xs_html_attr("type", "radio"),
-                        xs_html_attr("name", "visibility"),
-                        xs_html_attr("value", "public"),
-                        xs_html_attr(scope == SCOPE_PUBLIC ? "checked" : "", NULL)),
-                    xs_html_text(" "),
-                    xs_html_text(L("Public"))),
-                xs_html_text(" "),
-                xs_html_tag("label",
-                    xs_html_sctag("input",
-                        xs_html_attr("type", "radio"),
-                        xs_html_attr("name", "visibility"),
-                        xs_html_attr("value", "unlisted"),
-                        xs_html_attr(scope == SCOPE_UNLISTED ? "checked" : "", NULL)),
-                    xs_html_text(" "),
-                    xs_html_text(L("Unlisted"))),
-                xs_html_text(" "),
-                xs_html_tag("label",
-                    xs_html_sctag("input",
-                        xs_html_attr("type", "radio"),
-                        xs_html_attr("name", "visibility"),
-                        xs_html_attr("value", "followers"),
-                        xs_html_attr(scope == SCOPE_FOLLOWERS ? "checked" : "", NULL)),
-                    xs_html_text(" "),
-                    xs_html_text(L("Followers-only"))),
-                xs_html_text(" "),
-                xs_html_tag("label",
-                    xs_html_sctag("input",
-                        xs_html_attr("type", "radio"),
-                        xs_html_attr("name", "visibility"),
-                        xs_html_attr("value", "mentioned"),
-                        xs_html_attr(scope == SCOPE_MENTIONED ? "checked" : "", NULL)),
-                    xs_html_text(" "),
-                    xs_html_text(L("Direct Message")))));
-    }
+    html_note_render_visibility(user, form, scope);
 
     if (redir)
         xs_html_add(form,
