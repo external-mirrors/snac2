@@ -1,7 +1,7 @@
 /* snac - A simple, minimalistic ActivityPub instance */
 /* copyright (c) 2022 - 2025 grunfink et al. / MIT license */
 
-#define VERSION "2.84-dev"
+#define VERSION "2.84"
 
 #define USER_AGENT "snac/" VERSION
 
@@ -287,6 +287,8 @@ xs_list *content_search(snac *user, const char *regex,
 
 int actor_failure(const char *actor, int op);
 int instance_failure(const char *url, int op);
+
+int grave(const char *objid, int op);
 
 void enqueue_input(snac *snac, const xs_dict *msg, const xs_dict *req, int retries);
 void enqueue_shared_input(const xs_dict *msg, const xs_dict *req, int retries);

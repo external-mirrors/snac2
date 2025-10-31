@@ -454,6 +454,8 @@ int deluser(snac *user)
         }
     }
 
+    grave(user->uid, 1);
+
     rm_rf(user->basedir);
 
     return ret;

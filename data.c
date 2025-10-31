@@ -3137,6 +3137,35 @@ int instance_failure(const char *url, int op)
 }
 
 
+int grave(const char *objid, int op)
+/* the graveyeard of deleted objects */
+{
+    int ret = 0;
+    xs *dir = xs_fmt("%s/grave", srv_basedir);
+    xs *md5 = xs_md5_hex(objid, strlen(objid));
+    xs *fn  = xs_fmt("%s/%s", dir, md5);
+    FILE *f;
+
+    switch (op) {
+    case 0: /** check **/
+        ret = mtime(fn) > 0.0 ? 1 : 0;
+        break;
+
+    case 1: /** add **/
+        mkdirx(dir);
+
+        if ((f = fopen(fn, "w")) != NULL) {
+            fprintf(f, "%s\n", objid);
+            fclose(f);
+        }
+
+        break;
+    }
+
+    return ret;
+}
+
+
 /** notifications **/
 
 xs_str *notify_check_time(snac *snac, int reset)
