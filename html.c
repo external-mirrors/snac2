@@ -486,7 +486,8 @@ xs_html *html_note(snac *user, const char *summary,
                 xs_html_attr("type",  "hidden"),
                 xs_html_attr("name",  "to"),
                 xs_html_attr("value", actor_id)));
-    html_note_render_visibility(user, form, scope);
+    if (edit_id == NULL)
+        html_note_render_visibility(user, form, scope);
 
     if (redir)
         xs_html_add(form,
