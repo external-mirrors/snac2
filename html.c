@@ -3236,7 +3236,7 @@ xs_str *html_timeline(snac *user, const xs_list *list, int read_only,
             continue;
         }
         /* hide non-public posts viewed from outside */
-        if (read_only && scope != SCOPE_PUBLIC){
+        if (read_only && (scope != SCOPE_PUBLIC && scope != SCOPE_UNLISTED)) {
             continue;
         }
 
