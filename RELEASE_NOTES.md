@@ -1,5 +1,9 @@
 # Release Notes
 
+## UNRELEASED
+
+Quoted posts are now shown.
+
 ## 2.84
 
 Implemented more scopes to match other ActivityPub implementations (public, unlisted, followers-only and direct message) (contributed by byte).
