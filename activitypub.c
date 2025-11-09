@@ -2686,6 +2686,19 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
 
                 timeline_request(snac, &in_reply_to, &wrk, 0);
 
+                const char *quoted_id = xs_dict_get(object, "quote");
+                if (xs_is_string(quoted_id) && xs_match(quoted_id, "https://*|http://*")) { /** **/
+                    xs *quoted_post = NULL;
+                    int status;
+
+                    if (valid_status(status = activitypub_request(snac, quoted_id, &quoted_post))) {
+                        /* got quoted post */
+                        object_add(quoted_id, quoted_post);
+                    }
+
+                    snac_debug(snac, 1, xs_fmt("retrieving quoted post %s %d", quoted_id, status));
+                }
+
                 if (timeline_add(snac, id, object)) {
                     snac_log(snac, xs_fmt("new '%s' %s %s", utype, actor, id));
                     do_notify = 1;
