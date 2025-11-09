@@ -2686,7 +2686,7 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
 
                 timeline_request(snac, &in_reply_to, &wrk, 0);
 
-                const char *quoted_id = xs_dict_get(object, "quote");
+                const char *quoted_id = xs_dict_get(object, "quoteUri");
                 if (xs_is_string(quoted_id) && xs_match(quoted_id, "https://*|http://*")) { /** **/
                     xs *quoted_post = NULL;
                     int status;
