@@ -2394,6 +2394,21 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
         /* c contains sanitized HTML */
         xs_html_add(snac_content,
             xs_html_raw(c));
+
+        /* quoted post */
+        const char *quoted_id = xs_dict_get(msg, "quote");
+        if (xs_is_string(quoted_id)) {
+            xs *quoted_post = NULL;
+
+            if (valid_status(object_get(quoted_id, &quoted_post))) {
+                xs_html_add(snac_content,
+                    xs_html_tag("blockquote",
+                        xs_html_attr("class", "snac-quoted-post"),
+                        html_entry(user, quoted_post, 1, 1, NULL, 1)));
+            }
+            else
+                enqueue_object_request(user, quoted_id, 0);
+        }
     }
 
     if (strcmp(type, "Question") == 0) { /** question content **/
