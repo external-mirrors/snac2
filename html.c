@@ -2407,6 +2407,7 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
                         html_entry(user, quoted_post, 1, 1, NULL, 1)));
             }
             else
+            if (user)
                 enqueue_object_request(user, quoted_id, 0);
         }
     }
