@@ -76,9 +76,9 @@ int webfinger_request_signed(snac *snac, const char *qs, xs_str **actor, xs_str 
         xs *url = xs_fmt("%s:/" "/%s/.well-known/webfinger?resource=%s", proto, host, resource);
 
         if (snac == NULL)
-            xs_http_request("GET", url, headers, NULL, 0, &status, &payload, &p_size, 0);
+            xs_free(xs_http_request("GET", url, headers, NULL, 0, &status, &payload, &p_size, 0));
         else
-            http_signed_request(snac, "GET", url, headers, NULL, 0, &status, &payload, &p_size, 0);
+            xs_free(http_signed_request(snac, "GET", url, headers, NULL, 0, &status, &payload, &p_size, 0));
     }
 
     if (obj == NULL && valid_status(status) && payload) {
