@@ -1695,7 +1695,7 @@ xs_html *html_top_controls(snac *user)
                     xs_html_text(L("Languages you usually post in:")),
                     xs_html_sctag("br", NULL),
                     xs_html_sctag("input",
-                        xs_html_attr("type", "next"),
+                        xs_html_attr("type", "text"),
                         xs_html_attr("name", "post_langs"),
                         xs_html_attr("value", post_langs),
                         xs_html_attr("placeholder", L("en fr es de_AT")))),
