@@ -2805,6 +2805,9 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
             if (valid_status(object_get(object, &a_msg))) {
                 const char *who = get_atto(a_msg);
 
+                /* got the admired object: instance is [back] online */
+                instance_failure(object, 2);
+
                 if (who && !is_muted(snac, who)) {
                     /* bring the actor */
                     xs *who_o = NULL;
