@@ -3578,8 +3578,12 @@ xs_str *html_notifications(snac *user, int skip, int show)
 
         if (valid_status(actor_get(actor_id, &actor)))
             a_name = actor_name(actor, proxy);
-        else
+        else {
             a_name = xs_dup(actor_id);
+
+            /* actor not here: request it */
+            enqueue_actor_refresh(user, actor_id, 0);
+        }
 
         xs *label_sanitized = sanitize(type);
         const char *label = label_sanitized;
