@@ -2396,7 +2396,8 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
             xs_html_raw(c));
 
         /* quoted post */
-        const char *quoted_id = xs_dict_get(msg, "quoteUri");
+        const char *quoted_id = xs_or(xs_dict_get(msg, "quoteUri"), xs_dict_get(msg, "quoteUrl"));
+
         if (xs_is_string(quoted_id) && xs_match(quoted_id, "https://*|http://*")) { /** **/
             xs *quoted_post = NULL;
 
