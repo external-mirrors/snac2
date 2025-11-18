@@ -3355,10 +3355,11 @@ xs_html *html_people_list(snac *user, xs_list *list, const char *header, const c
 
             /* content (user bio) */
             const char *c = xs_dict_get(actor, "summary");
+            const xs_val *tag = xs_dict_get(actor, "tag");
 
             if (!xs_is_null(c)) {
                 xs *sc = sanitize(c);
-                sc = replace_shortnames(sc, xs_dict_get(actor, "tag"), 2, proxy);
+                sc = replace_shortnames(sc, tag, 2, proxy);
 
                 xs_html *snac_content = xs_html_tag("div",
                     xs_html_attr("class", "snac-content"));
@@ -3372,6 +3373,93 @@ xs_html *html_people_list(snac *user, xs_list *list, const char *header, const c
                             xs_html_raw(sc))); /* already sanitized */
 
                 xs_html_add(snac_post, snac_content);
+            }
+
+            /* add user metadata */
+            xs_html *snac_metadata = xs_html_tag("div",
+                xs_html_attr("class", "snac-metadata"));
+
+            int count = 0;
+            const xs_val *address = xs_dict_get(actor, "vcard:Address");
+            if (xs_is_string(address)) {
+                xs_html_add(snac_metadata,
+                    xs_html_tag("span",
+                        xs_html_attr("class", "snac-property-name"),
+                        xs_html_raw("&#x1F4CD; Location")),
+                    xs_html_text(":"),
+                    xs_html_raw("&nbsp;"),
+                    xs_html_tag("span",
+                        xs_html_attr("class", "snac-property-value p-adr"),
+                        xs_html_text(address)),
+                    xs_html_sctag("br", NULL));
+
+                count++;
+            }
+
+            const xs_val *birthday = xs_dict_get(actor, "vcard:bday");
+            if (xs_is_string(birthday)) {
+                xs_html_add(snac_metadata,
+                    xs_html_tag("span",
+                        xs_html_attr("class", "snac-property-name"),
+                        xs_html_raw("&#x1F382; Birthday")),
+                    xs_html_text(":"),
+                    xs_html_raw("&nbsp;"),
+                    xs_html_tag("time",
+                        xs_html_attr("class", "snac-property-value dt-bday"),
+                        xs_html_text(birthday)),
+                    xs_html_sctag("br", NULL));
+
+                count++;
+            }
+
+            const xs_list *attachment = xs_dict_get(actor, "attachment");
+            if (count > 0 && xs_list_len(attachment) > 0) {
+                xs_html_add(snac_metadata,
+                    xs_html_sctag("hr",
+                        xs_html_attr("class", "snac-property-divider")));
+            }
+
+            const xs_val *v;
+            xs_list_foreach(attachment, v) {
+                const char *type  = xs_dict_get(v, "type");
+                const char *name  = xs_dict_get(v, "name");
+                const char *value = xs_dict_get(v, "value");
+
+                if (!xs_is_null(type) && !xs_is_null(name) &&
+                    !xs_is_null(value) && strcmp(type, "PropertyValue") == 0) {
+                    /* both the name and the value can contain emoji */
+                    xs *nam = sanitize(name);
+                    nam = replace_shortnames(nam, tag, 1, proxy);
+
+                    /* todo: sometimes the value is transmitted as markdown and not html ._. */
+                    xs *val = sanitize(value);
+                    val = replace_shortnames(val, tag, 1, proxy);
+
+                    /* delete <p> tags, because some software sends them */
+                    val = xs_replace_i(val, "<p>", "");
+                    val = xs_replace_i(val, "</p>", "");
+
+                    xs_html_add(snac_metadata,
+                        xs_html_tag("span",
+                            xs_html_attr("class", "snac-property-name"),
+                            xs_html_raw(nam)),
+                        xs_html_text(":"),
+                        xs_html_raw("&nbsp;"),
+                        xs_html_tag("span",
+                            xs_html_attr("class", "snac-property-value"),
+                            xs_html_raw(val)),
+                        xs_html_sctag("br", NULL));
+
+                    count++;
+                }
+            }
+
+            if (count > 0) {
+                xs_html_add(snac_post, snac_metadata);
+            }
+            else {
+                /* free the html, by rendering it... */
+                xs_free(xs_html_render(snac_metadata));
             }
 
             /* buttons */
