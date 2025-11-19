@@ -143,6 +143,8 @@ in the "last_announcement" field of the
 .Pa user.json
 file. When the file is modified, the announcement will then reappear. It can
 contain only text and will be ignored if it has more than 2048 bytes.
+.It Pa server.pid
+This file stores the server PID in a single text line.
 .El
 .Pp
 Each user directory is a subdirectory of 
@@ -222,8 +224,6 @@ after executing the 'export_csv' command-line operation.
 .It Pa import/
 Mastodon-compatible CSV files must be copied into this directory to use
 any of the importing functions.
-.It Pa server.pid
-This file stores the server PID in a single text line.
 .El
 .Sh SEE ALSO
 .Xr snac 1 ,
