@@ -6,6 +6,8 @@ Quoted posts are now shown.
 
 Fixed memory leak (contributed by dandelions).
 
+Fixed typo in man page (contributed by spky).
+
 ## 2.84
 
 Implemented more scopes to match other ActivityPub implementations (public, unlisted, followers-only and direct message) (contributed by byte).
