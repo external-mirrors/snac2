@@ -3746,12 +3746,38 @@ xs_str *html_notifications(snac *user, int skip, int show)
             xs_html_attr("class", "snac-post-with-desc"),
             html_label);
 
-        if (strcmp(type, "Follow") == 0 || strcmp(utype, "Follow") == 0 || strcmp(type, "Block") == 0) {
+        if (strcmp(type, "Block") == 0) {
             if (actor)
                 xs_html_add(entry,
                     xs_html_tag("div",
                         xs_html_attr("class", "snac-post"),
                         html_actor_icon(user, actor, NULL, NULL, NULL, -1, 0, proxy, NULL, NULL)));
+        }
+        else
+        if (strcmp(type, "Follow") == 0 || strcmp(utype, "Follow") == 0) {
+            if (actor) {
+                xs *action = xs_fmt("%s/admin/action", user->actor);
+                xs_html *button = NULL;
+
+                if (following_check(user, actor_id))
+                    button = html_button("unfollow", L("Unfollow"), L("Stop following this user's activity"));
+                else
+                    button = html_button("follow", L("Follow"), L("Start following this user's activity"));
+
+                xs_html_add(entry,
+                    xs_html_tag("div",
+                        xs_html_attr("class", "snac-post"),
+                        html_actor_icon(user, actor, NULL, NULL, NULL, -1, 0, proxy, NULL, NULL),
+                        xs_html_tag("form",
+                            xs_html_attr("method", "post"),
+                            xs_html_attr("action", action),
+                            xs_html_sctag("input",
+                                xs_html_attr("type", "hidden"),
+                                xs_html_attr("name", "actor"),
+                                xs_html_attr("value", actor_id)),
+                            button,
+                            xs_html_sctag("br", NULL))));
+            }
         }
         else
         if (strcmp(type, "Move") == 0) {
