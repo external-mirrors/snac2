@@ -4,6 +4,8 @@
 
 Quoted posts are now shown.
 
+Added metadata to remote users in the people page (contributed by dandelions).
+
 Fixed memory leak (contributed by dandelions).
 
 Fixed typo in man page (contributed by spky).
