@@ -2634,7 +2634,7 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
                             xs_html_attr("title", name))));
             }
             else
-            if (xs_startswith(type, "video/")) {
+            if (xs_startswith(type, "video/") || strcmp(type, "Video") == 0) {
                 xs_html_add(content_attachments,
                     xs_html_tag("video",
                         xs_html_attr("preload", "none"),
