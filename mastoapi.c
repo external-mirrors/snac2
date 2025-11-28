@@ -1919,7 +1919,7 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
                             /* add only posts by the author */
                             if (!xs_is_null(msg_id) &&
                                 strcmp(xs_dict_get(msg, "type"), "Note") == 0 &&
-                                xs_startswith(xs_dict_get(msg, "id"), snac2.actor) && is_msg_public(msg)) {
+                                is_msg_mine(&snac2, xs_dict_get(msg, "id")) && is_msg_public(msg)) {
 
                                 /* if max_id is set, skip entries until we find it */
                                 if (skip_until_max) {
@@ -3824,7 +3824,7 @@ int mastoapi_delete_handler(const xs_dict *req, const char *q_path,
             if (valid_status(object_get_by_md5(p, &obj))) {
                 const char *id = xs_dict_get(obj, "id");
 
-                if (xs_is_string(id) && xs_startswith(id, snac.actor)) {
+                if (xs_is_string(id) && is_msg_mine(&snac, id)) {
                     xs *out = mastoapi_status(&snac, obj);
 
                     xs *msg = msg_delete(&snac, id);

@@ -1898,7 +1898,7 @@ xs_html *html_entry_controls(snac *user, const char *actor,
                 xs_html_attr("name",     "redir"),
                 xs_html_attr("value",    redir))));
 
-    if (!xs_startswith(id, user->actor)) {
+    if (!is_msg_mine(user, id)) {
         if (xs_list_in(likes, user->md5) == -1) {
             /* not already liked; add button */
             xs_html_add(form,
@@ -2426,7 +2426,7 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
         if (read_only)
             closed = 1; /* non-identified page; show as closed */
         else
-        if (user && xs_startswith(id, user->actor))
+        if (user && is_msg_mine(user, id))
             closed = 1; /* we questioned; closed for us */
         else
         if (user && was_question_voted(user, id))
@@ -5022,7 +5022,7 @@ int html_post_handler(const xs_dict *req, const char *q_path,
             }
             else {
                 /* delete an entry */
-                if (xs_startswith(id, snac.actor) && !is_draft(&snac, id)) {
+                if (is_msg_mine(&snac, id) && !is_draft(&snac, id)) {
                     /* it's a post by us: generate a delete */
                     xs *msg = msg_delete(&snac, id);
 

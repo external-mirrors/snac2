@@ -59,7 +59,7 @@ xs_str *rss_from_timeline(snac *user, const xs_list *timeline,
         const char *content = xs_dict_get(msg, "content");
         const char *published = xs_dict_get(msg, "published");
 
-        if (user && !xs_startswith(id, user->actor))
+        if (user && !is_msg_mine(user, id))
             continue;
 
         if (!id || !content || !published)
