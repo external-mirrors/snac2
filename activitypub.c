@@ -669,6 +669,20 @@ xs_list *recipient_list(snac *snac, const xs_dict *msg, int expand_public)
 }
 
 
+int is_msg_mine(snac *user, const char *id)
+/* returns true if a post id is by the given user */
+{
+    int ret = 0;
+
+    if (xs_is_string(id)) {
+        xs *s1 = xs_fmt("%s/", user->actor);
+        ret = xs_startswith(id, s1);
+    }
+
+    return ret;
+}
+
+
 int is_msg_public(const xs_dict *msg)
 /* checks if a message is public */
 {
