@@ -1358,6 +1358,20 @@ int pending_count(snac *user)
 }
 
 
+int is_msg_mine(snac *user, const char *id)
+/* returns true if a post id is by the given user */
+{
+    int ret = 0;
+
+    if (xs_is_string(id)) {
+        xs *s1 = xs_fmt("%s/", user->actor);
+        ret = xs_startswith(id, s1);
+    }
+
+    return ret;
+}
+
+
 /** timeline **/
 
 double timeline_mtime(snac *snac)
