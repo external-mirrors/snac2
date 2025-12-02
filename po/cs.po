@@ -478,7 +478,7 @@ msgstr "Popisek..."
 
 #: html.c:2697
 msgid "Source channel or community"
-msgstr ""
+msgstr "Původní kanál nebo komunita"
 
 #: html.c:2791
 msgid "Time: "
