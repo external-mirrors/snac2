@@ -1467,7 +1467,7 @@ void timeline_update_indexes(snac *snac, const char *id)
 {
     object_user_cache_add(snac, id, "private");
 
-    if (xs_startswith(id, snac->actor)) {
+    if (is_msg_mine(snac, id)) {
         xs *msg = NULL;
 
         if (valid_status(object_get(id, &msg))) {
@@ -1927,7 +1927,7 @@ int pin(snac *user, const char *id)
 {
     int ret = -2;
 
-    if (xs_startswith(id, user->actor)) {
+    if (is_msg_mine(user, id)) {
         if (is_pinned(user, id))
             ret = -3;
         else
@@ -3527,7 +3527,7 @@ void enqueue_output(snac *snac, const xs_dict *msg,
                     const xs_str *inbox, int retries, int p_status)
 /* enqueues an output message to an inbox */
 {
-    if (xs_startswith(inbox, snac->actor)) {
+    if (is_msg_mine(snac, inbox)) {
         snac_debug(snac, 1, xs_str_new("refusing enqueue to myself"));
         return;
     }
@@ -4055,7 +4055,7 @@ void delete_purged_posts(snac *user, int days)
                 if (xs_is_dict(msg)) {
                     const char *id = xs_dict_get(msg, "id");
 
-                    if (xs_is_string(id) && xs_startswith(id, user->actor)) {
+                    if (xs_is_string(id) && is_msg_mine(user, id)) {
                         xs *d_msg = msg_delete(user, id);
 
                         enqueue_message(user, d_msg);

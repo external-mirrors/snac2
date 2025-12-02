@@ -779,7 +779,7 @@ int is_msg_for_me(snac *snac, const xs_dict *c_msg)
             object_get(object, &obj);
 
         /* if it's about one of our posts, accept it */
-        if (xs_startswith(object, snac->actor))
+        if (is_msg_mine(snac, object))
             return 2;
 
         /* blocked by hashtag? */
@@ -1242,7 +1242,7 @@ void notify(snac *snac, const char *type, const char *utype, const char *actor, 
 
     if (xs_match(type, "Like|Announce|EmojiReact")) {
         /* if it's not an admiration about something by us, done */
-        if (xs_is_null(objid) || !xs_startswith(objid, snac->actor))
+        if (xs_is_null(objid) || !is_msg_mine(snac, objid))
             return;
 
         /* if it's an announce by our own relay, done */
@@ -1267,7 +1267,7 @@ void notify(snac *snac, const char *type, const char *utype, const char *actor, 
             return;
 
         /* if it's not ours and we didn't vote, discard */
-        if (!xs_startswith(poll_id, snac->actor) && !was_question_voted(snac, poll_id))
+        if (!is_msg_mine(snac, poll_id) && !was_question_voted(snac, poll_id))
             return;
     }
 
@@ -2792,10 +2792,10 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
         if (xs_is_null(object))
             snac_log(snac, xs_fmt("malformed message: no 'id' field"));
         else
-        if (is_muted(snac, actor) && !xs_startswith(object, snac->actor))
+        if (is_muted(snac, actor) && !is_msg_mine(snac, object))
             snac_log(snac, xs_fmt("dropped 'Announce' from muted actor %s", actor));
         else
-        if (is_limited(snac, actor) && !xs_startswith(object, snac->actor))
+        if (is_limited(snac, actor) && !is_msg_mine(snac, object))
             snac_log(snac, xs_fmt("dropped 'Announce' from limited actor %s", actor));
         else {
             xs *a_msg = NULL;
@@ -2903,7 +2903,7 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
             snac_log(snac, xs_fmt("malformed message: no 'id' field"));
         else
         if (object_here(object)) {
-            if (xs_startswith(object, srv_baseurl) && !xs_startswith(object, actor))
+            if (xs_startswith(object, srv_baseurl) && !is_msg_mine(snac, object))
                 snac_log(snac, xs_fmt("ignored incorrect 'Delete' %s %s", actor, object));
             else {
                 timeline_del(snac, object);
@@ -3716,7 +3716,7 @@ int activitypub_get_handler(const xs_dict *req, const char *q_path,
                 const char *type = xs_dict_get(i, "type");
                 const char *id   = xs_dict_get(i, "id");
 
-                if (type && id && strcmp(type, "Note") == 0 && xs_startswith(id, snac.actor)) {
+                if (type && id && strcmp(type, "Note") == 0 && is_msg_mine(&snac, id)) {
                     if (is_msg_public(i)) {
                         xs *c_msg = msg_create(&snac, i);
                         list = xs_list_append(list, c_msg);
