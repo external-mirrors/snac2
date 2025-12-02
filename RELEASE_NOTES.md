@@ -8,6 +8,8 @@ Added metadata to remote users in the people page (contributed by dandelions).
 
 Fixed memory leak (contributed by dandelions).
 
+Fixed user matching (contributed by rakoo).
+
 Fixed typo in man page (contributed by spky).
 
 ## 2.84
