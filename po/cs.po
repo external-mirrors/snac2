@@ -14,7 +14,7 @@ msgstr "Citlivý obsah: "
 
 #: html.c:448
 msgid "Sensitive content description"
-msgstr "Varování k citlivému obsahu"
+msgstr "Varování o citlivém obsahu"
 
 msgid "Only for mentioned people: "
 msgstr "Pouze pro zmíněné osoby:"
@@ -185,11 +185,11 @@ msgstr "Vaše jméno"
 
 #: html.c:1507
 msgid "Avatar: "
-msgstr "Avatar: "
+msgstr "Profilový obrázek: "
 
 #: html.c:1515
 msgid "Delete current avatar"
-msgstr "Smazat současný avatar"
+msgstr "Smazat profilový obrázek"
 
 #: html.c:1517
 msgid "Header image (banner): "
@@ -197,7 +197,7 @@ msgstr "Obrázek v záhlaví profilu: "
 
 #: html.c:1525
 msgid "Delete current header image"
-msgstr "Smazat současný obrázek v záhlaví"
+msgstr "Smazat obrázek v záhlaví"
 
 #: html.c:1527
 msgid "Bio:"
@@ -205,11 +205,11 @@ msgstr "Bio:"
 
 #: html.c:1533
 msgid "Write about yourself here..."
-msgstr "Napište sem něco o sobě..."
+msgstr "Napište něco o sobě..."
 
 #: html.c:1542
 msgid "Always show sensitive content"
-msgstr "Vždy zobrazit příspěvky s varováním o citlivém obsahu"
+msgstr "Rozbalit citlivé příspěvky"
 
 #: html.c:1544
 msgid "Email address for notifications:"
@@ -233,11 +233,11 @@ msgstr "Zahodit soukromé zprávy od lidí, které nesledujete"
 
 #: html.c:1611
 msgid "This account is a bot"
-msgstr "Tenhle účet je robot"
+msgstr "Tento účet je robotem"
 
 #: html.c:1620
 msgid "Auto-boost all mentions to this account"
-msgstr "Automaticky boostovat všechny zmíňky o tomto účtu"
+msgstr "Automaticky boostit všechna zmínění tohoto účtu"
 
 #: html.c:1629
 msgid "This account is private (posts are not shown through the web)"
@@ -246,11 +246,11 @@ msgstr ""
 
 #: html.c:1639
 msgid "Collapse top threads by default"
-msgstr "Zobrazovat vlákna složená"
+msgstr "Složit vlákna"
 
 #: html.c:1648
 msgid "Follow requests must be approved"
-msgstr "Žádosti o sledování je nutno manuálně potvrdit"
+msgstr "Žádosti o sledování je nutné manuálně potvrdit"
 
 #: html.c:1657
 msgid "Publish follower and following metrics"
@@ -274,7 +274,7 @@ msgstr "Nové heslo:"
 
 #: html.c:1710
 msgid "Repeat new password:"
-msgstr "Zopakujte nové heslo:"
+msgstr "Nové heslo znovu:"
 
 #: html.c:1720
 msgid "Update user info"
@@ -330,7 +330,7 @@ msgstr "Odboostit"
 
 #: html.c:1930
 msgid "I regret I boosted this"
-msgstr "Boostit to byl blbej nápad"
+msgstr "Boostit to byl špatný nápad"
 
 #: html.c:1936 html.c:4922
 msgid "Unbookmark"
@@ -438,7 +438,7 @@ msgstr "Událost"
 
 #: html.c:2246 html.c:2275
 msgid "boosted"
-msgstr "boostuje"
+msgstr "boostí"
 
 #: html.c:2289
 msgid "in reply to"
@@ -478,7 +478,7 @@ msgstr "Popisek..."
 
 #: html.c:2697
 msgid "Source channel or community"
-msgstr ""
+msgstr "Původní kanál nebo komunita"
 
 #: html.c:2791
 msgid "Time: "
@@ -519,7 +519,7 @@ msgstr "Rozepsané příspěvky"
 
 #: html.c:3177
 msgid "No more unseen posts"
-msgstr "Nic víc nového"
+msgstr "Nic nového"
 
 #: html.c:3181 html.c:3290
 msgid "Back to top"
@@ -623,7 +623,7 @@ msgstr "Nové"
 
 #: html.c:3707
 msgid "Already seen"
-msgstr "Zobrazeno dříve"
+msgstr "Již viděno"
 
 #: html.c:3722
 msgid "None"
