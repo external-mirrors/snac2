@@ -10,7 +10,13 @@ Fixed memory leak (contributed by dandelions).
 
 Fixed user matching (contributed by rakoo).
 
+Rendering visibility conditionally, with lesser reach if needed (contributed by byte).
+
+Added a button next to a follow notification to follow back.
+
 Fixed typo in man page (contributed by spky).
+
+Updated Czech and German translations (contributed by pmjv and zen).
 
 ## 2.84
 
