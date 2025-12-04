@@ -1,6 +1,6 @@
 # Release Notes
 
-## UNRELEASED
+## 2.85
 
 Quoted posts are now shown.
 
