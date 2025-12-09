@@ -1,5 +1,9 @@
 # Release Notes
 
+## UNRELEASED
+
+Mastodon API: Fix for some client notifications (contributed by violette).
+
 ## 2.85
 
 Quoted posts are now shown.
