@@ -3044,7 +3044,7 @@ int mastoapi_post_handler(const xs_dict *req, const char *q_path,
             xs *app  = xs_dict_new();
             xs *id   = xs_replace_i(tid(0), ".", "");
             xs *csec = random_str();
-            char *vkey = (char *)xs_dict_get(srv_config, "vkey");
+            xs *vkey = xs_dup(xs_dict_get(srv_config, "vkey"));
             if (vkey == NULL)
                 vkey = random_str();
 
