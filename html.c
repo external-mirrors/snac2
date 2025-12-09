@@ -3248,7 +3248,7 @@ xs_str *html_timeline(snac *user, const xs_list *list, int read_only,
 
     if (list && user && read_only) {
         /** history **/
-        if (xs_type(xs_dict_get(srv_config, "disable_history")) != XSTYPE_TRUE) {
+        if (xs_type(xs_dict_get(srv_config, "disable_history")) != XSTYPE_TRUE && !terse) {
             xs_html *ul = xs_html_tag("ul", NULL);
 
             xs_html *history = xs_html_tag("div",
