@@ -8,8 +8,6 @@ Investigate the problem with boosts inside the same instance (see https://codebe
 
 Editing / Updating a post does not index newly added hashtags.
 
-Unfollowing guppe groups seems to work (http status of 200), but messages continue to arrive as if it didn't.
-
 Important: deleting a follower should do more that just delete the object, see https://codeberg.org/grunfink/snac2/issues/43#issuecomment-956721
 
 ## Wishlist
@@ -31,10 +29,6 @@ Implement "FEP-3b86: Activity Intents" https://codeberg.org/fediverse/fep/src/br
 Track "FEP-ef61: Portable Objects" https://codeberg.org/fediverse/fep/src/branch/main/fep/ef61/fep-ef61.md
 
 Integrate "Added handling for International Domain Names" PR https://codeberg.org/grunfink/snac2/pulls/104
-
-Do something about Akkoma and Misskey's quoted replies (they use the `quoteUrl` field instead of `inReplyTo`).
-
-Take a look at crashes in the brittle Mastodon official app (crashes when hitting the reply button, crashes or 'ownVotes is null' errors when trying to show polls).
 
 The 'history' pages are just monthly HTML snapshots of the local timeline. This is ok and cheap and easy, but is problematic if you e.g. intentionally delete a post because it will remain there in the history forever. If you activate local timeline purging, purged entries will remain in the history as 'ghosts', which may or may not be what the user wants.
 
@@ -381,3 +375,9 @@ Add command-line tools for creating and manipulating lists (2025-04-18T10:04:41+
 Do a [Webmention](https://www.w3.org/TR/webmention/) to every link written in a post (2025-05-04T11:16:21+0200).
 
 The local purge should generate `Delete` activities for local posts (2025-07-25T18:55:16+0200).
+
+Unfollowing guppe groups seems to work (http status of 200), but messages continue to arrive as if it didn't. (No longer relevant, as guppe seems to not exist anymore) (2025-12-09T05:31:56+0100).
+
+Do something about Akkoma and Misskey's quoted replies (they use the `quoteUrl` field instead of `inReplyTo`) (2025-12-09T05:31:56+0100).
+
+Take a look at crashes in the brittle Mastodon official app (crashes when hitting the reply button, crashes or 'ownVotes is null' errors when trying to show polls) (2025-12-09T05:31:56+0100).
