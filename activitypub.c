@@ -1643,7 +1643,22 @@ xs_dict *msg_emoji_init(snac *snac, const char *mid, const char *eid_o)
             dict = xs_dict_set(dict, "type", "Emoji");
             tag = xs_list_append(tag, dict);
         }
+        else
+        if (xs_startswith(emo, "&#")) {
+            /* snac default emoji as an HTML entity: decode */
+            content = xs_free(content);
+
+            xs *s1 = xs_strip_chars_i(xs_dup(emo), "&#");
+            unsigned int cpoint = 0;
+            sscanf(s1, "%u;", &cpoint);
+
+            if (cpoint)
+                content = xs_utf8_cat(xs_str_new(NULL), cpoint);
+            else
+                content = xs_dup(emo);
+        }
         else {
+            /* use as it is and hope for the best */
             xs_free(content);
             content = xs_dup(emo);
         }
