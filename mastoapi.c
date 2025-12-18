@@ -1185,7 +1185,8 @@ xs_dict *mastoapi_status(snac *snac, const xs_dict *msg)
                 }
 
                 xs *fl = xs_list_new();
-                fl = xs_list_append(fl, xs_fmt("%d", count), me);
+                xs *c1 = xs_fmt("%d", count);
+                fl = xs_list_append(fl, c1, me);
                 sfrl = xs_dict_append(sfrl, content, fl);
             }
         }
@@ -2399,8 +2400,10 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
                                 mn = xs_dict_append(mn, "emoji_url", url);
                             }
 
-                            if (xs_is_emoji((utf = xs_utf8_dec(&content))))
-                                mn = xs_dict_append(mn, "name", xs_fmt("&#%d;", utf));
+                            if (xs_is_emoji((utf = xs_utf8_dec(&content)))) {
+                                xs *s1 = xs_fmt("&#%d;", utf);
+                                mn = xs_dict_append(mn, "name", s1);
+                            }
                         }
                     }
                 }

@@ -55,7 +55,7 @@ int login(snac *user, const xs_dict *headers)
 }
 
 xs_str *_replace_shortnames(xs_str *s, const xs_list *tag, int ems,
-                            const char *proxy, const xs_list *cl, const char *act)
+                            const char *proxy, const xs_list *cl, const char *act_o)
 /* replace but also adds a class list and an actor in its alt text.
  * Used for emoji reactions */
 {
@@ -107,7 +107,7 @@ xs_str *_replace_shortnames(xs_str *s, const xs_list *tag, int ems,
                         if (!xs_is_string(mt))
                             mt = xs_mime_by_ext(u);
 
-                        act = act ? xs_fmt("%s\n%s", n, act) : xs_fmt("%s", n);
+                        xs *act = act_o ? xs_fmt("%s\n%s", n, act) : xs_fmt("%s", n);
 
                         if (strcmp(mt, "image/svg+xml") == 0 && !xs_is_true(xs_dict_get(srv_config, "enable_svg")))
                             s = xs_replace_i(s, n, "");
@@ -2479,7 +2479,9 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
                 }
 
                 xs *fl = xs_list_new();
-                fl = xs_list_append(fl, xs_fmt("%d", count), actors, xs_fmt("%d", me));
+                xs *c1 = xs_fmt("%d", count);
+                xs *c2 = xs_fmt("%d", me);
+                fl = xs_list_append(fl, c1, actors, c2);
                 sfrl = xs_dict_append(sfrl, content, fl);
             }
         }
@@ -2545,11 +2547,12 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
                             if (me)
                                 class = xs_list_append(class, "snac-reacted");
                             xs *l1 = xs_join(class, " ");
+                            xs *s1 = xs_fmt("&#%d", utf);
                             ret = xs_html_tag("button",
                                     xs_html_attr("type", "submit"),
                                     xs_html_attr("name", "action"),
                                     xs_html_attr("value", me ? L("EmojiUnreact") : L("EmojiReact")),
-                                    xs_html_raw(xs_fmt("&#%d", utf)),
+                                    xs_html_raw(s1),
                                     xs_html_tag("span",
                                         xs_html_raw(nb),
                                         xs_html_attr("style", "font-size: initial; padding-left: 5px;")),
