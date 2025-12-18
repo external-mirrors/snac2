@@ -1599,7 +1599,7 @@ int timeline_admire(snac *snac, const char *id,
     /* use utf <3 as a like, as it is ugly */
     if (type && xs_match(type, "Like|EmojiReact|Emoji") &&
             content && strcmp(content, "❤") != 0) {
-        ret = timeline_emoji_react(xs_dup(snac->actor), id, xs_dup(msg));
+        ret = timeline_emoji_react(snac->actor, id, xs_dup(msg));
         snac_debug(snac, 1, xs_fmt("timeline_emoji_react %s", id));
     }
 

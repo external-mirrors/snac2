@@ -1643,7 +1643,7 @@ xs_dict *msg_emoji_init(snac *snac, const char *mid, const char *eid)
 
     n_msg = xs_dict_set(n_msg, "content", content);
     n_msg = xs_dict_set(n_msg, "accounts", accounts);
-    n_msg = xs_dict_set(n_msg, "attributedTo", xs_list_get(xs_dup(xs_dict_get(n_msg, "to")), 1));
+    n_msg = xs_dict_set(n_msg, "attributedTo", xs_list_get(xs_dict_get(n_msg, "to"), 1));
     n_msg = xs_dict_set(n_msg, "accountId", snac->uid);
     n_msg = xs_dict_set(n_msg, "tag", tag);
 
