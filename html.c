@@ -107,7 +107,7 @@ xs_str *_replace_shortnames(xs_str *s, const xs_list *tag, int ems,
                         if (!xs_is_string(mt))
                             mt = xs_mime_by_ext(u);
 
-                        xs *act = act_o ? xs_fmt("%s\n%s", n, act) : xs_fmt("%s", n);
+                        xs *act = act_o ? xs_fmt("%s\n%s", n, act_o) : xs_fmt("%s", n);
 
                         if (strcmp(mt, "image/svg+xml") == 0 && !xs_is_true(xs_dict_get(srv_config, "enable_svg")))
                             s = xs_replace_i(s, n, "");
