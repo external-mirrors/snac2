@@ -2107,14 +2107,15 @@ xs_html *html_entry_controls(snac *user, const char *actor,
         /* the post textarea */
         xs *div_id  = xs_fmt("%s_reply", md5);
         xs *form_id = xs_fmt("%s_reply_form", md5);
+        xs *e_react = emoji_reacted(user, id);
 
         xs_html_add(controls, xs_html_tag("div",
             xs_html_tag("p", NULL),
             html_emoji(
-                user, L("Emoji react"),
+                user, L("Emoji react..."),
                 div_id, form_id,
                 ":neocat:", id,
-                emoji_reacted(user, id))),
+                e_react)),
             xs_html_tag("p", NULL));
     }
 

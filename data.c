@@ -1959,19 +1959,19 @@ xs_list *muted_list(snac *user)
 
 /** emojis react **/
 
-const xs_str *emoji_reacted(snac *user, const char *id)
+xs_str *emoji_reacted(snac *user, const char *id)
 /* returns the emoji an user reacted to a message */
 {
     xs *emojis = object_get_emoji_reacts(id);
     int c = 0;
     const char *v;
-    xs_dict *msg;
 
     while (xs_list_next(emojis, &v, &c)) {
+        xs *msg = NULL;
         if (object_get_by_md5(v, &msg)) {
             const xs_val *act = xs_dict_get(msg, "actor");
             if (act && strcmp(act, user->actor) == 0)
-                return xs_dict_get(msg, "content");
+                return xs_dup(xs_dict_get(msg, "content"));
         }
     }
     return NULL;

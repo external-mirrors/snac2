@@ -205,7 +205,7 @@ void unmute(snac *snac, const char *actor);
 int is_muted(snac *snac, const char *actor);
 xs_list *muted_list(snac *user);
 
-const xs_str *emoji_reacted(snac *user, const char *id);
+xs_str *emoji_reacted(snac *user, const char *id);
 
 int is_bookmarked(snac *user, const char *id);
 int bookmark(snac *user, const char *id);
