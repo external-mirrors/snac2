@@ -1628,19 +1628,25 @@ xs_dict *msg_emoji_init(snac *snac, const char *mid, const char *eid_o)
     }
     else {
         content = xs_fmt(":%s:", eid);
-        const char *url = xs_dict_get(emjs, content);
+        const char *emo = xs_dict_get(emjs, content);
 
-        if (url == NULL)
+        if (emo == NULL)
             return NULL;
 
-        icon = xs_dict_set(icon, "type", "Image");
-        icon = xs_dict_set(icon, "url", url);
-        dict = xs_dict_set(dict, "icon", icon);
+        if (xs_match(emo, "https://*|http://*")) { /* emoji is an URL to an image */
+            icon = xs_dict_set(icon, "type", "Image");
+            icon = xs_dict_set(icon, "url", emo);
+            dict = xs_dict_set(dict, "icon", icon);
 
-        dict = xs_dict_set(dict, "id", url);
-        dict = xs_dict_set(dict, "name", content);
-        dict = xs_dict_set(dict, "type", "Emoji");
-        tag = xs_list_append(tag, dict);
+            dict = xs_dict_set(dict, "id", emo);
+            dict = xs_dict_set(dict, "name", content);
+            dict = xs_dict_set(dict, "type", "Emoji");
+            tag = xs_list_append(tag, dict);
+        }
+        else {
+            xs_free(content);
+            content = xs_dup(emo);
+        }
     }
 
     accounts = xs_list_append(accounts, snac->actor);
