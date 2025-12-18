@@ -1165,8 +1165,8 @@ xs_dict *mastoapi_status(snac *snac, const xs_dict *msg)
         int c = 0;
         const char *v;
 
-        xs_dict *msg = NULL;
         while (xs_list_next(rl, &v, &c)) {
+            xs *msg = NULL;
             if (valid_status(object_get_by_md5(v, &msg))) {
                 const char *content = xs_dict_get(msg, "content");
                 const char *actor = xs_dict_get(msg, "actor");
@@ -1194,6 +1194,7 @@ xs_dict *mastoapi_status(snac *snac, const xs_dict *msg)
         c = 0;
 
         while (xs_list_next(rl, &v, &c)) {
+            xs *msg = NULL;
             if (valid_status(object_get_by_md5(v, &msg))) {
                 xs *d1 = xs_dict_new();
 

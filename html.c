@@ -2454,8 +2454,8 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
         xs *sfrl = xs_dict_new();
         xs *rl = object_get_emoji_reacts(id);
 
-        xs_dict *m = NULL;
         while (xs_list_next(rl, &v, &c)) {
+            xs *m = NULL;
             if (valid_status(object_get_by_md5(v, &m))) {
                 const char *content = xs_dict_get(m, "content");
                 const char *actor = xs_dict_get(m, "actor");
@@ -2490,6 +2490,7 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
         c = 0;
 
         while (xs_list_next(rl, &k, &c)) {
+            xs *m = NULL;
             if (valid_status(object_get_by_md5(k, &m))) {
                 const xs_dict *tag = xs_dict_get(m, "tag");
                 const xs_dict *ide = xs_dict_get(m, "id");
