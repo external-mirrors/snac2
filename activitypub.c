@@ -1600,17 +1600,18 @@ xs_dict *msg_repulsion(snac *user, const char *id, const char *type)
     return msg;
 }
 
-xs_dict *msg_emoji_init(snac *snac, const char *mid, const char *eid)
+xs_dict *msg_emoji_init(snac *snac, const char *mid, const char *eid_o)
 /* creates an emoji reaction from a local user */
 {
     xs_dict *n_msg = msg_admiration(snac, mid, "EmojiReact");
 
-    eid = xs_strip_chars_i(xs_dup(eid), ":");
+    xs *eid = xs_strip_chars_i(xs_dup(eid_o), ":");
     xs *content = NULL;
     xs *tag = xs_list_new();
     xs *dict = xs_dict_new();
     xs *icon = xs_dict_new();
     xs *accounts = xs_list_new();
+    xs *emjs = emojis();
 
     /* may be a default emoji */
     xs *eidd = xs_dup(eid);
@@ -1625,15 +1626,18 @@ xs_dict *msg_emoji_init(snac *snac, const char *mid, const char *eid)
             return NULL;
         }
     }
-    else if (xs_dict_get(emojis(), xs_fmt(":%s:", eid)) == NULL)
-        return NULL;
     else {
         content = xs_fmt(":%s:", eid);
+        const char *url = xs_dict_get(emjs, content);
+
+        if (url == NULL)
+            return NULL;
+
         icon = xs_dict_set(icon, "type", "Image");
-        icon = xs_dict_set(icon, "url", xs_fmt("%s/s/%s.png", snac->actor, eid));
+        icon = xs_dict_set(icon, "url", url);
         dict = xs_dict_set(dict, "icon", icon);
 
-        dict = xs_dict_set(dict, "id", xs_fmt("%s/s/%s.png", snac->actor, eid));
+        dict = xs_dict_set(dict, "id", url);
         dict = xs_dict_set(dict, "name", content);
         dict = xs_dict_set(dict, "type", "Emoji");
         tag = xs_list_append(tag, dict);
