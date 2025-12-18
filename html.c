@@ -2521,6 +2521,8 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
                         cl = xs_list_append(cl, "snac-reaction-image");
                         xs *emoji = _replace_shortnames(xs_dup(shortname), tag, 2, proxy, cl, act);
 
+                        emoji = xs_strip_chars_i(emoji, ":");
+
                         if (me)
                             class = xs_list_append(class, "snac-reacted");
 
