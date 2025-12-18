@@ -1158,6 +1158,97 @@ xs_dict *mastoapi_status(snac *snac, const xs_dict *msg)
         st = xs_dict_append(st, "tags",     htl);
         st = xs_dict_append(st, "emojis",   eml);
     }
+    {
+        xs *rl   = object_get_emoji_reacts(id);
+        xs *frl  = xs_list_new(); /* final */
+        xs *sfrl = xs_dict_new(); /* seen */
+        int c = 0;
+        const char *v;
+
+        xs_dict *msg = NULL;
+        while (xs_list_next(rl, &v, &c)) {
+            if (valid_status(object_get_by_md5(v, &msg))) {
+                const char *content = xs_dict_get(msg, "content");
+                const char *actor = xs_dict_get(msg, "actor");
+                const xs_list *contentl = xs_dict_get(sfrl, content);
+                /* NOTE: idk when there are no actor, but i encountered that bug.
+                 * Probably because of one of my previous attempts.
+                 * Keeping this just in case, can remove later */
+                const char *me = actor && strcmp(actor, snac->actor) == 0 ?
+                    xs_stock(XSTYPE_TRUE) : xs_stock(XSTYPE_FALSE);
+                int count = 1;
+
+                if (contentl) {
+                    count = atoi(xs_list_get(contentl, 0)) + 1;
+                    if (strncmp(xs_list_get(contentl, 1), xs_stock(XSTYPE_TRUE), 1) == 0)
+                        me = xs_stock(XSTYPE_TRUE);
+                }
+
+                xs *fl = xs_list_new();
+                fl = xs_list_append(fl, xs_fmt("%d", count), me);
+                sfrl = xs_dict_append(sfrl, content, fl);
+            }
+        }
+
+        c = 0;
+
+        while (xs_list_next(rl, &v, &c)) {
+            if (valid_status(object_get_by_md5(v, &msg))) {
+                xs *d1 = xs_dict_new();
+
+                const xs_dict *icon = xs_dict_get(xs_list_get(xs_dict_get(msg, "tag"), 0), "icon");
+                const char *o_url = xs_dict_get(icon, "url");
+                const char *name = xs_dict_get(msg, "content");
+                const char *actor = xs_dict_get(msg, "actor");
+
+                xs *nm = xs_dup(name);
+                xs *url = NULL;
+
+                if (!xs_is_null(o_url)) {
+                    if (actor && snac && !strcmp(actor, snac->actor))
+                        url = make_url(o_url, NULL, 1);
+                    else
+                        url = xs_dup(o_url);
+                }
+
+                xs *accounts = xs_list_new();
+                if (actor) {
+                    xs *d2 = xs_dict_new();
+                    object_get(actor, &d2);
+                    xs *e_acct = mastoapi_account(snac, d2);
+                    accounts = xs_list_append(accounts, e_acct);
+                }
+
+                const xs_list *item = xs_dict_get(sfrl, nm);
+                const xs_str *nb = xs_list_get(item, 0);
+                const xs_val *me = xs_list_get(item, 1);
+                if (item == NULL)
+                    continue;
+
+                if (nm && strcmp(nm, "")) {
+                    if (url && strcmp(url, "")) {
+                        d1 = xs_dict_append(d1, "name",              nm);
+                        d1 = xs_dict_append(d1, "shortcode",         nm);
+                        d1 = xs_dict_append(d1, "accounts",          accounts);
+                        d1 = xs_dict_append(d1, "me",                me);
+                        d1 = xs_dict_append(d1, "url",               url);
+                        d1 = xs_dict_append(d1, "static_url",        url);
+                        d1 = xs_dict_append(d1, "visible_in_picker", xs_stock(XSTYPE_TRUE));
+                        d1 = xs_dict_append(d1, "count", nb);
+                    } else {
+                        d1 = xs_dict_append(d1, "name",              nm);
+                        d1 = xs_dict_append(d1, "count",             nb);
+                        d1 = xs_dict_append(d1, "me",                me);
+                        d1 = xs_dict_append(d1, "visible_in_picker", xs_stock(XSTYPE_TRUE));
+                    }
+                    sfrl = xs_dict_del(sfrl, nm);
+                    frl = xs_list_append(frl, d1);
+                }
+            }
+        }
+
+        st = xs_dict_append(st, "reactions", frl);
+    }
 
     xs_free(idx);
     xs_free(ixc);
@@ -2202,14 +2293,23 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
                 if (noti == NULL)
                     continue;
 
+                const xs_dict *tag = xs_list_get(xs_dict_get_path(noti, "msg.tag"), 0);
+
                 const char *type  = xs_dict_get(noti, "type");
                 const char *utype = xs_dict_get(noti, "utype");
                 const char *objid = xs_dict_get(noti, "objid");
                 const char *id    = xs_dict_get(noti, "id");
                 const char *actid = xs_dict_get(noti, "actor");
+
+                int isEmoji = 0;
+
                 xs *fid = xs_replace(id, ".", "");
                 xs *actor = NULL;
                 xs *entry = NULL;
+
+                if (tag) {
+                    isEmoji = strcmp(xs_dict_get(tag, "type"), "Emoji") ? 0 : 1;
+                }
 
                 if (!valid_status(actor_get(actid, &actor)))
                     continue;
@@ -2234,8 +2334,11 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
                 }
 
                 /* convert the type */
-                if (strcmp(type, "Like") == 0 || strcmp(type, "EmojiReact") == 0)
+                if (strcmp(type, "Like") == 0 && !isEmoji)
                     type = "favourite";
+                else
+                if (isEmoji || strcmp(type, "EmojiReact") == 0)
+                    type = "reaction";
                 else
                 if (strcmp(type, "Announce") == 0)
                     type = "reblog";
@@ -2277,8 +2380,29 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
                 if (strcmp(type, "follow") != 0 && !xs_is_null(objid)) {
                     xs *st = mastoapi_status(&snac1, entry);
 
-                    if (st)
+                    if (st) {
                         mn = xs_dict_append(mn, "status", st);
+
+                        if (strcmp(type, "reaction") == 0 && !xs_is_null(objid)) {
+                            const char *eid = NULL;
+                            const char *url = NULL;
+                            int utf = 0;
+
+                            const xs_dict *tag = xs_list_get(xs_dict_get_path(noti, "msg.tag"), 0);
+                            const char *content = xs_dict_get_path(noti, "msg.content");
+
+                            url = xs_dict_get(xs_dict_get(tag, "icon"), "url");
+                            eid = xs_dict_get(tag, "name");
+
+                            if (eid && url) {
+                                mn = xs_dict_append(mn, "emoji", eid);
+                                mn = xs_dict_append(mn, "emoji_url", url);
+                            }
+
+                            if (xs_is_emoji((utf = xs_utf8_dec(&content))))
+                                mn = xs_dict_append(mn, "name", xs_fmt("&#%d;", utf));
+                        }
+                    }
                 }
 
                 out = xs_list_append(out, mn);
@@ -2594,6 +2718,11 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
                 "\"max_expiration\":2629746,"
                 "\"max_options\":8,\"min_expiration\":300}");
             cfg = xs_dict_append(cfg, "polls", d14);
+
+
+            xs *d15 = xs_json_loads("{\"max_reactions\":50}");
+                cfg = xs_dict_append(cfg, "reactions", d15);
+
         }
 
         ins = xs_dict_append(ins, "configuration", cfg);
@@ -3219,7 +3348,7 @@ int mastoapi_post_handler(const xs_dict *req, const char *q_path,
 
                         if (n_msg != NULL) {
                             enqueue_message(&snac, n_msg);
-                            timeline_admire(&snac, xs_dict_get(n_msg, "object"), snac.actor, 1);
+                            timeline_admire(&snac, xs_dict_get(n_msg, "object"), snac.actor, 1, msg);
 
                             out = mastoapi_status(&snac, msg);
                         }
@@ -3235,12 +3364,35 @@ int mastoapi_post_handler(const xs_dict *req, const char *q_path,
                         }
                     }
                     else
+                    if (strcmp(op, "react") == 0) { /** **/
+                        const char *eid = xs_list_get(l, 5);
+                        xs *n_msg = msg_emoji_init(&snac, id, eid);
+                        if (n_msg)
+                            out = mastoapi_status(&snac, n_msg);
+                    }
+                    else
+                    if (strcmp(op, "unreact") == 0) { /** **/
+                        const char *eid = xs_list_get(l, 5);
+                        xs *content = xs_fmt("%s", eid);
+
+                        if (eid) {
+                            xs *n_msg = msg_emoji_unreact(&snac, id, content);
+
+                            if (n_msg != NULL) {
+                                enqueue_message(&snac, n_msg);
+
+                                out = mastoapi_status(&snac, msg);
+                            }
+                        }
+                    }
+
+                    else
                     if (strcmp(op, "reblog") == 0) { /** **/
                         xs *n_msg = msg_admiration(&snac, id, "Announce");
 
                         if (n_msg != NULL) {
                             enqueue_message(&snac, n_msg);
-                            timeline_admire(&snac, xs_dict_get(n_msg, "object"), snac.actor, 0);
+                            timeline_admire(&snac, xs_dict_get(n_msg, "object"), snac.actor, 0, msg);
 
                             out = mastoapi_status(&snac, msg);
                         }

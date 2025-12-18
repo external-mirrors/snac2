@@ -146,12 +146,15 @@ void object_touch(const char *id);
 int object_admire(const char *id, const char *actor, int like);
 int object_unadmire(const char *id, const char *actor, int like);
 
+int object_emoji_react(const char *mid, const char *eid);
+int object_rm_emoji_react(const char *mid, const char *eid);
 int object_likes_len(const char *id);
 int object_announces_len(const char *id);
 
 xs_list *object_children(const char *id);
 xs_list *object_likes(const char *id);
 xs_list *object_announces(const char *id);
+xs_list *object_get_emoji_reacts(const char *id);
 int object_parent(const char *md5, char parent[MD5_HEX_SIZE]);
 
 int object_user_cache_add(snac *snac, const char *id, const char *cachedir);
@@ -180,7 +183,8 @@ xs_str *user_index_fn(snac *user, const char *idx_name);
 xs_list *timeline_simple_list(snac *user, const char *idx_name, int skip, int show, int *more);
 xs_list *timeline_list(snac *snac, const char *idx_name, int skip, int show, int *more);
 int timeline_add(snac *snac, const char *id, const xs_dict *o_msg);
-int timeline_admire(snac *snac, const char *id, const char *admirer, int like);
+int timeline_admire(snac *snac, const char *id, const char *admirer, int like, xs_dict *msg);
+int timeline_emoji_react(const char *atto, const char *id, xs_dict *o_msg);
 
 xs_list *timeline_top_level(snac *snac, const xs_list *list);
 void timeline_add_mark(snac *user);
@@ -200,6 +204,8 @@ void mute(snac *snac, const char *actor);
 void unmute(snac *snac, const char *actor);
 int is_muted(snac *snac, const char *actor);
 xs_list *muted_list(snac *user);
+
+const xs_str *emoji_reacted(snac *user, const char *id);
 
 int is_bookmarked(snac *user, const char *id);
 int bookmark(snac *user, const char *id);
@@ -358,6 +364,8 @@ xs_list *get_attachments(const xs_dict *msg);
 
 xs_dict *msg_admiration(snac *snac, const char *object, const char *type);
 xs_dict *msg_repulsion(snac *user, const char *id, const char *type);
+xs_dict *msg_emoji_init(snac *user, const char *mid, const char *eid);
+xs_dict *msg_emoji_unreact(snac *user, const char *id, const char *type);
 xs_dict *msg_create(snac *snac, const xs_dict *object);
 xs_dict *msg_follow(snac *snac, const char *actor);
 

@@ -54,9 +54,10 @@ int login(snac *user, const xs_dict *headers)
     return logged_in;
 }
 
-
-xs_str *replace_shortnames(xs_str *s, const xs_list *tag, int ems, const char *proxy)
-/* replaces all the :shortnames: with the emojis in tag */
+xs_str *_replace_shortnames(xs_str *s, const xs_list *tag, int ems,
+                            const char *proxy, const xs_list *cl, const char *act)
+/* replace but also adds a class list and an actor in its alt text.
+ * Used for emoji reactions */
 {
     if (!xs_is_null(tag)) {
         xs *tag_list = NULL;
@@ -69,11 +70,15 @@ xs_str *replace_shortnames(xs_str *s, const xs_list *tag, int ems, const char *p
             tag_list = xs_dup(tag);
         }
 
-        xs *style = xs_fmt("height: %dem; width: %dem; vertical-align: middle;", ems, ems);
+        xs *style = xs_fmt("max-height: %dem; max-width: %dem;", ems, ems);
         xs *class = xs_fmt("snac-emoji snac-emoji-%d-em", ems);
+        if (cl)
+            class = xs_str_cat(class, " ", xs_join(cl, " "));
 
-        const xs_dict *v;
         int c = 0;
+        const xs_val *v;
+
+        c = 0;
 
         xs_set rep_emoji;
         xs_set_init(&rep_emoji);
@@ -100,6 +105,8 @@ xs_str *replace_shortnames(xs_str *s, const xs_list *tag, int ems, const char *p
                         if (!xs_is_string(mt))
                             mt = xs_mime_by_ext(u);
 
+                        act = act ? xs_fmt("%s\n%s", n, act) : xs_fmt("%s", n);
+
                         if (strcmp(mt, "image/svg+xml") == 0 && !xs_is_true(xs_dict_get(srv_config, "enable_svg")))
                             s = xs_replace_i(s, n, "");
                         else {
@@ -108,8 +115,8 @@ xs_str *replace_shortnames(xs_str *s, const xs_list *tag, int ems, const char *p
                             xs_html *img = xs_html_sctag("img",
                                 xs_html_attr("loading", "lazy"),
                                 xs_html_attr("src", url),
-                                xs_html_attr("alt", n),
-                                xs_html_attr("title", n),
+                                xs_html_attr("alt", act),
+                                xs_html_attr("title", act),
                                 xs_html_attr("class", class),
                                 xs_html_attr("style", style));
 
@@ -127,6 +134,13 @@ xs_str *replace_shortnames(xs_str *s, const xs_list *tag, int ems, const char *p
     }
 
     return s;
+}
+
+
+xs_str *replace_shortnames(xs_str *s, const xs_list *tag, int ems, const char *proxy)
+/* replaces all the :shortnames: with the emojis in tag */
+{
+    return _replace_shortnames(s, tag, ems, proxy, NULL, NULL);
 }
 
 
@@ -428,6 +442,52 @@ void html_note_render_visibility(snac* user, xs_html *form, const int scope)
         );
     }
     xs_html_add(form, paragraph);
+}
+
+/* html_note but moddled for emoji's needs. here and not bellow, since the
+ * other one is already so complex. */
+xs_html *html_emoji(snac *user, const char *summary,
+                   const char *div_id, const char *form_id,
+                   const char* placeholder, const char *post_id,
+                   const char* eid)
+{
+    xs *action = xs_fmt("%s/admin/action", user->actor);
+
+    xs_html *form;
+    const int react = eid == NULL ? 0 : 1;
+
+    xs_html *note = xs_html_tag("div",
+        xs_html_tag("details",
+            xs_html_tag("summary",
+                xs_html_text(summary)),
+                xs_html_tag("p", NULL),
+                xs_html_tag("div",
+                    xs_html_attr("class", "snac-note"),
+                    xs_html_attr("id",    div_id),
+                    form = xs_html_tag("form",
+                        xs_html_attr("autocomplete", "off"),
+                        xs_html_attr("method",       "post"),
+                        xs_html_attr("action",       action),
+                        xs_html_attr("enctype",      "multipart/form-data"),
+                        xs_html_attr("id",           form_id),
+                        xs_html_sctag("input",
+                            xs_html_attr("type",     "hidden"),
+                            xs_html_attr("name",     "id"),
+                            xs_html_attr("value",    post_id)),
+                        xs_html_sctag("input",
+                            xs_html_attr("type",     react ? "hidden" : "text"),
+                            xs_html_attr("name",     "eid"),
+                            xs_html_attr(react ? "value" : "placeholder", react ? eid : placeholder)),
+                        xs_html_text(" "),
+                        xs_html_sctag("input",
+                            xs_html_attr("type",    "submit"),
+                            xs_html_attr("name",    "action"),
+                            xs_html_attr("eid",    "action"),
+                            xs_html_attr("value",   react ? L("EmojiUnreact") : L("EmojiReact"))),
+                        xs_html_text(" "),
+                    xs_html_tag("p", NULL)))));
+
+    return note;
 }
 
 xs_html *html_note(snac *user, const char *summary,
@@ -1356,6 +1416,28 @@ xs_html *html_top_controls(snac *user)
                     xs_html_attr("value",   L("Like"))),
                 xs_html_text(" "),
                 xs_html_text(L("(by URL)"))),
+            xs_html_tag("form",
+                xs_html_attr("autocomplete", "off"),
+                xs_html_attr("method",       "post"),
+                xs_html_attr("action",       ops_action),
+                xs_html_sctag("input",
+                    xs_html_attr("type",     "text"),
+                    xs_html_attr("name",     "eid"),
+                    xs_html_attr("required", "required"),
+                    xs_html_attr("placeholder", ":neocat:")),
+                xs_html_text(" "),
+                xs_html_sctag("input",
+                    xs_html_attr("type",     "text"),
+                    xs_html_attr("name",     "id"),
+                    xs_html_attr("required", "required"),
+                    xs_html_attr("placeholder", "https:/" "/fedi.example.com/bob/...")),
+                xs_html_text(" "),
+                xs_html_sctag("input",
+                    xs_html_attr("type",    "submit"),
+                    xs_html_attr("name",    "action"),
+                    xs_html_attr("value",   L("EmojiReact"))),
+                xs_html_text(" "),
+                xs_html_text(L("(by URL)"))),
             xs_html_tag("p", NULL)));
 
     /** user settings **/
@@ -2019,6 +2101,21 @@ xs_html *html_entry_controls(snac *user, const char *actor,
             xs_html_tag("p", NULL));
     }
 
+    { /** emoji react **/
+        /* the post textarea */
+        xs *div_id  = xs_fmt("%s_reply", md5);
+        xs *form_id = xs_fmt("%s_reply_form", md5);
+
+        xs_html_add(controls, xs_html_tag("div",
+            xs_html_tag("p", NULL),
+            html_emoji(
+                user, L("Emoji react"),
+                div_id, form_id,
+                ":neocat:", id,
+                emoji_reacted(user, id))),
+            xs_html_tag("p", NULL));
+    }
+
     { /** reply **/
         /* the post textarea */
         xs *ct      = build_mentions(user, msg);
@@ -2345,6 +2442,168 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
     xs_html_add(snac_content_wrap,
         snac_content);
 
+    /* add all emoji reacts */
+    int is_emoji = 0;
+    {
+        int c = 0;
+        const xs_dict *k;
+        xs *ls = xs_list_new();
+        xs *sfrl = xs_dict_new();
+        xs *rl = object_get_emoji_reacts(id);
+
+        xs_dict *m = NULL;
+        while (xs_list_next(rl, &v, &c)) {
+            if (valid_status(object_get_by_md5(v, &m))) {
+                const char *content = xs_dict_get(m, "content");
+                const char *actor = xs_dict_get(m, "actor");
+                const xs_list *contentl = xs_dict_get(sfrl, content);
+                xs *actors = xs_list_new();
+                actors = xs_list_append(actors, actor);
+                char me = actor && user && strcmp(actor, user->actor) == 0;
+                int count = 1;
+
+                if (contentl) {
+                    count = atoi(xs_list_get(contentl, 0)) + 1;
+                    const xs_list *actorsc = xs_list_get(contentl, 1);
+                    if (strncmp(xs_list_get(contentl, 2), "1", 1) == 0)
+                        me = 1;
+
+                    if (xs_list_in(actorsc, actor) != -1) {
+                        xs_free(actors);
+                        actors = xs_dup(actorsc);
+                    }
+                    else
+                        actors = xs_list_cat(actors, actorsc);
+                }
+
+                xs *fl = xs_list_new();
+                fl = xs_list_append(fl, xs_fmt("%d", count), actors, xs_fmt("%d", me));
+                sfrl = xs_dict_append(sfrl, content, fl);
+            }
+        }
+
+        c = 0;
+
+        while (xs_list_next(rl, &k, &c)) {
+            if (valid_status(object_get_by_md5(k, &m))) {
+                const xs_dict *tag = xs_dict_get(m, "tag");
+                const xs_dict *ide = xs_dict_get(m, "id");
+
+                const char *content = xs_dict_get(m, "content");
+                const char *shortname;
+                shortname = xs_dict_get(m, "content");
+
+                const xs_list *items = xs_dict_get(sfrl, content);
+                const char *nb = xs_list_get(items, 0);
+                const xs_list *actors = xs_list_get(items, 1);
+                const char me = *xs_list_get(items, 2) == '1';
+
+                if (!xs_is_null(nb)) {
+                    is_emoji = 1;
+
+                    const char *act = atoi(nb) > 1 ?
+                        xs_fmt("%d different actors \n\t%s", atoi(nb), xs_join(actors, ",\n\t")) :
+                        xs_dict_get(m, "actor");
+
+                    xs *class = xs_list_new();
+                    class = xs_list_append(class, "snac-reaction");
+
+                    xs_html *ret = NULL;
+                    if (tag && shortname) {
+                        xs *cl = xs_list_new();
+                        cl = xs_list_append(cl, "snac-reaction-image");
+                        xs *emoji = _replace_shortnames(xs_dup(shortname), tag, 2, proxy, cl, act);
+
+                        if (me)
+                            class = xs_list_append(class, "snac-reacted");
+
+                        ret = xs_html_tag("button",
+                                xs_html_attr("type", "submit"),
+                                xs_html_attr("name", "action"),
+                                xs_html_attr("value", me ? L("EmojiReact") : L("EmojiUnreact")),
+                                xs_html_raw(emoji),
+                                xs_html_tag("span",
+                                    xs_html_raw(nb),
+                                    xs_html_attr("style", "padding-left: 5px;")),
+                                xs_html_attr("title", act),
+                                xs_html_attr("class", xs_join(class, " ")));
+
+                        if (!(ide && xs_startswith(ide, srv_baseurl)))
+                            xs_html_add(ret, xs_html_attr("disabled", "true"));
+                    }
+                    else if (shortname) {
+                        xs *sn = xs_dup(shortname);
+                        const char *sna = sn;
+                        unsigned int utf = xs_utf8_dec((const char **)&sna);
+
+                        if (xs_is_emoji(utf)) {
+                            const char *style = "font-size: large;";
+                            if (me)
+                                class = xs_list_append(class, "snac-reacted");
+                            ret = xs_html_tag("button",
+                                    xs_html_attr("type", "submit"),
+                                    xs_html_attr("name", "action"),
+                                    xs_html_attr("value", me ? L("EmojiUnreact") : L("EmojiReact")),
+                                    xs_html_raw(xs_fmt("&#%d", utf)),
+                                    xs_html_tag("span",
+                                        xs_html_raw(nb),
+                                        xs_html_attr("style", "font-size: initial; padding-left: 5px;")),
+                                    xs_html_attr("title", act),
+                                    xs_html_attr("class", xs_join(class, " ")),
+                                    xs_html_attr("style", style));
+                        }
+                    }
+                    if (ret) {
+                        xs *s1;
+                        if (user) {
+                            xs *action = xs_fmt("%s/admin/action", user->actor);
+                            xs *form_id = xs_fmt("%s_reply_form", md5);
+
+                            xs_html *form =
+                                xs_html_tag("form",
+                                xs_html_attr("autocomplete", "off"),
+                                xs_html_attr("method",       "post"),
+                                xs_html_attr("action",       action),
+                                xs_html_attr("enctype",      "multipart/form-data"),
+                                xs_html_attr("style",      "display: inline-flex;"
+                                    "vertical-align: middle;"),
+                                xs_html_attr("id",           form_id),
+                                xs_html_sctag("input",
+                                    xs_html_attr("type",  "hidden"),
+                                    xs_html_attr("name",  "id"),
+                                    xs_html_attr("value", id)),
+                                xs_html_sctag("input",
+                                    xs_html_attr("type",  "hidden"),
+                                    xs_html_attr("name",  "eid"),
+                                    xs_html_attr("value", shortname)),
+                                ret);
+                            s1 = xs_html_render(form);
+                        }
+                        else
+                            s1 = xs_html_render(ret);
+
+                        ls = xs_list_append(ls, s1);
+                        sfrl = xs_dict_del(sfrl, content);
+                    }
+                }
+            }
+        }
+
+        c = 0;
+
+        xs_html *emoji_div;
+        if (xs_list_len(ls) > 0) {
+                emoji_div = xs_html_tag("div", xs_html_text(L("Emoji reactions: ")),
+                        xs_html_attr("class", "snac-reaction-div"));
+
+            while (ls != NULL && xs_list_next(ls, &k, &c))
+                xs_html_add(emoji_div, xs_html_raw(k));
+
+            xs_html_add(snac_content_wrap, emoji_div);
+        }
+
+    }
+
     {
         /** build the content string **/
         const char *content = xs_dict_get(msg, "content");
@@ -2371,7 +2630,8 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
 
         c = xs_replace_i(c, "<br><br>", "<p>");
 
-        c = xs_str_cat(c, "<p>");
+        if (is_emoji == 0)
+            c = xs_str_cat(c, "<p>");
 
         /* replace the :shortnames: */
         c = replace_shortnames(c, xs_dict_get(msg, "tag"), 2, proxy);
@@ -3686,9 +3946,18 @@ xs_str *html_notifications(snac *user, int skip, int show)
         if (strcmp(type, "EmojiReact") == 0 || strcmp(type, "Like") == 0) {
             const char *content = xs_dict_get_path(noti, "msg.content");
 
+            xs *cd = xs_dup(content);
+            const char *sna = cd;
+            const xs_dict *tag = xs_dict_get_path(noti, "msg.tag");
+            unsigned int utf = xs_utf8_dec((const char **)&sna);
+
+            int isEmoji = 0;
+            if (xs_is_emoji(utf) || (tag && xs_list_len(tag) > 0))
+                isEmoji = 1;
+
             if (xs_type(content) == XSTYPE_STRING) {
                 xs *emoji = replace_shortnames(xs_dup(content), xs_dict_get_path(noti, "msg.tag"), 1, proxy);
-                wrk = xs_fmt("%s (%s&#xFE0F;)", type, emoji);
+                wrk = xs_fmt("%s (%s&#xFE0F;)", isEmoji ? "EmojiReact" : "Like", emoji);
                 label = wrk;
             }
         }
@@ -4583,8 +4852,8 @@ int html_get_handler(const xs_dict *req, const char *q_path,
                     xs *msg = msg_admiration(&snac, id, *action == 'L' ? "Like" : "Announce");
 
                     if (msg != NULL) {
+                        timeline_admire(&snac, xs_dict_get(msg, "object"), snac.actor, *action == 'L' ? 1 : 0, msg);
                         enqueue_message(&snac, msg);
-                        timeline_admire(&snac, xs_dict_get(msg, "object"), snac.actor, *action == 'L' ? 1 : 0);
 
                         status = HTTP_STATUS_SEE_OTHER;
                     }
@@ -4892,12 +5161,36 @@ int html_post_handler(const xs_dict *req, const char *q_path,
 
         status = HTTP_STATUS_SEE_OTHER;
 
+        if (strcmp(action, L("EmojiUnreact")) == 0) { /** **/
+            const char *eid = xs_dict_get(p_vars, "eid");
+
+            if (eid != NULL) {
+                xs *n_msg = msg_emoji_unreact(&snac, id, eid);
+
+                if (n_msg != NULL)
+                    enqueue_message(&snac, n_msg);
+            }
+        }
+        else
+        if (strcmp(action, L("EmojiReact")) == 0) { /** **/
+            const char *eid = xs_dict_get(p_vars, "eid");
+
+            eid = xs_strip_chars_i(xs_dup(eid), ":");
+
+            const xs_dict *ret = msg_emoji_init(&snac, id, eid);
+            /* fails if either invalid or already reacted */
+            if (!ret)
+                ret = msg_emoji_unreact(&snac, id, eid);
+            if (!ret)
+                status = HTTP_STATUS_NOT_FOUND;
+        }
+        else
         if (strcmp(action, L("Like")) == 0) { /** **/
             xs *msg = msg_admiration(&snac, id, "Like");
 
             if (msg != NULL) {
+                timeline_admire(&snac, xs_dict_get(msg, "object"), snac.actor, 1, msg);
                 enqueue_message(&snac, msg);
-                timeline_admire(&snac, xs_dict_get(msg, "object"), snac.actor, 1);
             }
         }
         else
@@ -4905,8 +5198,8 @@ int html_post_handler(const xs_dict *req, const char *q_path,
             xs *msg = msg_admiration(&snac, id, "Announce");
 
             if (msg != NULL) {
+                timeline_admire(&snac, xs_dict_get(msg, "object"), snac.actor, 0, msg);
                 enqueue_message(&snac, msg);
-                timeline_admire(&snac, xs_dict_get(msg, "object"), snac.actor, 0);
             }
         }
         else

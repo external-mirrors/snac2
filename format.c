@@ -459,6 +459,9 @@ xs_str *sanitize(const char *content)
     char *p;
     const char *v;
 
+    if (!content)
+        return NULL;
+
     sl = xs_regex_split(content, "</?[^>]+>");
 
     p = sl;
