@@ -1567,9 +1567,10 @@ int timeline_add(snac *snac, const char *id, const xs_dict *o_msg)
 }
 
 
-int timeline_emoji_react(const char *act, const char *id, xs_dict *msg)
+int timeline_emoji_react(const char *act, const char *id, const xs_dict *msg_o)
 /* adds an emoji reaction to a message */
 {
+    xs *msg = xs_dup(msg_o);
     msg = xs_dict_append(msg, "attributedTo", act);
     msg = xs_dict_set(msg, "type", "EmojiReact");
     const char *emote_id = xs_dict_get(msg, "id");
@@ -1583,7 +1584,7 @@ int timeline_emoji_react(const char *act, const char *id, xs_dict *msg)
 
 
 int timeline_admire(snac *snac, const char *id,
-                    const char *admirer, int like, xs_dict *msg)
+                    const char *admirer, int like, const xs_dict *msg)
 /* updates a timeline entry with a new admiration or emoji reaction */
 {
     int ret;
@@ -1599,7 +1600,7 @@ int timeline_admire(snac *snac, const char *id,
     /* use utf <3 as a like, as it is ugly */
     if (type && xs_match(type, "Like|EmojiReact|Emoji") &&
             content && strcmp(content, "❤") != 0) {
-        ret = timeline_emoji_react(snac->actor, id, xs_dup(msg));
+        ret = timeline_emoji_react(snac->actor, id, msg);
         snac_debug(snac, 1, xs_fmt("timeline_emoji_react %s", id));
     }
 

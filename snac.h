@@ -183,8 +183,8 @@ xs_str *user_index_fn(snac *user, const char *idx_name);
 xs_list *timeline_simple_list(snac *user, const char *idx_name, int skip, int show, int *more);
 xs_list *timeline_list(snac *snac, const char *idx_name, int skip, int show, int *more);
 int timeline_add(snac *snac, const char *id, const xs_dict *o_msg);
-int timeline_admire(snac *snac, const char *id, const char *admirer, int like, xs_dict *msg);
-int timeline_emoji_react(const char *atto, const char *id, xs_dict *o_msg);
+int timeline_admire(snac *snac, const char *id, const char *admirer, int like, const xs_dict *msg);
+int timeline_emoji_react(const char *atto, const char *id, const xs_dict *o_msg);
 
 xs_list *timeline_top_level(snac *snac, const xs_list *list);
 void timeline_add_mark(snac *user);
