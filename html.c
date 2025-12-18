@@ -72,8 +72,10 @@ xs_str *_replace_shortnames(xs_str *s, const xs_list *tag, int ems,
 
         xs *style = xs_fmt("max-height: %dem; max-width: %dem;", ems, ems);
         xs *class = xs_fmt("snac-emoji snac-emoji-%d-em", ems);
-        if (cl)
-            class = xs_str_cat(class, " ", xs_join(cl, " "));
+        if (cl) {
+            xs *l = xs_join(cl, " ");
+            class = xs_str_cat(class, " ", l);
+        }
 
         int c = 0;
         const xs_val *v;
@@ -2501,9 +2503,10 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
                 if (!xs_is_null(nb)) {
                     is_emoji = 1;
 
-                    const char *act = atoi(nb) > 1 ?
-                        xs_fmt("%d different actors \n\t%s", atoi(nb), xs_join(actors, ",\n\t")) :
-                        xs_dict_get(m, "actor");
+                    xs *al = xs_join(actors, ",\n\t");
+                    xs *act = atoi(nb) > 1 ?
+                        xs_fmt("%d different actors \n\t%s", atoi(nb), al) :
+                        xs_dup(xs_dict_get(m, "actor"));
 
                     xs *class = xs_list_new();
                     class = xs_list_append(class, "snac-reaction");
@@ -2517,6 +2520,7 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
                         if (me)
                             class = xs_list_append(class, "snac-reacted");
 
+                        xs *l1 = xs_join(class, " ");
                         ret = xs_html_tag("button",
                                 xs_html_attr("type", "submit"),
                                 xs_html_attr("name", "action"),
@@ -2526,7 +2530,7 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
                                     xs_html_raw(nb),
                                     xs_html_attr("style", "padding-left: 5px;")),
                                 xs_html_attr("title", act),
-                                xs_html_attr("class", xs_join(class, " ")));
+                                xs_html_attr("class", l1));
 
                         if (!(ide && xs_startswith(ide, srv_baseurl)))
                             xs_html_add(ret, xs_html_attr("disabled", "true"));
@@ -2540,6 +2544,7 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
                             const char *style = "font-size: large;";
                             if (me)
                                 class = xs_list_append(class, "snac-reacted");
+                            xs *l1 = xs_join(class, " ");
                             ret = xs_html_tag("button",
                                     xs_html_attr("type", "submit"),
                                     xs_html_attr("name", "action"),
@@ -2549,7 +2554,7 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
                                         xs_html_raw(nb),
                                         xs_html_attr("style", "font-size: initial; padding-left: 5px;")),
                                     xs_html_attr("title", act),
-                                    xs_html_attr("class", xs_join(class, " ")),
+                                    xs_html_attr("class", l1),
                                     xs_html_attr("style", style));
                         }
                     }
