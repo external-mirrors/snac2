@@ -5141,6 +5141,9 @@ int html_post_handler(const xs_dict *req, const char *q_path,
                         /* overwrite object, not updating the indexes */
                         object_add_ow(edit_id, msg);
 
+                        /* index tags */
+                        tag_index(edit_id, msg);
+
                         /* update message */
                         c_msg = msg_update(&snac, msg);
                     }
