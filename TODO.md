@@ -6,8 +6,6 @@ It seems that Microsoft is planning to laminate Basic HTTP Auth, so make a plan,
 
 Investigate the problem with boosts inside the same instance (see https://codeberg.org/grunfink/snac2/issues/214).
 
-Editing / Updating a post does not index newly added hashtags.
-
 Important: deleting a follower should do more that just delete the object, see https://codeberg.org/grunfink/snac2/issues/43#issuecomment-956721
 
 ## Wishlist
@@ -381,3 +379,5 @@ Unfollowing guppe groups seems to work (http status of 200), but messages contin
 Do something about Akkoma and Misskey's quoted replies (they use the `quoteUrl` field instead of `inReplyTo`) (2025-12-09T05:31:56+0100).
 
 Take a look at crashes in the brittle Mastodon official app (crashes when hitting the reply button, crashes or 'ownVotes is null' errors when trying to show polls) (2025-12-09T05:31:56+0100).
+
+Editing / Updating a post does not index newly added hashtags (2025-12-19T15:29:38+0100).
