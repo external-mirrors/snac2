@@ -37,7 +37,7 @@
 ### Supported activities and objects
 
 - **Inbound**: `Follow`, `Accept`, `Create`, `Update`, `Delete`, `Announce`, `Like`, `EmojiReact`, `Undo` (for Follow/Like/Announce), and `Move` covering `Note`, `Question`, `Page`, `Article`, `Event`, and `Video`.
-- **Outbound**: the same set, except for `EmojiReact` (normalised into `Like` internally) and `Create` currently emits `Note` and `Question` objects.
+- **Outbound**: the same set. `Create` currently emits `Note` and `Question` objects.
 - Ordered collections: outboxes present the latest entries; follower/following collections hide membership by default.
 
 ### Delivery and moderation
