@@ -2500,11 +2500,12 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
                 shortname = xs_dict_get(m, "content");
 
                 const xs_list *items = xs_dict_get(sfrl, content);
-                const char *nb = xs_list_get(items, 0);
-                const xs_list *actors = xs_list_get(items, 1);
-                const char me = *xs_list_get(items, 2) == '1';
 
-                if (!xs_is_null(nb)) {
+                if (!xs_is_null(items)) {
+                    const char *nb = xs_list_get(items, 0);
+                    const xs_list *actors = xs_list_get(items, 1);
+                    const char me = *xs_list_get(items, 2) == '1';
+
                     is_emoji = 1;
 
                     xs *al = xs_join(actors, ",\n\t");

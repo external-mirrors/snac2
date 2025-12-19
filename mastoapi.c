@@ -1174,7 +1174,7 @@ xs_dict *mastoapi_status(snac *snac, const xs_dict *msg)
                 /* NOTE: idk when there are no actor, but i encountered that bug.
                  * Probably because of one of my previous attempts.
                  * Keeping this just in case, can remove later */
-                const char *me = actor && strcmp(actor, snac->actor) == 0 ?
+                const char *me = actor && snac && strcmp(actor, snac->actor) == 0 ?
                     xs_stock(XSTYPE_TRUE) : xs_stock(XSTYPE_FALSE);
                 int count = 1;
 
