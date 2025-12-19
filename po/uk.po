@@ -15,119 +15,119 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.0\n"
 
-#: html.c:440
+#: html.c:534
 msgid "Sensitive content: "
 msgstr "Делікатний вміст: "
 
-#: html.c:448
+#: html.c:542
 msgid "Sensitive content description"
 msgstr "Опис делікатного вмісту"
 
 msgid "Only for mentioned people: "
 msgstr "Тільки для зазначених осіб: "
 
-#: html.c:514
+#: html.c:570
 msgid "Reply to (URL): "
 msgstr "Відповісти до (URL): "
 
-#: html.c:523
+#: html.c:579
 msgid "Don't send, but store as a draft"
 msgstr "Не надсилати, але зберігти як чернетку"
 
-#: html.c:524
+#: html.c:580
 msgid "Draft:"
 msgstr "Чернетка:"
 
-#: html.c:614
+#: html.c:670
 msgid "Attachments..."
 msgstr "Вкладення..."
 
-#: html.c:637
+#: html.c:693
 msgid "File:"
 msgstr "Файл:"
 
-#: html.c:641
+#: html.c:697
 msgid "Clear this field to delete the attachment"
 msgstr "Очистіть це поле, щоб видалити вкладення"
 
-#: html.c:650 html.c:675
+#: html.c:706 html.c:731
 msgid "Attachment description"
 msgstr "Опис вкладення"
 
-#: html.c:686
+#: html.c:742
 msgid "Poll..."
 msgstr "Опитування..."
 
-#: html.c:688
+#: html.c:744
 msgid "Poll options (one per line, up to 8):"
 msgstr "Варіанти відповідей (по одному в рядку, до 8):"
 
-#: html.c:700
+#: html.c:756
 msgid "One choice"
 msgstr "Єдиний вибір"
 
-#: html.c:703
+#: html.c:759
 msgid "Multiple choices"
 msgstr "Декілька варіантів вибору"
 
-#: html.c:709
+#: html.c:765
 msgid "End in 5 minutes"
 msgstr "Закінчення через 5 хвилин"
 
-#: html.c:713
+#: html.c:769
 msgid "End in 1 hour"
 msgstr "Закінчення через 1 годину"
 
-#: html.c:716
+#: html.c:772
 msgid "End in 1 day"
 msgstr "Закінчення через 1 день"
 
-#: html.c:724
+#: html.c:780
 msgid "Post"
 msgstr "Надіслати"
 
-#: html.c:826 html.c:833
+#: html.c:882 html.c:889
 msgid "Site description"
 msgstr "Опис сайту"
 
-#: html.c:844
+#: html.c:900
 msgid "Admin email"
 msgstr "Пошта админа"
 
-#: html.c:857
+#: html.c:913
 msgid "Admin account"
 msgstr "Обліковий запис адміна"
 
-#: html.c:922 html.c:1278
+#: html.c:978 html.c:1334
 #, c-format
 msgid "%d following, %d followers"
 msgstr "%d підписок, %d підписників"
 
-#: html.c:1019
+#: html.c:1075
 msgid "RSS"
 msgstr "RSS"
 
-#: html.c:1024 html.c:1063
+#: html.c:1080 html.c:1119
 msgid "private"
 msgstr "особисте"
 
-#: html.c:1059
+#: html.c:1115
 msgid "public"
 msgstr "публічне"
 
-#: html.c:1067
+#: html.c:1123
 msgid "notifications"
 msgstr "повідомлення"
 
-#: html.c:1072
+#: html.c:1128
 msgid "people"
 msgstr "люди"
 
-#: html.c:1077
+#: html.c:1133
 msgid "instance"
 msgstr "сервер"
 
-#: html.c:1086
+#: html.c:1142
 msgid ""
 "Search posts by URL or content (regular expression), @user@host accounts, or "
 "#tag"
@@ -135,574 +135,574 @@ msgstr ""
 "Шукати дописи за URL або вмістом (регулярний вираз), акаунтами @user@host "
 "або #тегом"
 
-#: html.c:1087
+#: html.c:1143
 msgid "Content search"
 msgstr "Пошук за вмістом"
 
-#: html.c:1213
+#: html.c:1269
 msgid "verified link"
 msgstr "перевірене посилання"
 
-#: html.c:1270 html.c:2726 html.c:2739 html.c:2748 html.c:3680
+#: html.c:1326 html.c:3010 html.c:3023 html.c:3032 html.c:4095
 msgid "Location: "
 msgstr "Місце знаходження: "
 
-#: html.c:1302
+#: html.c:1358
 msgid "New Post..."
 msgstr "Новий допис..."
 
-#: html.c:1304
+#: html.c:1360
 msgid "What's on your mind?"
 msgstr "Що у вас на думці?"
 
-#: html.c:1313
+#: html.c:1369
 msgid "Operations..."
 msgstr "Дії..."
 
-#: html.c:1328 html.c:1949 html.c:3400 html.c:4817
+#: html.c:1384 html.c:2027 html.c:3776 html.c:4044 html.c:5261
 msgid "Follow"
 msgstr "Підписатися"
 
-#: html.c:1330
+#: html.c:1386
 msgid "(by URL or user@host)"
 msgstr "(за URL або user@host)"
 
-#: html.c:1345 html.c:1925 html.c:4766
+#: html.c:1401 html.c:2003 html.c:5210
 msgid "Boost"
 msgstr "Просувати"
 
-#: html.c:1347 html.c:1364
+#: html.c:1403 html.c:1420 html.c:1442
 msgid "(by URL)"
 msgstr "(за URL)"
 
-#: html.c:1362 html.c:1904 html.c:4757
+#: html.c:1418 html.c:1982 html.c:5201
 msgid "Like"
 msgstr "Вподобайка"
 
-#: html.c:1490
+#: html.c:1568
 msgid "User Settings..."
 msgstr "Налаштування користувача..."
 
-#: html.c:1499
+#: html.c:1577
 msgid "Display name:"
 msgstr "Видиме ім'я:"
 
-#: html.c:1505
+#: html.c:1583
 msgid "Your name"
 msgstr "Ваше ім'я"
 
-#: html.c:1507
+#: html.c:1585
 msgid "Avatar: "
 msgstr "Аватар: "
 
-#: html.c:1515
+#: html.c:1593
 msgid "Delete current avatar"
 msgstr "Видалити поточний аватар"
 
-#: html.c:1517
+#: html.c:1595
 msgid "Header image (banner): "
 msgstr "Зображення заголовка (банер): "
 
-#: html.c:1525
+#: html.c:1603
 msgid "Delete current header image"
 msgstr "Видалити поточне зображення заголовка"
 
-#: html.c:1527
+#: html.c:1605
 msgid "Bio:"
 msgstr "Про себе:"
 
-#: html.c:1533
+#: html.c:1611
 msgid "Write about yourself here..."
 msgstr "Напишіть про себе тут..."
 
-#: html.c:1542
+#: html.c:1620
 msgid "Always show sensitive content"
 msgstr "Завжди показувати делікатний вміст"
 
-#: html.c:1544
+#: html.c:1622
 msgid "Email address for notifications:"
 msgstr "Поштова адреса для повідомлень:"
 
-#: html.c:1552
+#: html.c:1630
 msgid "Telegram notifications (bot key and chat id):"
 msgstr "Повідомлення в Telegram (ключ бота та id чату):"
 
-#: html.c:1566
+#: html.c:1644
 msgid "ntfy notifications (ntfy server and token):"
 msgstr "Повідомлення в ntfy (сервер та токен ntfy):"
 
-#: html.c:1588
+#: html.c:1666
 msgid "Maximum days to keep posts (0: server settings):"
 msgstr "Максимальний час для зберігання дописів (0: налаштування сервера):"
 
-#: html.c:1602
+#: html.c:1680
 msgid "Drop direct messages from people you don't follow"
 msgstr "Відхиляти особисті повідомлення від незнайомців"
 
-#: html.c:1611
+#: html.c:1689
 msgid "This account is a bot"
 msgstr "Цей акаунт є ботом"
 
-#: html.c:1620
+#: html.c:1698
 msgid "Auto-boost all mentions to this account"
 msgstr "Автоматично просувати всі згадки цього акаунта"
 
-#: html.c:1629
+#: html.c:1707
 msgid "This account is private (posts are not shown through the web)"
 msgstr "Це закритий акаунт (дописи не показуються в мережі)"
 
-#: html.c:1639
+#: html.c:1717
 msgid "Collapse top threads by default"
 msgstr "Згорнути потоки за замовчуванням"
 
-#: html.c:1648
+#: html.c:1726
 msgid "Follow requests must be approved"
 msgstr "Запити на підписку мають бути схвалені"
 
-#: html.c:1657
+#: html.c:1735
 msgid "Publish follower and following metrics"
 msgstr "Публікувати метрики підписок та підписників"
 
-#: html.c:1659
+#: html.c:1737
 msgid "Current location:"
 msgstr "Поточне місцезнаходження:"
 
-#: html.c:1673
+#: html.c:1751
 msgid "Profile metadata (key=value pairs in each line):"
 msgstr "Метадані профілю (пари ключ=значення в кожному рядку):"
 
-#: html.c:1684
+#: html.c:1762
 msgid "Web interface language:"
 msgstr "Мова інтерфейсу:"
 
-#: html.c:1703
+#: html.c:1781
 msgid "New password:"
 msgstr "Новий пароль:"
 
-#: html.c:1710
+#: html.c:1788
 msgid "Repeat new password:"
 msgstr "Повторити новий пароль:"
 
-#: html.c:1720
+#: html.c:1798
 msgid "Update user info"
 msgstr "Оновлення даних користувача"
 
-#: html.c:1731
+#: html.c:1809
 msgid "Followed hashtags..."
 msgstr "Підписані хештеги..."
 
-#: html.c:1733 html.c:1766
+#: html.c:1811 html.c:1844
 msgid "One hashtag per line"
 msgstr "Один хештег на рядок"
 
-#: html.c:1755 html.c:1787
+#: html.c:1833 html.c:1865
 msgid "Update hashtags"
 msgstr "Оновити хештеги"
 
-#: html.c:1904
+#: html.c:1982
 msgid "Say you like this post"
 msgstr "Позначте допис як вподобаний"
 
-#: html.c:1909 html.c:4775
+#: html.c:1987 html.c:5219
 msgid "Unlike"
 msgstr "Більше не подобається"
 
-#: html.c:1909
+#: html.c:1987
 msgid "Nah don't like it that much"
 msgstr "Мені це не дуже подобається"
 
-#: html.c:1915 html.c:4912
+#: html.c:1993 html.c:5356
 msgid "Unpin"
 msgstr "Відкріпити"
 
-#: html.c:1915
+#: html.c:1993
 msgid "Unpin this post from your timeline"
 msgstr "Відкріпити цей допис зі власної стрічки"
 
-#: html.c:1918 html.c:4907
+#: html.c:1996 html.c:5351
 msgid "Pin"
 msgstr "Закріпити"
 
-#: html.c:1918
+#: html.c:1996
 msgid "Pin this post to the top of your timeline"
 msgstr "Закріпити цей допис до власної стрічки"
 
-#: html.c:1925
+#: html.c:2003
 msgid "Announce this post to your followers"
 msgstr "Поділитися цим дописом зі своїми підписниками"
 
-#: html.c:1930 html.c:4783
+#: html.c:2008 html.c:5227
 msgid "Unboost"
 msgstr "Скасувати просування"
 
-#: html.c:1930
+#: html.c:2008
 msgid "I regret I boosted this"
 msgstr "Я шкодую, що просував це"
 
-#: html.c:1936 html.c:4922
+#: html.c:2014 html.c:5366
 msgid "Unbookmark"
 msgstr "Видалити з закладок"
 
-#: html.c:1936
+#: html.c:2014
 msgid "Delete this post from your bookmarks"
 msgstr "Видалити цей допис з закладок"
 
-#: html.c:1939 html.c:4917
+#: html.c:2017 html.c:5361
 msgid "Bookmark"
 msgstr "Додати в закладки"
 
-#: html.c:1939
+#: html.c:2017
 msgid "Add this post to your bookmarks"
 msgstr "Додайте цей допис в закладки"
 
-#: html.c:1945 html.c:3386 html.c:3577 html.c:4830
+#: html.c:2023 html.c:3762 html.c:3957 html.c:4042 html.c:5274
 msgid "Unfollow"
 msgstr "Відписатися"
 
-#: html.c:1945 html.c:3387
+#: html.c:2023 html.c:3763 html.c:4042
 msgid "Stop following this user's activity"
 msgstr "Відписатися від цього користувача"
 
-#: html.c:1949 html.c:3401
+#: html.c:2027 html.c:3777 html.c:4044
 msgid "Start following this user's activity"
 msgstr "Підписатися до цього користувача"
 
-#: html.c:1955 html.c:4860
+#: html.c:2033 html.c:5304
 msgid "Unfollow Group"
 msgstr "Відписатися від групи"
 
-#: html.c:1956
+#: html.c:2034
 msgid "Stop following this group or channel"
 msgstr "Відписатися від групи чи канала"
 
-#: html.c:1960 html.c:4847
+#: html.c:2038 html.c:5291
 msgid "Follow Group"
 msgstr "Підписатися на групу"
 
-#: html.c:1961
+#: html.c:2039
 msgid "Start following this group or channel"
 msgstr "Підписатися на групу чи канал"
 
-#: html.c:1966 html.c:3423 html.c:4791
+#: html.c:2044 html.c:3799 html.c:5235
 msgid "MUTE"
 msgstr "Заглушити"
 
-#: html.c:1967
+#: html.c:2045
 msgid "Block any activity from this user forever"
 msgstr "Назавжди заблокувати активність цього користувача"
 
-#: html.c:1972 html.c:3405 html.c:4877
+#: html.c:2050 html.c:3781 html.c:5321
 msgid "Delete"
 msgstr "Видалити"
 
-#: html.c:1972
+#: html.c:2050
 msgid "Delete this post"
 msgstr "Видалити цей допис"
 
-#: html.c:1975 html.c:4799
+#: html.c:2053 html.c:5243
 msgid "Hide"
 msgstr "Приховати"
 
-#: html.c:1975
+#: html.c:2053
 msgid "Hide this post and its children"
 msgstr "Приховати цей допис разом з обговоренням"
 
-#: html.c:2017
+#: html.c:2095
 msgid "Edit..."
 msgstr "Редагувати..."
 
-#: html.c:2039
+#: html.c:2133
 msgid "Reply..."
 msgstr "Відповісти..."
 
-#: html.c:2090
+#: html.c:2184
 msgid "Truncated (too deep)"
 msgstr "Обрізано (занадто багато)"
 
-#: html.c:2108
+#: html.c:2202
 msgid "follows you"
 msgstr "підписан на вас"
 
-#: html.c:2182
+#: html.c:2276
 msgid "Pinned"
 msgstr "Закріплено"
 
-#: html.c:2190
+#: html.c:2284
 msgid "Bookmarked"
 msgstr "Додано до закладок"
 
-#: html.c:2198
+#: html.c:2292
 msgid "Poll"
 msgstr "Опитування"
 
-#: html.c:2205
+#: html.c:2299
 msgid "Voted"
 msgstr "Проголосовано"
 
-#: html.c:2214
+#: html.c:2308
 msgid "Event"
 msgstr "Подія"
 
-#: html.c:2246 html.c:2275
+#: html.c:2340 html.c:2369
 msgid "boosted"
 msgstr "просунуто"
 
-#: html.c:2289
+#: html.c:2383
 msgid "in reply to"
 msgstr "у відповідь на"
 
-#: html.c:2345
+#: html.c:2439
 msgid " [SENSITIVE CONTENT]"
 msgstr " [ДЕЛІКАТНИЙ ВМІСТ]"
 
-#: html.c:2512
+#: html.c:2796
 msgid "Vote"
 msgstr "Голос"
 
-#: html.c:2522
+#: html.c:2806
 msgid "Closed"
 msgstr "Завершено"
 
-#: html.c:2547
+#: html.c:2831
 msgid "Closes in"
 msgstr "Завершується через"
 
-#: html.c:2627
+#: html.c:2911
 msgid "Video"
 msgstr "Відео"
 
-#: html.c:2642
+#: html.c:2926
 msgid "Audio"
 msgstr "Аудіо"
 
-#: html.c:2670
+#: html.c:2954
 msgid "Attachment"
 msgstr "Вкладення"
 
-#: html.c:2684
+#: html.c:2968
 msgid "Alt..."
 msgstr "Опис..."
 
-#: html.c:2697
+#: html.c:2981
 msgid "Source channel or community"
 msgstr "Вихідний канал або спільнота"
 
-#: html.c:2791
+#: html.c:3075
 msgid "Time: "
 msgstr "Час: "
 
-#: html.c:2872
+#: html.c:3156
 msgid "Older..."
 msgstr "Раніше..."
 
-#: html.c:2974
+#: html.c:3258
 msgid "about this site"
 msgstr "про цей сайт"
 
-#: html.c:2976
+#: html.c:3260
 msgid "powered by "
 msgstr "на базі "
 
-#: html.c:3041
+#: html.c:3329
 msgid "Dismiss"
 msgstr "Відхилити"
 
-#: html.c:3058
+#: html.c:3346
 #, c-format
 msgid "Timeline for list '%s'"
 msgstr "Стрічки для списку '%s'"
 
-#: html.c:3077 html.c:4169
+#: html.c:3365 html.c:4589
 msgid "Pinned posts"
 msgstr "Закріплені дописи"
 
-#: html.c:3089 html.c:4184
+#: html.c:3377 html.c:4604
 msgid "Bookmarked posts"
 msgstr "Дописи у закладках"
 
-#: html.c:3101 html.c:4199
+#: html.c:3389 html.c:4619
 msgid "Post drafts"
 msgstr "Чернетки дописів"
 
-#: html.c:3177
+#: html.c:3465
 msgid "No more unseen posts"
 msgstr "Усе переглянуто"
 
-#: html.c:3181 html.c:3290
+#: html.c:3469 html.c:3578
 msgid "Back to top"
 msgstr "Повернутися до початку"
 
-#: html.c:3243
+#: html.c:3531
 msgid "History"
 msgstr "Історія"
 
-#: html.c:3295 html.c:3734
+#: html.c:3583 html.c:4149
 msgid "More..."
 msgstr "Більше..."
 
-#: html.c:3391 html.c:4813
+#: html.c:3767 html.c:5257
 msgid "Unlimit"
 msgstr "Без обмеження"
 
-#: html.c:3392
+#: html.c:3768
 msgid "Allow announces (boosts) from this user"
 msgstr "Дозволити просування від цього користувача"
 
-#: html.c:3395 html.c:4809
+#: html.c:3771 html.c:5253
 msgid "Limit"
 msgstr "Обмежити"
 
-#: html.c:3396
+#: html.c:3772
 msgid "Block announces (boosts) from this user"
 msgstr "Заборонити просування від цього користувача"
 
-#: html.c:3405
+#: html.c:3781
 msgid "Delete this user"
 msgstr "Видалити користувача"
 
-#: html.c:3410 html.c:4927
+#: html.c:3786 html.c:5371
 msgid "Approve"
 msgstr "Підтвердити"
 
-#: html.c:3411
+#: html.c:3787
 msgid "Approve this follow request"
 msgstr "Підтвердити цей запит на підписку"
 
-#: html.c:3414 html.c:4951
+#: html.c:3790 html.c:5395
 msgid "Discard"
 msgstr "Відхилити"
 
-#: html.c:3414
+#: html.c:3790
 msgid "Discard this follow request"
 msgstr "Відхилити цей запит на підписку"
 
-#: html.c:3419 html.c:4795
+#: html.c:3795 html.c:5239
 msgid "Unmute"
 msgstr "Скасувати глушіння"
 
-#: html.c:3420
+#: html.c:3796
 msgid "Stop blocking activities from this user"
 msgstr "Припинити глушіння дій цього користувача"
 
-#: html.c:3424
+#: html.c:3800
 msgid "Block any activity from this user"
 msgstr "Заглушити всі дії цього користувача"
 
-#: html.c:3432
+#: html.c:3808
 msgid "Direct Message..."
 msgstr "Особисте повідомлення..."
 
-#: html.c:3467
+#: html.c:3843
 msgid "Pending follow confirmations"
 msgstr "Запити на підписку очікують на розгляд"
 
-#: html.c:3471
+#: html.c:3847
 msgid "People you follow"
 msgstr "Ваші підписки"
 
-#: html.c:3472
+#: html.c:3848
 msgid "People that follow you"
 msgstr "Ваші підписники"
 
-#: html.c:3511
+#: html.c:3887
 msgid "Clear all"
 msgstr "Очистити все"
 
-#: html.c:3571
+#: html.c:3951
 msgid "Mention"
 msgstr "Згадка"
 
-#: html.c:3574
+#: html.c:3954
 msgid "Finished poll"
 msgstr "Завершене опитування"
 
-#: html.c:3590
+#: html.c:3979
 msgid "Follow Request"
 msgstr "Запит на підписку"
 
-#: html.c:3674
+#: html.c:4089
 msgid "Context"
 msgstr "Контекст"
 
-#: html.c:3692
+#: html.c:4107
 msgid "New"
 msgstr "Нове"
 
-#: html.c:3707
+#: html.c:4122
 msgid "Already seen"
 msgstr "Вже переглянуто"
 
-#: html.c:3722
+#: html.c:4137
 msgid "None"
 msgstr "Нема"
 
-#: html.c:3994
+#: html.c:4414
 #, c-format
 msgid "Search results for account %s"
 msgstr "Результати пошуку для облікового запису %s"
 
-#: html.c:4001
+#: html.c:4421
 #, c-format
 msgid "Account %s not found"
 msgstr "Обліковий запис %s не знайдений"
 
-#: html.c:4032
+#: html.c:4452
 #, c-format
 msgid "Search results for tag %s"
 msgstr "Результати пошуку тега %s"
 
-#: html.c:4032
+#: html.c:4452
 #, c-format
 msgid "Nothing found for tag %s"
 msgstr "Нічого не знайдено за тегом %s"
 
-#: html.c:4048
+#: html.c:4468
 #, c-format
 msgid "Search results for '%s' (may be more)"
 msgstr "Результати пошуку для '%s' (можливо є більше)"
 
-#: html.c:4051
+#: html.c:4471
 #, c-format
 msgid "Search results for '%s'"
 msgstr "Результати пошуку для '%s'"
 
-#: html.c:4054
+#: html.c:4474
 #, c-format
 msgid "No more matches for '%s'"
 msgstr "Немає більше збігів для '%s'"
 
-#: html.c:4056
+#: html.c:4476
 #, c-format
 msgid "Nothing found for '%s'"
 msgstr "Нічого не знайдено для '%s'"
 
-#: html.c:4154
+#: html.c:4574
 msgid "Showing instance timeline"
 msgstr "Показуємо стрічку сервера"
 
-#: html.c:4237
+#: html.c:4657
 #, c-format
 msgid "Showing timeline for list '%s'"
 msgstr "Показуємо стрічку для списку '%s'"
 
-#: httpd.c:258
+#: httpd.c:259
 #, c-format
 msgid "Search results for tag #%s"
 msgstr "Результати пошуку для тега #%s"
 
-#: httpd.c:267
+#: httpd.c:268
 msgid "Recent posts by users in this instance"
 msgstr "Останні повідомлення на цьому сервері"
 
-#: html.c:1764
+#: html.c:1842
 msgid "Blocked hashtags..."
 msgstr "Заблоковані теги..."
 
-#: html.c:518
+#: html.c:574
 msgid "Optional URL to reply to"
 msgstr "Необов'язковий URL для відповіді"
 
-#: html.c:695
+#: html.c:751
 msgid ""
 "Option 1...\n"
 "Option 2...\n"
@@ -714,94 +714,106 @@ msgstr ""
 "Варіант 3...\n"
 "..."
 
-#: html.c:1558
+#: html.c:1636
 msgid "Bot API key"
 msgstr "Ключ API для бота"
 
-#: html.c:1564
+#: html.c:1642
 msgid "Chat id"
 msgstr "Id чату"
 
-#: html.c:1572
+#: html.c:1650
 msgid "ntfy server - full URL (example: https://ntfy.sh/YourTopic)"
 msgstr "повна URL сервера ntfy (наприклад https://ntfy.sh/YourTopic)"
 
-#: html.c:1578
+#: html.c:1656
 msgid "ntfy token - if needed"
 msgstr "токен ntfy - якщо потрібно"
 
-#: html.c:3078
+#: html.c:3366
 msgid "pinned"
 msgstr "закріплено"
 
-#: html.c:3090
+#: html.c:3378
 msgid "bookmarks"
 msgstr "закладки"
 
-#: html.c:3102
+#: html.c:3390
 msgid "drafts"
 msgstr "чернетки"
 
-#: html.c:584
+#: html.c:640
 msgid "Scheduled post..."
 msgstr "Запланувати..."
 
 msgid "Post date and time:"
 msgstr "Час допису:"
 
-#: html.c:3113 html.c:4214
+#: html.c:3401 html.c:4634
 msgid "Scheduled posts"
 msgstr "Заплановані дописи"
 
-#: html.c:3114
+#: html.c:3402
 msgid "scheduled posts"
 msgstr "заплановані дописи"
 
-#: html.c:578
+#: html.c:634
 #, c-format
 msgid "Post date and time (timezone: %s):"
 msgstr "Дата та час допису (часовий пояс: %s):"
 
-#: html.c:1689
+#: html.c:1767
 msgid "Time zone:"
 msgstr "Часовий пояс:"
 
-#: html.c:559
+#: html.c:615
 msgid "Language:"
 msgstr ""
 
-#: html.c:1580
+#: html.c:1658
 msgid "Notify webhook:"
 msgstr ""
 
-#: html.c:1586
+#: html.c:1664
 msgid "http://example.com/webhook"
 msgstr ""
 
-#: html.c:1694
+#: html.c:1772
 msgid "Languages you usually post in:"
 msgstr ""
 
-#: html.c:1700
+#: html.c:1778
 msgid "en fr es de_AT"
 msgstr ""
 
-#: html.c:460
+#: html.c:428
 msgid "Visibility: "
 msgstr ""
 
-#: html.c:468
 msgid "Public"
 msgstr ""
 
-#: html.c:477
 msgid "Unlisted"
 msgstr ""
 
-#: html.c:486
 msgid "Followers-only"
 msgstr ""
 
-#: html.c:495
 msgid "Direct Message"
+msgstr ""
+
+#: html.c:488 html.c:2534 html.c:2559 html.c:5177
+msgid "EmojiUnreact"
+msgstr ""
+
+#: html.c:488 html.c:1440 html.c:2534 html.c:2559 html.c:5188
+msgid "EmojiReact"
+msgstr ""
+
+#: html.c:2115
+msgid "Emoji react..."
+msgstr ""
+
+#: html.c:2609
+msgid "Emoji reactions: "
 msgstr ""

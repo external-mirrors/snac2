@@ -8,693 +8,693 @@ msgstr ""
 "Language: zh\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: html.c:440
+#: html.c:534
 msgid "Sensitive content: "
 msgstr "敏感内容："
 
-#: html.c:448
+#: html.c:542
 msgid "Sensitive content description"
 msgstr "敏感内容描述"
 
 msgid "Only for mentioned people: "
 msgstr "只有提及到的人："
 
-#: html.c:514
+#: html.c:570
 msgid "Reply to (URL): "
 msgstr "回复给(URL)："
 
-#: html.c:523
+#: html.c:579
 msgid "Don't send, but store as a draft"
 msgstr "不发送，但保存为草稿"
 
-#: html.c:524
+#: html.c:580
 msgid "Draft:"
 msgstr "草稿："
 
-#: html.c:614
+#: html.c:670
 msgid "Attachments..."
 msgstr "附件..."
 
-#: html.c:637
+#: html.c:693
 msgid "File:"
 msgstr "文件："
 
-#: html.c:641
+#: html.c:697
 msgid "Clear this field to delete the attachment"
 msgstr "清除此项以删除附件"
 
-#: html.c:650 html.c:675
+#: html.c:706 html.c:731
 msgid "Attachment description"
 msgstr "附件描述"
 
-#: html.c:686
+#: html.c:742
 msgid "Poll..."
 msgstr "投票..."
 
-#: html.c:688
+#: html.c:744
 msgid "Poll options (one per line, up to 8):"
 msgstr "投票选项（每行一项，最多八项）："
 
-#: html.c:700
+#: html.c:756
 msgid "One choice"
 msgstr "单选"
 
-#: html.c:703
+#: html.c:759
 msgid "Multiple choices"
 msgstr "多选"
 
-#: html.c:709
+#: html.c:765
 msgid "End in 5 minutes"
 msgstr "五分钟后结束"
 
-#: html.c:713
+#: html.c:769
 msgid "End in 1 hour"
 msgstr "一小时后结束"
 
-#: html.c:716
+#: html.c:772
 msgid "End in 1 day"
 msgstr "一天后结束"
 
-#: html.c:724
+#: html.c:780
 msgid "Post"
 msgstr "发布"
 
-#: html.c:826 html.c:833
+#: html.c:882 html.c:889
 msgid "Site description"
 msgstr "站点描述"
 
-#: html.c:844
+#: html.c:900
 msgid "Admin email"
 msgstr "管理员邮箱"
 
-#: html.c:857
+#: html.c:913
 msgid "Admin account"
 msgstr "管理员帐号"
 
-#: html.c:922 html.c:1278
+#: html.c:978 html.c:1334
 #, c-format
 msgid "%d following, %d followers"
 msgstr "%d 个正在关注，%d 个关注者"
 
-#: html.c:1019
+#: html.c:1075
 msgid "RSS"
 msgstr "RSS"
 
-#: html.c:1024 html.c:1063
+#: html.c:1080 html.c:1119
 msgid "private"
 msgstr "私密"
 
-#: html.c:1059
+#: html.c:1115
 msgid "public"
 msgstr "公开"
 
-#: html.c:1067
+#: html.c:1123
 msgid "notifications"
 msgstr "通知"
 
-#: html.c:1072
+#: html.c:1128
 msgid "people"
 msgstr "成员"
 
-#: html.c:1077
+#: html.c:1133
 msgid "instance"
 msgstr "实例"
 
-#: html.c:1086
+#: html.c:1142
 msgid ""
 "Search posts by URL or content (regular expression), @user@host accounts, or "
 "#tag"
 msgstr ""
 "通过 URL、内容（正则表达式）、@<用户名>@<主机名>帐号，或者 #话题标签 搜索贴子"
 
-#: html.c:1087
+#: html.c:1143
 msgid "Content search"
 msgstr "搜索内容"
 
-#: html.c:1213
+#: html.c:1269
 msgid "verified link"
 msgstr "已验证的链接"
 
-#: html.c:1270 html.c:2726 html.c:2739 html.c:2748 html.c:3680
+#: html.c:1326 html.c:3010 html.c:3023 html.c:3032 html.c:4095
 msgid "Location: "
 msgstr "位置："
 
-#: html.c:1302
+#: html.c:1358
 msgid "New Post..."
 msgstr "新贴子..."
 
-#: html.c:1304
+#: html.c:1360
 msgid "What's on your mind?"
 msgstr "你在想什么？"
 
-#: html.c:1313
+#: html.c:1369
 msgid "Operations..."
 msgstr "操作..."
 
-#: html.c:1328 html.c:1949 html.c:3400 html.c:4817
+#: html.c:1384 html.c:2027 html.c:3776 html.c:4044 html.c:5261
 msgid "Follow"
 msgstr "关注"
 
-#: html.c:1330
+#: html.c:1386
 msgid "(by URL or user@host)"
 msgstr "（通过 URL 或者 <用户名>@<主机名>）"
 
-#: html.c:1345 html.c:1925 html.c:4766
+#: html.c:1401 html.c:2003 html.c:5210
 msgid "Boost"
 msgstr "转发"
 
-#: html.c:1347 html.c:1364
+#: html.c:1403 html.c:1420 html.c:1442
 msgid "(by URL)"
 msgstr "（通过 URL）"
 
-#: html.c:1362 html.c:1904 html.c:4757
+#: html.c:1418 html.c:1982 html.c:5201
 msgid "Like"
 msgstr "点赞"
 
-#: html.c:1490
+#: html.c:1568
 msgid "User Settings..."
 msgstr "用户设置..."
 
-#: html.c:1499
+#: html.c:1577
 msgid "Display name:"
 msgstr "显示名字："
 
-#: html.c:1505
+#: html.c:1583
 msgid "Your name"
 msgstr "你的名字"
 
-#: html.c:1507
+#: html.c:1585
 msgid "Avatar: "
 msgstr "头像："
 
-#: html.c:1515
+#: html.c:1593
 msgid "Delete current avatar"
 msgstr "删除当前头像"
 
-#: html.c:1517
+#: html.c:1595
 msgid "Header image (banner): "
 msgstr "页眉图像（横幅）"
 
-#: html.c:1525
+#: html.c:1603
 msgid "Delete current header image"
 msgstr "删除当前的页眉图像"
 
-#: html.c:1527
+#: html.c:1605
 msgid "Bio:"
 msgstr "简介"
 
-#: html.c:1533
+#: html.c:1611
 msgid "Write about yourself here..."
 msgstr "在这里介绍你自己..."
 
-#: html.c:1542
+#: html.c:1620
 msgid "Always show sensitive content"
 msgstr "总是显示敏感内容"
 
-#: html.c:1544
+#: html.c:1622
 msgid "Email address for notifications:"
 msgstr "用于通知的电子邮箱地址"
 
-#: html.c:1552
+#: html.c:1630
 msgid "Telegram notifications (bot key and chat id):"
 msgstr "Telegram 通知（bot 密钥和聊天 ID）"
 
-#: html.c:1566
+#: html.c:1644
 msgid "ntfy notifications (ntfy server and token):"
 msgstr "ntfy 通知（ntfy 服务器和令牌）："
 
-#: html.c:1588
+#: html.c:1666
 msgid "Maximum days to keep posts (0: server settings):"
 msgstr "保存贴子的最大天数（0：服务器设置）"
 
-#: html.c:1602
+#: html.c:1680
 msgid "Drop direct messages from people you don't follow"
 msgstr "丢弃你没有关注的人的私信"
 
-#: html.c:1611
+#: html.c:1689
 msgid "This account is a bot"
 msgstr "此帐号是机器人"
 
-#: html.c:1620
+#: html.c:1698
 msgid "Auto-boost all mentions to this account"
 msgstr "自动转发所有对此帐号的提及"
 
-#: html.c:1629
+#: html.c:1707
 msgid "This account is private (posts are not shown through the web)"
 msgstr "这是一个私密帐号（贴子不会在网页中显示）"
 
-#: html.c:1639
+#: html.c:1717
 msgid "Collapse top threads by default"
 msgstr "默认收起主题帖"
 
-#: html.c:1648
+#: html.c:1726
 msgid "Follow requests must be approved"
 msgstr "关注请求必须经过审批"
 
-#: html.c:1657
+#: html.c:1735
 msgid "Publish follower and following metrics"
 msgstr "展示关注者和正在关注的数量"
 
-#: html.c:1659
+#: html.c:1737
 msgid "Current location:"
 msgstr "当前位置："
 
-#: html.c:1673
+#: html.c:1751
 msgid "Profile metadata (key=value pairs in each line):"
 msgstr "个人资料元数据（每行一条 键=值）"
 
-#: html.c:1684
+#: html.c:1762
 msgid "Web interface language:"
 msgstr "网页界面语言："
 
-#: html.c:1703
+#: html.c:1781
 msgid "New password:"
 msgstr "新密码："
 
-#: html.c:1710
+#: html.c:1788
 msgid "Repeat new password:"
 msgstr "重复新密码："
 
-#: html.c:1720
+#: html.c:1798
 msgid "Update user info"
 msgstr "更新用户信息："
 
-#: html.c:1731
+#: html.c:1809
 msgid "Followed hashtags..."
 msgstr "关注的标签..."
 
-#: html.c:1733 html.c:1766
+#: html.c:1811 html.c:1844
 msgid "One hashtag per line"
 msgstr "每行一个标签"
 
-#: html.c:1755 html.c:1787
+#: html.c:1833 html.c:1865
 msgid "Update hashtags"
 msgstr "更新标签"
 
-#: html.c:1904
+#: html.c:1982
 msgid "Say you like this post"
 msgstr "说你喜欢这个贴子"
 
-#: html.c:1909 html.c:4775
+#: html.c:1987 html.c:5219
 msgid "Unlike"
 msgstr "不喜欢"
 
-#: html.c:1909
+#: html.c:1987
 msgid "Nah don't like it that much"
 msgstr "啊，不怎么喜欢这个"
 
-#: html.c:1915 html.c:4912
+#: html.c:1993 html.c:5356
 msgid "Unpin"
 msgstr "取消置顶"
 
-#: html.c:1915
+#: html.c:1993
 msgid "Unpin this post from your timeline"
 msgstr "从你的时间线上取消置顶这个贴子"
 
-#: html.c:1918 html.c:4907
+#: html.c:1996 html.c:5351
 msgid "Pin"
 msgstr "置顶"
 
-#: html.c:1918
+#: html.c:1996
 msgid "Pin this post to the top of your timeline"
 msgstr "把这条贴子置顶在你的时间线上"
 
-#: html.c:1925
+#: html.c:2003
 msgid "Announce this post to your followers"
 msgstr "向你的关注者宣布这条贴子"
 
-#: html.c:1930 html.c:4783
+#: html.c:2008 html.c:5227
 msgid "Unboost"
 msgstr "取消转发"
 
-#: html.c:1930
+#: html.c:2008
 msgid "I regret I boosted this"
 msgstr "我后悔转发这个了"
 
-#: html.c:1936 html.c:4922
+#: html.c:2014 html.c:5366
 msgid "Unbookmark"
 msgstr "取消收藏"
 
-#: html.c:1936
+#: html.c:2014
 msgid "Delete this post from your bookmarks"
 msgstr "从收藏夹中删除这个贴子"
 
-#: html.c:1939 html.c:4917
+#: html.c:2017 html.c:5361
 msgid "Bookmark"
 msgstr "收藏"
 
-#: html.c:1939
+#: html.c:2017
 msgid "Add this post to your bookmarks"
 msgstr "把这个贴子加入收藏夹"
 
-#: html.c:1945 html.c:3386 html.c:3577 html.c:4830
+#: html.c:2023 html.c:3762 html.c:3957 html.c:4042 html.c:5274
 msgid "Unfollow"
 msgstr "取消关注"
 
-#: html.c:1945 html.c:3387
+#: html.c:2023 html.c:3763 html.c:4042
 msgid "Stop following this user's activity"
 msgstr "停止关注此用户的动态"
 
-#: html.c:1949 html.c:3401
+#: html.c:2027 html.c:3777 html.c:4044
 msgid "Start following this user's activity"
 msgstr "开始关注此用户的动态"
 
-#: html.c:1955 html.c:4860
+#: html.c:2033 html.c:5304
 msgid "Unfollow Group"
 msgstr "取消关注群组"
 
-#: html.c:1956
+#: html.c:2034
 msgid "Stop following this group or channel"
 msgstr "取消关注这个群组或频道"
 
-#: html.c:1960 html.c:4847
+#: html.c:2038 html.c:5291
 msgid "Follow Group"
 msgstr "关注群组"
 
-#: html.c:1961
+#: html.c:2039
 msgid "Start following this group or channel"
 msgstr "开始关注这个群组或频道"
 
-#: html.c:1966 html.c:3423 html.c:4791
+#: html.c:2044 html.c:3799 html.c:5235
 msgid "MUTE"
 msgstr "静音"
 
-#: html.c:1967
+#: html.c:2045
 msgid "Block any activity from this user forever"
 msgstr "永久屏蔽来自这个用户的任何动态"
 
-#: html.c:1972 html.c:3405 html.c:4877
+#: html.c:2050 html.c:3781 html.c:5321
 msgid "Delete"
 msgstr "删除"
 
-#: html.c:1972
+#: html.c:2050
 msgid "Delete this post"
 msgstr "删除这条贴子"
 
-#: html.c:1975 html.c:4799
+#: html.c:2053 html.c:5243
 msgid "Hide"
 msgstr "隐藏"
 
-#: html.c:1975
+#: html.c:2053
 msgid "Hide this post and its children"
 msgstr "删除这条贴子及其回复"
 
-#: html.c:2017
+#: html.c:2095
 msgid "Edit..."
 msgstr "编辑..."
 
-#: html.c:2039
+#: html.c:2133
 msgid "Reply..."
 msgstr "回复..."
 
-#: html.c:2090
+#: html.c:2184
 msgid "Truncated (too deep)"
 msgstr "已被截断（太深了）"
 
-#: html.c:2108
+#: html.c:2202
 msgid "follows you"
 msgstr "关注了你"
 
-#: html.c:2182
+#: html.c:2276
 msgid "Pinned"
 msgstr "已置顶"
 
-#: html.c:2190
+#: html.c:2284
 msgid "Bookmarked"
 msgstr "已收藏"
 
-#: html.c:2198
+#: html.c:2292
 msgid "Poll"
 msgstr "投票"
 
-#: html.c:2205
+#: html.c:2299
 msgid "Voted"
 msgstr "已投票"
 
-#: html.c:2214
+#: html.c:2308
 msgid "Event"
 msgstr "事件"
 
-#: html.c:2246 html.c:2275
+#: html.c:2340 html.c:2369
 msgid "boosted"
 msgstr "已转发"
 
-#: html.c:2289
+#: html.c:2383
 msgid "in reply to"
 msgstr "回复给"
 
-#: html.c:2345
+#: html.c:2439
 msgid " [SENSITIVE CONTENT]"
 msgstr "【敏感内容】"
 
-#: html.c:2512
+#: html.c:2796
 msgid "Vote"
 msgstr "投票"
 
-#: html.c:2522
+#: html.c:2806
 msgid "Closed"
 msgstr "已关闭"
 
-#: html.c:2547
+#: html.c:2831
 msgid "Closes in"
 msgstr "距离关闭还有"
 
-#: html.c:2627
+#: html.c:2911
 msgid "Video"
 msgstr "视频"
 
-#: html.c:2642
+#: html.c:2926
 msgid "Audio"
 msgstr "音频"
 
-#: html.c:2670
+#: html.c:2954
 msgid "Attachment"
 msgstr "附件"
 
-#: html.c:2684
+#: html.c:2968
 msgid "Alt..."
 msgstr "描述..."
 
-#: html.c:2697
+#: html.c:2981
 msgid "Source channel or community"
 msgstr "来源频道或者社群"
 
-#: html.c:2791
+#: html.c:3075
 msgid "Time: "
 msgstr "时间："
 
-#: html.c:2872
+#: html.c:3156
 msgid "Older..."
 msgstr "更早的..."
 
-#: html.c:2974
+#: html.c:3258
 msgid "about this site"
 msgstr "关于此站点"
 
-#: html.c:2976
+#: html.c:3260
 msgid "powered by "
 msgstr "驱动自"
 
-#: html.c:3041
+#: html.c:3329
 msgid "Dismiss"
 msgstr "忽略"
 
-#: html.c:3058
+#: html.c:3346
 #, c-format
 msgid "Timeline for list '%s'"
 msgstr "列表'%s'的时间线"
 
-#: html.c:3077 html.c:4169
+#: html.c:3365 html.c:4589
 msgid "Pinned posts"
 msgstr "置顶的贴子"
 
-#: html.c:3089 html.c:4184
+#: html.c:3377 html.c:4604
 msgid "Bookmarked posts"
 msgstr "收藏的贴子"
 
-#: html.c:3101 html.c:4199
+#: html.c:3389 html.c:4619
 msgid "Post drafts"
 msgstr "贴子草稿"
 
-#: html.c:3177
+#: html.c:3465
 msgid "No more unseen posts"
 msgstr "没有更多未读贴子了"
 
-#: html.c:3181 html.c:3290
+#: html.c:3469 html.c:3578
 msgid "Back to top"
 msgstr "返回顶部"
 
-#: html.c:3243
+#: html.c:3531
 msgid "History"
 msgstr "历史"
 
-#: html.c:3295 html.c:3734
+#: html.c:3583 html.c:4149
 msgid "More..."
 msgstr "更多..."
 
-#: html.c:3391 html.c:4813
+#: html.c:3767 html.c:5257
 msgid "Unlimit"
 msgstr "取消限制"
 
-#: html.c:3392
+#: html.c:3768
 msgid "Allow announces (boosts) from this user"
 msgstr "允许来自这个用户的通知（转发）"
 
-#: html.c:3395 html.c:4809
+#: html.c:3771 html.c:5253
 msgid "Limit"
 msgstr "限制"
 
-#: html.c:3396
+#: html.c:3772
 msgid "Block announces (boosts) from this user"
 msgstr "屏蔽来自这个用户的通知（转发）"
 
-#: html.c:3405
+#: html.c:3781
 msgid "Delete this user"
 msgstr "删除此用户"
 
-#: html.c:3410 html.c:4927
+#: html.c:3786 html.c:5371
 msgid "Approve"
 msgstr "允许"
 
-#: html.c:3411
+#: html.c:3787
 msgid "Approve this follow request"
 msgstr "允许这个关注请求"
 
-#: html.c:3414 html.c:4951
+#: html.c:3790 html.c:5395
 msgid "Discard"
 msgstr "丢弃"
 
-#: html.c:3414
+#: html.c:3790
 msgid "Discard this follow request"
 msgstr "丢弃这个关注请求"
 
-#: html.c:3419 html.c:4795
+#: html.c:3795 html.c:5239
 msgid "Unmute"
 msgstr "取消静音"
 
-#: html.c:3420
+#: html.c:3796
 msgid "Stop blocking activities from this user"
 msgstr "停止屏蔽来自此用户的动态"
 
-#: html.c:3424
+#: html.c:3800
 msgid "Block any activity from this user"
 msgstr "屏蔽来自此用户的任何动态"
 
-#: html.c:3432
+#: html.c:3808
 msgid "Direct Message..."
 msgstr "私信..."
 
-#: html.c:3467
+#: html.c:3843
 msgid "Pending follow confirmations"
 msgstr "待处理的关注确认"
 
-#: html.c:3471
+#: html.c:3847
 msgid "People you follow"
 msgstr "你关注的人"
 
-#: html.c:3472
+#: html.c:3848
 msgid "People that follow you"
 msgstr "关注你的人"
 
-#: html.c:3511
+#: html.c:3887
 msgid "Clear all"
 msgstr "清除全部"
 
-#: html.c:3571
+#: html.c:3951
 msgid "Mention"
 msgstr "提及"
 
-#: html.c:3574
+#: html.c:3954
 msgid "Finished poll"
 msgstr "结束投票"
 
-#: html.c:3590
+#: html.c:3979
 msgid "Follow Request"
 msgstr "关注请求"
 
-#: html.c:3674
+#: html.c:4089
 msgid "Context"
 msgstr "上下文"
 
-#: html.c:3692
+#: html.c:4107
 msgid "New"
 msgstr "新建"
 
-#: html.c:3707
+#: html.c:4122
 msgid "Already seen"
 msgstr "已经看过"
 
-#: html.c:3722
+#: html.c:4137
 msgid "None"
 msgstr "没有"
 
-#: html.c:3994
+#: html.c:4414
 #, c-format
 msgid "Search results for account %s"
 msgstr "账户 %s 的搜索结果"
 
-#: html.c:4001
+#: html.c:4421
 #, c-format
 msgid "Account %s not found"
 msgstr "没有找到账户 %s"
 
-#: html.c:4032
+#: html.c:4452
 #, c-format
 msgid "Search results for tag %s"
 msgstr "标签 %s 的搜索结果"
 
-#: html.c:4032
+#: html.c:4452
 #, c-format
 msgid "Nothing found for tag %s"
 msgstr "没有找到标签'%s'的结果"
 
-#: html.c:4048
+#: html.c:4468
 #, c-format
 msgid "Search results for '%s' (may be more)"
 msgstr "'%s'的搜索结果（可能还有更多）"
 
-#: html.c:4051
+#: html.c:4471
 #, c-format
 msgid "Search results for '%s'"
 msgstr "'%s'的搜索结果"
 
-#: html.c:4054
+#: html.c:4474
 #, c-format
 msgid "No more matches for '%s'"
 msgstr "没有更多匹配'%s'的结果了"
 
-#: html.c:4056
+#: html.c:4476
 #, c-format
 msgid "Nothing found for '%s'"
 msgstr "没有找到'%s'的结果"
 
-#: html.c:4154
+#: html.c:4574
 msgid "Showing instance timeline"
 msgstr "显示实例时间线"
 
-#: html.c:4237
+#: html.c:4657
 #, c-format
 msgid "Showing timeline for list '%s'"
 msgstr "显示列表'%s'的事件线"
 
-#: httpd.c:258
+#: httpd.c:259
 #, c-format
 msgid "Search results for tag #%s"
 msgstr "标签 #%s 的搜索结果"
 
-#: httpd.c:267
+#: httpd.c:268
 msgid "Recent posts by users in this instance"
 msgstr "此实例上的用户最近的贴子"
 
-#: html.c:1764
+#: html.c:1842
 msgid "Blocked hashtags..."
 msgstr "已屏蔽的话题标签"
 
-#: html.c:518
+#: html.c:574
 msgid "Optional URL to reply to"
 msgstr "可选的回复的网址"
 
-#: html.c:695
+#: html.c:751
 msgid ""
 "Option 1...\n"
 "Option 2...\n"
@@ -706,94 +706,106 @@ msgstr ""
 "选项 3...\n"
 "..."
 
-#: html.c:1558
+#: html.c:1636
 msgid "Bot API key"
 msgstr "Bot API 密钥"
 
-#: html.c:1564
+#: html.c:1642
 msgid "Chat id"
 msgstr "聊天 ID"
 
-#: html.c:1572
+#: html.c:1650
 msgid "ntfy server - full URL (example: https://ntfy.sh/YourTopic)"
 msgstr "ntfy 服务器 - 完整网址（例如：https://ntft.sh/YourTopic）"
 
-#: html.c:1578
+#: html.c:1656
 msgid "ntfy token - if needed"
 msgstr "ntft 令牌 - 如果需要的话"
 
-#: html.c:3078
+#: html.c:3366
 msgid "pinned"
 msgstr "置顶"
 
-#: html.c:3090
+#: html.c:3378
 msgid "bookmarks"
 msgstr "收藏夹"
 
-#: html.c:3102
+#: html.c:3390
 msgid "drafts"
 msgstr "草稿"
 
-#: html.c:584
+#: html.c:640
 msgid "Scheduled post..."
 msgstr "计划发布定时贴文"
 
 msgid "Post date and time:"
 msgstr "发布日期和时间"
 
-#: html.c:3113 html.c:4214
+#: html.c:3401 html.c:4634
 msgid "Scheduled posts"
 msgstr "已发布的定时帖文"
 
-#: html.c:3114
+#: html.c:3402
 msgid "scheduled posts"
 msgstr "计划发布定时贴文"
 
-#: html.c:578
+#: html.c:634
 #, c-format
 msgid "Post date and time (timezone: %s):"
 msgstr "发布日期和时间（时区： %s）"
 
-#: html.c:1689
+#: html.c:1767
 msgid "Time zone:"
 msgstr "时区"
 
-#: html.c:559
+#: html.c:615
 msgid "Language:"
 msgstr "语言"
 
-#: html.c:1580
+#: html.c:1658
 msgid "Notify webhook:"
 msgstr ""
 
-#: html.c:1586
+#: html.c:1664
 msgid "http://example.com/webhook"
 msgstr ""
 
-#: html.c:1694
+#: html.c:1772
 msgid "Languages you usually post in:"
 msgstr "您通常使用的语言："
 
-#: html.c:1700
+#: html.c:1778
 msgid "en fr es de_AT"
 msgstr ""
 
-#: html.c:460
+#: html.c:428
 msgid "Visibility: "
 msgstr ""
 
-#: html.c:468
 msgid "Public"
 msgstr ""
 
-#: html.c:477
 msgid "Unlisted"
 msgstr ""
 
-#: html.c:486
 msgid "Followers-only"
 msgstr ""
 
-#: html.c:495
 msgid "Direct Message"
+msgstr ""
+
+#: html.c:488 html.c:2534 html.c:2559 html.c:5177
+msgid "EmojiUnreact"
+msgstr ""
+
+#: html.c:488 html.c:1440 html.c:2534 html.c:2559 html.c:5188
+msgid "EmojiReact"
+msgstr ""
+
+#: html.c:2115
+msgid "Emoji react..."
+msgstr ""
+
+#: html.c:2609
+msgid "Emoji reactions: "
 msgstr ""
