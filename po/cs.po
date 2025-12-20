@@ -781,7 +781,7 @@ msgstr "cs en fr de_AT"
 
 #: html.c:428
 msgid "Visibility: "
-msgstr "Viditelnost"
+msgstr "Viditelnost: "
 
 msgid "Public"
 msgstr "Veřejné"
@@ -797,16 +797,16 @@ msgstr "Soukromá Zpráva"
 
 #: html.c:488 html.c:2534 html.c:2559 html.c:5177
 msgid "EmojiUnreact"
-msgstr ""
+msgstr "EmojiOdebrat"
 
 #: html.c:488 html.c:1440 html.c:2534 html.c:2559 html.c:5188
 msgid "EmojiReact"
-msgstr ""
+msgstr "EmojiReakce"
 
 #: html.c:2115
 msgid "Emoji react..."
-msgstr ""
+msgstr "Reagovat emoji..."
 
 #: html.c:2609
 msgid "Emoji reactions: "
-msgstr ""
+msgstr "Emoji reakce: "
