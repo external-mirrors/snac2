@@ -8,6 +8,8 @@ Mastodon API: Fix for some client notifications (contributed by violette).
 
 If the query variable `terse` of a public post page is set to anything, no header is shown.
 
+Fixed search failures when the query string has any leading blank.
+
 ## 2.85
 
 Quoted posts are now shown.
