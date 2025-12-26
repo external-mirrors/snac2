@@ -1985,60 +1985,64 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
                 }
                 else
                 if (strcmp(opt, "statuses") == 0) { /** **/
-                    /* the public list of posts of a user */
-                    const char *limit_s  = xs_dict_get(args, "limit");
-                    const char *o_max_id = xs_dict_get(args, "max_id");
-                    int limit = limit_s ? atoi(limit_s) : 20;
-                    xs *max_id = o_max_id ? xs_tolower_i(xs_dup(o_max_id)) : NULL;
+                    if (logged_in || xs_type(xs_dict_get(snac2.config, "private")) == XSTYPE_FALSE) {
+                        /* the public list of posts of a user */
+                        const char *limit_s  = xs_dict_get(args, "limit");
+                        const char *o_max_id = xs_dict_get(args, "max_id");
+                        int limit = limit_s ? atoi(limit_s) : 20;
+                        xs *max_id = o_max_id ? xs_tolower_i(xs_dup(o_max_id)) : NULL;
 
-                    srv_debug(1, xs_fmt("account statuses: max_id=%s limit=%d", max_id ? max_id : "(null)", limit));
+                        srv_debug(1, xs_fmt("account statuses: max_id=%s limit=%d", max_id ? max_id : "(null)", limit));
 
-                    xs *timeline = timeline_simple_list(&snac2, "public", 0, 256, NULL);
-                    xs_list *p   = timeline;
-                    const xs_str *v;
-                    xs_set seen;
-                    int cnt = 0;
-                    int skip_until_max = max_id != NULL;
+                        xs *timeline = timeline_simple_list(&snac2, "public", 0, 256, NULL);
+                        xs_list *p   = timeline;
+                        const xs_str *v;
+                        xs_set seen;
+                        int cnt = 0;
+                        int skip_until_max = max_id != NULL;
 
-                    out = xs_list_new();
-                    xs_set_init(&seen);
+                        out = xs_list_new();
+                        xs_set_init(&seen);
 
-                    while (xs_list_iter(&p, &v) && cnt < limit) {
-                        xs *msg = NULL;
+                        while (xs_list_iter(&p, &v) && cnt < limit) {
+                            xs *msg = NULL;
 
-                        if (valid_status(timeline_get_by_md5(&snac2, v, &msg))) {
-                            const char *msg_id = xs_dict_get(msg, "id");
+                            if (valid_status(timeline_get_by_md5(&snac2, v, &msg))) {
+                                const char *msg_id = xs_dict_get(msg, "id");
 
-                            /* add only posts by the author */
-                            if (!xs_is_null(msg_id) &&
-                                strcmp(xs_dict_get(msg, "type"), "Note") == 0 &&
-                                is_msg_mine(&snac2, xs_dict_get(msg, "id")) && is_msg_public(msg)) {
+                                /* add only posts by the author */
+                                if (!xs_is_null(msg_id) &&
+                                    strcmp(xs_dict_get(msg, "type"), "Note") == 0 &&
+                                    is_msg_mine(&snac2, xs_dict_get(msg, "id")) && is_msg_public(msg)) {
 
-                                /* if max_id is set, skip entries until we find it */
-                                if (skip_until_max) {
-                                    xs *mid = mastoapi_id(msg);
-                                    if (strcmp(mid, max_id) == 0) {
-                                        skip_until_max = 0;
-                                        srv_debug(2, xs_fmt("account statuses: found max_id, starting from next post"));
+                                    /* if max_id is set, skip entries until we find it */
+                                    if (skip_until_max) {
+                                        xs *mid = mastoapi_id(msg);
+                                        if (strcmp(mid, max_id) == 0) {
+                                            skip_until_max = 0;
+                                            srv_debug(2, xs_fmt("account statuses: found max_id, starting from next post"));
+                                        }
+                                        continue;
                                     }
-                                    continue;
-                                }
 
-                                /* deduplicate by message id */
-                                if (xs_set_add(&seen, msg_id) == 1) {
-                                    xs *st = mastoapi_status(&snac2, msg);
+                                    /* deduplicate by message id */
+                                    if (xs_set_add(&seen, msg_id) == 1) {
+                                        xs *st = mastoapi_status(&snac2, msg);
 
-                                    if (st) {
-                                        out = xs_list_append(out, st);
-                                        cnt++;
+                                        if (st) {
+                                            out = xs_list_append(out, st);
+                                            cnt++;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    srv_debug(1, xs_fmt("account statuses: returning %d posts (requested %d)", cnt, limit));
-                    xs_set_free(&seen);
+                        srv_debug(1, xs_fmt("account statuses: returning %d posts (requested %d)", cnt, limit));
+                        xs_set_free(&seen);
+                    }
+                    else
+                        status = HTTP_STATUS_UNAUTHORIZED;
                 }
                 else
                 if (strcmp(opt, "featured_tags") == 0) {

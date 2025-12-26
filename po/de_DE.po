@@ -798,16 +798,16 @@ msgstr "Direktnachricht"
 
 #: html.c:488 html.c:2534 html.c:2559 html.c:5177
 msgid "EmojiUnreact"
-msgstr ""
+msgstr "Emoji-Reaktion löschen"
 
 #: html.c:488 html.c:1440 html.c:2534 html.c:2559 html.c:5188
 msgid "EmojiReact"
-msgstr ""
+msgstr "Emoji-Reaktion"
 
 #: html.c:2115
 msgid "Emoji react..."
-msgstr ""
+msgstr "Emoji-Reaktion..."
 
 #: html.c:2609
 msgid "Emoji reactions: "
-msgstr ""
+msgstr "Emoji-Reaktionen:"
