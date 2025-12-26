@@ -4343,12 +4343,8 @@ int html_get_handler(const xs_dict *req, const char *q_path,
             status = HTTP_STATUS_UNAUTHORIZED;
         }
         else {
-            xs *q = NULL;
-            const char *q1 = xs_dict_get(q_vars, "q");
+            const char *q = xs_dict_get(q_vars, "q");
             xs *url_acct = NULL;
-
-            if (xs_is_string(q1))
-                q = xs_strip_i(xs_dup(q1));
 
             /* searching for an URL? */
             if (q && xs_match(q, "https://*|http://*")) {
