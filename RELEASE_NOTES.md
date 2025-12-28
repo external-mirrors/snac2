@@ -2,6 +2,8 @@
 
 ## UNRELEASED
 
+Link contacts to single-user people pages (contributed by lxo).
+
 Added emoji reactions (contributed by violette).
 
 Mastodon API: Fix for some client notifications (contributed by violette), fix for a status visibility error (contributed by fruye).

@@ -221,7 +221,7 @@ xs_html *html_actor_icon(snac *user, xs_dict *actor, const char *date,
            anchored link to the people page instead of the actor url */
         if (fwer || fwing) {
             xs *md5 = xs_md5_hex(actor_id, strlen(actor_id));
-            href = xs_fmt("%s/people#%s", user->actor, md5);
+            href = xs_fmt("%s/people/%s", user->actor, md5);
         }
     }
 
@@ -2355,7 +2355,7 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
                 }
 
                 if (!read_only && (fwers || fwing))
-                    href = xs_fmt("%s/people#%s", user->actor, p);
+                    href = xs_fmt("%s/people/%s", user->actor, p);
                 else
                     href = xs_dup(id);
 
@@ -3856,6 +3856,29 @@ xs_str *html_people(snac *user)
     return xs_html_render_s(html, "<!DOCTYPE html>\n");
 }
 
+xs_str *html_people_one(snac *user, const char *actor)
+{
+    const char *proxy = NULL;
+
+    if (xs_is_true(xs_dict_get(srv_config, "proxy_media")))
+        proxy = user->actor;
+
+    xs_html *lists = xs_html_tag("div",
+        xs_html_attr("class", "snac-posts"));
+
+    xs *foll = xs_list_append(xs_list_new(), actor);
+
+    xs_html_add(lists,
+        html_people_list(user, foll, L("People - single"), "p", proxy));
+
+    xs_html *html = xs_html_tag("html",
+        html_user_head(user, NULL, NULL),
+        xs_html_add(html_user_body(user, 0),
+            lists,
+            html_footer(user)));
+
+    return xs_html_render_s(html, "<!DOCTYPE html>\n");
+}
 
 xs_str *html_notifications(snac *user, int skip, int show)
 {
@@ -4415,7 +4438,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
                             actor_add(actor, actor_obj);
 
                             /* create a people list with only one element */
-                            l = xs_list_append(xs_list_new(), actor);
+                            l = xs_list_append(l, actor);
 
                             xs *title = xs_fmt(L("Search results for account %s"), q);
 
@@ -4552,6 +4575,30 @@ int html_get_handler(const xs_dict *req, const char *q_path,
             *body   = html_people(&snac);
             *b_size = strlen(*body);
             status  = HTTP_STATUS_OK;
+        }
+    }
+    else
+    if (xs_startswith(p_path, "people/")) { /** the list of people **/
+        if (!login(&snac, req)) {
+            *body  = xs_dup(uid);
+            status = HTTP_STATUS_UNAUTHORIZED;
+        }
+        else {
+            xs *actor_dict = NULL;
+            const char *actor_id = NULL;
+            xs *actor = NULL;
+
+            if (valid_status(object_get_by_md5(p_path + strlen("people/"), &actor_dict)) &&
+               (actor_id = xs_dict_get(actor_dict, "id")) != NULL &&
+               valid_status(actor_get(actor_id, &actor))) {
+                *body   = html_people_one(&snac, actor_id);
+                *b_size = strlen(*body);
+                status  = HTTP_STATUS_OK;
+            }
+            else {
+                *body = xs_dup(uid);
+                status = HTTP_STATUS_NOT_FOUND;
+            }
         }
     }
     else
