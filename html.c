@@ -3914,7 +3914,8 @@ xs_str *html_people_one(snac *user, const char *actor, const xs_list *list,
             m = xs_fmt("%s&%s", url, ss);
         else
             m = xs_fmt("%s?%s", url, ss);
-            m10 = xs_fmt("%s0", m);
+
+        m10 = xs_fmt("%s0", m);
 
         xs_html *more_links = xs_html_tag("p",
             xs_html_tag("a",
