@@ -3856,12 +3856,19 @@ xs_str *html_people(snac *user)
     return xs_html_render_s(html, "<!DOCTYPE html>\n");
 }
 
-xs_str *html_people_one(snac *user, const char *actor)
+/* Filter list to display only posts by actor.  We'll probably show
+   fewer than show posts.  Should we try harder to find some?  */
+xs_str *html_people_one(snac *user, const char *actor, const xs_list *list,
+                        int skip, int show, int show_more, const char *page)
 {
     const char *proxy = NULL;
+    xs_list *p = (xs_list *)list;
+    const char *v;
 
     if (xs_is_true(xs_dict_get(srv_config, "proxy_media")))
         proxy = user->actor;
+
+    xs_html *body = html_user_body(user, 0);
 
     xs_html *lists = xs_html_tag("div",
         xs_html_attr("class", "snac-posts"));
@@ -3869,12 +3876,69 @@ xs_str *html_people_one(snac *user, const char *actor)
     xs *foll = xs_list_append(xs_list_new(), actor);
 
     xs_html_add(lists,
-        html_people_list(user, foll, L("People - single"), "p", proxy));
+        html_people_list(user, foll, L("Contact's posts"), "p", proxy));
+
+    xs_html_add(body, lists);
+
+    while (xs_list_iter(&p, &v)) {
+        xs *msg = NULL;
+        int status;
+
+        status = timeline_get_by_md5(user, v, &msg);
+
+        if (!valid_status(status))
+            continue;
+
+        const char *by = xs_dict_get(msg, "attributedTo");
+        if (!by || strcmp(actor, by) != 0)
+            continue;
+
+        xs_html *entry = html_entry(user, msg, 0, 0, v, 1);
+
+        if (entry != NULL)
+            xs_html_add(lists,
+                entry);
+    }
+
+    if (show_more) {
+        xs *m  = NULL;
+        xs *m10  = NULL;
+        xs *ss = xs_fmt("skip=%d&show=%d", skip + show, show);
+
+        xs *url = xs_dup(user == NULL ? srv_baseurl : user->actor);
+
+        if (page != NULL)
+            url = xs_str_cat(url, page);
+
+        if (xs_str_in(url, "?") != -1)
+            m = xs_fmt("%s&%s", url, ss);
+        else
+            m = xs_fmt("%s?%s", url, ss);
+            m10 = xs_fmt("%s0", m);
+
+        xs_html *more_links = xs_html_tag("p",
+            xs_html_tag("a",
+                xs_html_attr("href", url),
+                xs_html_attr("name", "snac-more"),
+                xs_html_text(L("Back to top"))),
+            xs_html_text(" - "),
+            xs_html_tag("a",
+                xs_html_attr("href", m),
+                xs_html_attr("name", "snac-more"),
+                xs_html_text(L("More..."))),
+            xs_html_text(" - "),
+            xs_html_tag("a",
+                xs_html_attr("href", m10),
+                xs_html_attr("name", "snac-more"),
+                xs_html_text(L("More (x 10)..."))));
+
+        xs_html_add(body,
+            more_links);
+    }
 
     xs_html *html = xs_html_tag("html",
         html_user_head(user, NULL, NULL),
-        xs_html_add(html_user_body(user, 0),
-            lists,
+        xs_html_add(body,
             html_footer(user)));
 
     return xs_html_render_s(html, "<!DOCTYPE html>\n");
@@ -4578,7 +4642,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
         }
     }
     else
-    if (xs_startswith(p_path, "people/")) { /** the list of people **/
+    if (xs_startswith(p_path, "people/")) { /** a single actor **/
         if (!login(&snac, req)) {
             *body  = xs_dup(uid);
             status = HTTP_STATUS_UNAUTHORIZED;
@@ -4587,11 +4651,18 @@ int html_get_handler(const xs_dict *req, const char *q_path,
             xs *actor_dict = NULL;
             const char *actor_id = NULL;
             xs *actor = NULL;
+            xs_list *page_lst = xs_split_n(p_path, "?", 2);
+            xs *page = xs_str_cat(xs_str_new("/"), xs_list_get(page_lst, 0));
+            xs_list *l = xs_split_n(page, "/", 3);
+            const char *actor_md5 = xs_list_get(l, 2);
 
-            if (valid_status(object_get_by_md5(p_path + strlen("people/"), &actor_dict)) &&
+            if (valid_status(object_get_by_md5(actor_md5, &actor_dict)) &&
                (actor_id = xs_dict_get(actor_dict, "id")) != NULL &&
                valid_status(actor_get(actor_id, &actor))) {
-                *body   = html_people_one(&snac, actor_id);
+                int more = 0;
+                xs *list = timeline_list(&snac, "private", skip, show, &more);
+
+                *body   = html_people_one(&snac, actor_id, list, skip, show, more, page);
                 *b_size = strlen(*body);
                 status  = HTTP_STATUS_OK;
             }
