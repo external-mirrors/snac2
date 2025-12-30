@@ -2,7 +2,7 @@
 
 ## UNRELEASED
 
-Link contacts to single-user people pages (contributed by lxo).
+Link contacts to single-user people pages. Also, user's posts are shown (contributed by lxo).
 
 Added emoji reactions (contributed by violette).
 
