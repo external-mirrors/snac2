@@ -3889,8 +3889,22 @@ xs_str *html_people_one(snac *user, const char *actor, const xs_list *list,
         if (!valid_status(status))
             continue;
 
-        const char *by = xs_dict_get(msg, "attributedTo");
-        if (!by || strcmp(actor, by) != 0)
+        const char *id = xs_dict_get(msg, "id");
+        const char *by = get_atto(msg);
+        xs *actor_md5 = NULL;
+        xs_list *boosts = NULL;
+        xs_list *likes = NULL;
+        xs_list *reacts = NULL;
+        /* Besides actor's posts, also show actor's boosts, and also
+           posts by user with likes or reacts by actor.  I.e., any
+           actor's actions that user could have seen in the timeline
+           or in notifications.  */
+        if (!(by && strcmp(actor, by) == 0) &&
+            xs_list_in((boosts = object_announces(id)),
+                       (actor_md5 = xs_md5_hex(actor, strlen(actor)))) == -1 &&
+            (!(by && strcmp(user->actor, by) == 0) ||
+             (xs_list_in((likes = object_likes(id)), actor_md5) == -1 &&
+              xs_list_in((reacts = object_get_emoji_reacts(id)), actor_md5) == -1)))
             continue;
 
         xs_html *entry = html_entry(user, msg, 0, 0, v, 1);
@@ -4359,8 +4373,12 @@ int html_get_handler(const xs_dict *req, const char *q_path,
         cache = 0;
 
     int skip = 0;
+    const char *max_show_default = "50";
+    int max_show = xs_number_get(xs_dict_get_def(srv_config, "max_timeline_entries",
+                                 max_show_default));
     int def_show = xs_number_get(xs_dict_get_def(srv_config, "def_timeline_entries",
-                                 xs_dict_get_def(srv_config, "max_timeline_entries", "50")));
+                                 xs_dict_get_def(srv_config, "max_timeline_entries",
+                                 max_show_default)));
     int show = def_show;
 
     if ((v = xs_dict_get(q_vars, "skip")) != NULL)
@@ -4386,6 +4404,8 @@ int html_get_handler(const xs_dict *req, const char *q_path,
     /* a show of 0 has no sense */
     if (show == 0)
         show = def_show;
+    if (show > max_show)
+        show = max_show;
 
     if (p_path == NULL) { /** public timeline **/
         xs *h = xs_str_localtime(0, "%Y-%m.html");
@@ -4661,7 +4681,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
                (actor_id = xs_dict_get(actor_dict, "id")) != NULL &&
                valid_status(actor_get(actor_id, &actor))) {
                 int more = 0;
-                xs *list = timeline_list(&snac, "private", skip, show, &more);
+                xs *list = timeline_simple_list(&snac, "private", skip, show, &more);
 
                 *body   = html_people_one(&snac, actor_id, list, skip, show, more, page);
                 *b_size = strlen(*body);
