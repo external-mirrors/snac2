@@ -10,6 +10,7 @@
 #include "xs_openssl.h"
 #include "xs_json.h"
 #include "xs_http.h"
+#include "xs_unicode.h"
 
 #include "snac.h"
 
@@ -74,7 +75,14 @@ xs_str *rss_from_timeline(snac *user, const xs_list *timeline,
         title = xs_regex_replace_i(title, "&[^;]+;", " ");
         int i;
 
-        for (i = 0; title[i] && title[i] != '\n' && i < 50; i++);
+        for (i = 0; title[i] && title[i] != '\n' && i < 50; ) {
+            const char *p = &title[i];
+            unsigned int cp = xs_utf8_dec(&p);
+            int n = p - title;
+            if (cp == 0xfffd || n > 50)
+                break;
+            i = n;
+        }
 
         if (title[i] != '\0') {
             title[i] = '\0';

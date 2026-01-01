@@ -2,6 +2,8 @@
 
 ## UNRELEASED
 
+Truncate RSS titles at UTF-8 character boundaries (contributed by lxo).
+
 Link contacts to single-user people pages. Also, user's posts are shown (contributed by lxo).
 
 Added emoji reactions (contributed by violette).
