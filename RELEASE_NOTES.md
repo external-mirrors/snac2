@@ -1,6 +1,6 @@
 # Release Notes
 
-## UNRELEASED
+## 2.86
 
 Truncate RSS titles at UTF-8 character boundaries (contributed by lxo).
 
