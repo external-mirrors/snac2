@@ -89,8 +89,15 @@ int srv_open(const char *basedir, int auto_upgrade)
                 else {
                     if (xs_number_get(xs_dict_get(srv_config, "layout")) < disk_layout)
                         error = xs_fmt("ERROR: disk layout changed - execute 'snac upgrade' first");
-                    else
-                        ret = 1;
+                    else {
+                        if (!check_strip_tool()) {
+                            const char *mp = xs_dict_get(srv_config, "mogrify_path");
+                            if (mp == NULL) mp = "mogrify";
+                            error = xs_fmt("ERROR: strip_exif enabled but '%s' not found or not working (set 'mogrify_path' in server.json)", mp);
+                        }
+                        else
+                            ret = 1;
+                    }
                 }
             }
 
@@ -2710,6 +2717,8 @@ void static_put(snac *snac, const char *id, const char *data, int size)
     if (fn && (f = fopen(fn, "wb")) != NULL) {
         fwrite(data, size, 1, f);
         fclose(f);
+
+        strip_media(fn);
     }
 }
 

@@ -32,6 +32,7 @@
 
 #include <sys/time.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 
 xs_str *srv_basedir = NULL;
 xs_dict *srv_config = NULL;
@@ -166,6 +167,69 @@ int check_password(const char *uid, const char *passwd, const char *hash)
         xs *n_hash = hash_password(uid, passwd, xs_list_get(spl, 0));
 
         ret = (strcmp(hash, n_hash) == 0);
+    }
+
+    return ret;
+}
+
+
+int strip_media(const char *fn)
+/* strips EXIF data from a file */
+{
+    int ret = 0;
+    const xs_val *v = xs_dict_get(srv_config, "strip_exif");
+
+    if (xs_type(v) == XSTYPE_TRUE) {
+        xs *l_fn = xs_tolower_i(xs_dup(fn));
+
+        /* check extensions */
+        if (xs_endswith(l_fn, ".jpg") || xs_endswith(l_fn, ".jpeg") ||
+            xs_endswith(l_fn, ".png") || xs_endswith(l_fn, ".webp") ||
+            xs_endswith(l_fn, ".heic") || xs_endswith(l_fn, ".heif") ||
+            xs_endswith(l_fn, ".avif") || xs_endswith(l_fn, ".tiff") ||
+            xs_endswith(l_fn, ".gif")  || xs_endswith(l_fn, ".bmp")) {
+
+            const char *mp = xs_dict_get(srv_config, "mogrify_path");
+            if (mp == NULL)
+                mp = "mogrify";
+
+            xs *cmd = xs_fmt("%s -strip \"%s\" 2>/dev/null", mp, fn);
+
+            ret = system(cmd);
+
+            if (ret != 0) {
+                int code = 0;
+                if (WIFEXITED(ret))
+                    code = WEXITSTATUS(ret);
+                
+                if (code == 127)
+                    srv_log(xs_fmt("strip_media: error stripping %s. '%s' not found (exit 127). Set 'mogrify_path' in server.json.", fn, mp));
+                else
+                    srv_log(xs_fmt("strip_media: error stripping %s %d", fn, ret));
+            }
+            else
+                srv_debug(1, xs_fmt("strip_media: stripped %s", fn));
+        }
+    }
+
+    return ret;
+}
+
+
+int check_strip_tool(void)
+{
+    const xs_val *v = xs_dict_get(srv_config, "strip_exif");
+    int ret = 1;
+
+    if (xs_type(v) == XSTYPE_TRUE) {
+        const char *mp = xs_dict_get(srv_config, "mogrify_path");
+        if (mp == NULL)
+            mp = "mogrify";
+
+        xs *cmd = xs_fmt("%s -version 2>/dev/null >/dev/null", mp);
+        
+        if (system(cmd) != 0)
+            ret = 0;
     }
 
     return ret;

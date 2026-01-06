@@ -105,6 +105,9 @@ int validate_uid(const char *uid);
 xs_str *hash_password(const char *uid, const char *passwd, const char *nonce);
 int check_password(const char *uid, const char *passwd, const char *hash);
 
+int strip_media(const char *fn);
+int check_strip_tool(void);
+
 void srv_archive(const char *direction, const char *url, xs_dict *req,
                  const char *payload, int p_size,
                  int status, xs_dict *headers,
