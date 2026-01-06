@@ -2460,6 +2460,10 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
                 const char *content = xs_dict_get(m, "content");
                 const char *actor = xs_dict_get(m, "actor");
                 const xs_list *contentl = xs_dict_get(sfrl, content);
+
+                if (is_muted(user, actor) || is_instance_blocked(actor))
+                    continue;
+
                 xs *actors = xs_list_new();
                 actors = xs_list_append(actors, actor);
                 char me = actor && user && strcmp(actor, user->actor) == 0;
