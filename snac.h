@@ -1,7 +1,7 @@
 /* snac - A simple, minimalistic ActivityPub instance */
 /* copyright (c) 2022 - 2026 grunfink et al. / MIT license */
 
-#define VERSION "2.86"
+#define VERSION "2.87"
 
 #define USER_AGENT "snac/" VERSION
 
