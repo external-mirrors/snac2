@@ -1171,6 +1171,10 @@ xs_dict *mastoapi_status(snac *snac, const xs_dict *msg)
                 const char *content = xs_dict_get(msg, "content");
                 const char *actor = xs_dict_get(msg, "actor");
                 const xs_list *contentl = xs_dict_get(sfrl, content);
+
+                if ((snac && is_muted(snac, actor)) || is_instance_blocked(actor))
+                    continue;
+
                 /* NOTE: idk when there are no actor, but i encountered that bug.
                  * Probably because of one of my previous attempts.
                  * Keeping this just in case, can remove later */
