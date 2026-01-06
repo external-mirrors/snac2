@@ -1,5 +1,9 @@
 # Release Notes
 
+## 2.87
+
+Hide EmojiReacts from muted actors and blocked instances.
+
 ## 2.86
 
 Truncate RSS titles at UTF-8 character boundaries (contributed by lxo).
