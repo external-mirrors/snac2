@@ -2461,7 +2461,7 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
                 const char *actor = xs_dict_get(m, "actor");
                 const xs_list *contentl = xs_dict_get(sfrl, content);
 
-                if (is_muted(user, actor) || is_instance_blocked(actor))
+                if ((user && is_muted(user, actor)) || is_instance_blocked(actor))
                     continue;
 
                 xs *actors = xs_list_new();
