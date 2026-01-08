@@ -2578,6 +2578,11 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
         return -1;
     }
 
+    if (strcmp(type, "EmojiReact") == 0 && xs_is_true(xs_dict_get(srv_config, "disable_emojireact"))) {
+        srv_log(xs_fmt("Dropping EmojiReact from %s due to admin configuration", actor));
+        return -1;
+    }
+
     const char *object, *utype;
 
     object = xs_dict_get(msg, "object");
