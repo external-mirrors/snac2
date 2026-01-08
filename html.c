@@ -2447,7 +2447,7 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
 
     /* add all emoji reacts */
     int is_emoji = 0;
-    {
+    if (!xs_is_true(xs_dict_get(srv_config, "disable_emojireact"))) {
         int c = 0;
         const xs_dict *k;
         xs *ls = xs_list_new();
