@@ -2103,7 +2103,7 @@ xs_html *html_entry_controls(snac *user, const char *actor,
             xs_html_tag("p", NULL));
     }
 
-    { /** emoji react **/
+    if (!xs_is_true(xs_dict_get(srv_config, "disable_emojireact"))) { /** emoji react **/
         /* the post textarea */
         xs *div_id  = xs_fmt("%s_reply", md5);
         xs *form_id = xs_fmt("%s_reply_form", md5);
