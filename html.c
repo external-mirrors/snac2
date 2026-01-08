@@ -4030,6 +4030,9 @@ xs_str *html_notifications(snac *user, int skip, int show)
         if (xs_is_string(id2) && xs_set_add(&rep, id2) != 1)
             continue;
 
+        if (strcmp(type, "EmojiReact") == 0 && xs_is_true(xs_dict_get(srv_config, "disable_emojireact")))
+            continue;
+
         object_get(id, &obj);
 
         const char *msg_id = NULL;
