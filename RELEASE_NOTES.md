@@ -1,5 +1,9 @@
 # Release Notes
 
+## UNRELEASED
+
+If `disable_emojireact` is set to `true` in `server.json`, EmojiReacts (incoming and outgoing) are totally disabled.
+
 ## 2.87
 
 Hide EmojiReacts from muted actors and blocked instances.
