@@ -76,7 +76,8 @@ int usage(const char *cmd)
         "list_create {basedir} {uid} {name}   Creates a new list\n"
         "list_remove {basedir} {uid} {name}   Removes an existing list\n"
         "list_add {basedir} {uid} {name} {acct} Adds an account (@user@host or actor url) to a list\n"
-        "list_del {basedir} {uid} {name} {actor} Deletes an actor URL from a list\n";
+        "list_del {basedir} {uid} {name} {actor} Deletes an actor URL from a list\n"
+        "top_ten {basedir} {uid} [{N}]        Prints the most popular posts\n";
 
     if (cmd == NULL)
         printf("%s", cmds);
@@ -346,6 +347,24 @@ int main(int argc, char *argv[])
 
         xs_list_foreach(l, v)
             printf("%s\n", v);
+
+        return 0;
+    }
+
+    if (strcmp(cmd, "top_ten") == 0) { /** **/
+        int count = 10;
+        const char *n = GET_ARGV();
+        if (xs_is_string(n))
+            count = atoi(n);
+
+        xs *l = user_top_ten(&snac, count);
+        const xs_list *i;
+
+        xs_list_foreach(l, i) {
+            printf("%s %ld★ %ld↺\n", xs_list_get(i, 0),
+                xs_number_get_l(xs_list_get(i, 1)),
+                xs_number_get_l(xs_list_get(i, 2)));
+        }
 
         return 0;
     }

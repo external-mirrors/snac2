@@ -494,3 +494,5 @@ void rss_to_timeline(snac *user, const char *url);
 void rss_poll_hashtags(void);
 
 void data_fsck(void);
+
+xs_list *user_top_ten(snac *user, int count);
