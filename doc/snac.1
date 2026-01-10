@@ -405,6 +405,9 @@ Removes an existing list.
 Adds an account (by its @name@host handle or actor URL) to a list.
 .It Cm list_del Ar basedir Ar uid Ar name Ar actor_url
 Deletes an actor (by its actor URL) from a list.
+.It Cm top_ten Ar basedir Ar uid Op N
+Returns the ids of the top ten (or top N) most popular posts (considering the
+sum of likes and boosts).
 .El
 .Ss Migrating an account to/from Mastodon
 See 
