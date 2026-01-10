@@ -27,6 +27,7 @@
 #include "xs_html.h"
 #include "xs_po.h"
 #include "xs_webmention.h"
+#include "xs_list_tools.h"
 
 #include "snac.h"
 
