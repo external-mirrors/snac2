@@ -4,6 +4,8 @@
 
 If `disable_emojireact` is set to `true` in `server.json`, EmojiReacts (incoming and outgoing) are totally disabled.
 
+New command-line option `top_ten`, that returns the top ten most popular posts by a user (ordered by the sum of likes and boosts) (contributed by aov).
+
 ## 2.87
 
 Hide EmojiReacts from muted actors and blocked instances.
