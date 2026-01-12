@@ -168,14 +168,16 @@ xs_str *actor_pronouns(xs_dict *actor)
     const xs_list *attachment;
     const xs_dict *d;
     const char *pronouns = "";
-    char *ret;
+    xs_str *ret;
 
-    if (!xs_is_null((attachment = xs_dict_get(actor, "attachment")))) {
+    if (xs_is_list((attachment = xs_dict_get(actor, "attachment")))) {
         xs_list_foreach(attachment, d) {
-            char *prop = xs_utf8_to_lower(xs_dict_get(d, "name"));
+            xs *prop = xs_utf8_to_lower(xs_dict_get(d, "name"));
             /* make sure that we are reading the correct metadata */
-            if (strlen(prop) == 8 && strcmp(prop, "pronouns") == 0)
+            if (strlen(prop) == 8 && strcmp(prop, "pronouns") == 0) {
                 pronouns = xs_dict_get(d, "value");
+                break;
+            }
         }
     }
 
