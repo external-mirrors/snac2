@@ -8,6 +8,8 @@ New command-line option `top_ten`, that returns the top ten most popular posts b
 
 Added a new set of per-user muted words; if a post contains any of them, it's hidden behind a dropdown (contributed by byte).
 
+If an account has a metadata named `pronouns`, it's shown by the name (contributed by violette).
+
 ## 2.87
 
 Hide EmojiReacts from muted actors and blocked instances.
