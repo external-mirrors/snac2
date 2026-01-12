@@ -181,9 +181,8 @@ xs_str *actor_pronouns(xs_dict *actor)
         }
     }
 
-    /* <p> breaks page, cannot nest them */
-    ret = xs_replace_i(xs_dup(pronouns), "<p>", "");
-    ret = xs_replace_i(ret, "</p>", "");
+    /* strip all HTML tags */
+    ret = xs_regex_replace(pronouns, "</?[>]+>", "");
 
     return ret;
 }
