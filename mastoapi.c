@@ -1809,6 +1809,37 @@ xs_list *mastoapi_account_lists(snac *user, const char *uid)
 }
 
 
+xs_list *build_childrens(const xs_dict *msg, snac *snac1) {
+    xs_list *ret = xs_list_new();
+    xs *children = object_children(xs_dict_get(msg, "id"));
+    char *p = children;
+    const xs_str *v;
+
+    while (xs_list_iter(&p, &v)) {
+        xs *m2 = NULL;
+
+        if (valid_status(timeline_get_by_md5(snac1, v, &m2))) {
+            if (xs_is_null(xs_dict_get(m2, "name"))) {
+                xs *st = mastoapi_status(snac1, m2);
+
+                if (st) {
+                    /* childrens children */
+                    xs *childs = build_childrens(m2, snac1);
+                    ret = xs_list_append(ret, st);
+                    if (xs_list_len(childs)) {
+                        char *p2 = childs;
+                        while (xs_list_iter(&p2, &v))
+                            ret = xs_list_append(ret, v);
+
+                    }
+                }
+            }
+        }
+    }
+    return ret;
+}
+
+
 int mastoapi_get_handler(const xs_dict *req, const char *q_path,
                          char **body, int *b_size, char **ctype, xs_str **link)
 {
@@ -2821,8 +2852,6 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
                         /* return ancestors and children */
                         xs *anc = xs_list_new();
                         xs *des = xs_list_new();
-                        xs_list *p;
-                        const xs_str *v;
                         char pid[MD5_HEX_SIZE];
 
                         /* build the [grand]parent list, moving up */
@@ -2842,21 +2871,9 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
                         }
 
                         /* build the children list */
-                        xs *children = object_children(xs_dict_get(msg, "id"));
-                        p = children;
-
-                        while (xs_list_iter(&p, &v)) {
-                            xs *m2 = NULL;
-
-                            if (valid_status(timeline_get_by_md5(&snac1, v, &m2))) {
-                                if (xs_is_null(xs_dict_get(m2, "name"))) {
-                                    xs *st = mastoapi_status(&snac1, m2);
-
-                                    if (st)
-                                        des = xs_list_append(des, st);
-                                }
-                            }
-                        }
+                        xs *childs = build_childrens(msg, &snac1);
+                        if (xs_list_len(childs) > 0)
+                            des = xs_list_cat(des, childs);
 
                         out = xs_dict_new();
                         out = xs_dict_append(out, "ancestors",   anc);
