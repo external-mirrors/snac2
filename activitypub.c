@@ -1611,7 +1611,7 @@ xs_dict *msg_emoji_init(snac *snac, const char *mid, const char *eid_o)
     xs *dict = xs_dict_new();
     xs *icon = xs_dict_new();
     xs *accounts = xs_list_new();
-    xs *emjs = emojis();
+    xs *emjs = emojis_rm_categories();
 
     /* may be a default emoji */
     xs *eidd = xs_dup(eid);

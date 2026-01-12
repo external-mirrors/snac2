@@ -79,6 +79,24 @@ xs_dict *emojis(void)
     return d;
 }
 
+
+xs_dict *emojis_rm_categories() {
+    xs *emjs = emojis();
+    char *res = xs_dict_new();
+    const char *k, *v;
+    xs_dict_foreach(emjs, k, v) {
+        if (xs_type(v) == XSTYPE_DICT) {
+            const char *v2;
+            xs_dict_foreach(v, k, v2)
+                res = xs_dict_append(res, k, v2);
+        }
+        else
+            res = xs_dict_append(res, k, v);
+    }
+    return res;
+}
+
+
 /* Non-whitespace without trailing comma, period or closing paren */
 #define NOSPACE "([^[:space:],.)]+|[,.)]+[^[:space:],.)])+"
 
@@ -405,7 +423,7 @@ xs_str *not_really_markdown(const char *content, xs_list **attach, xs_list **tag
 
     {
         /* traditional emoticons */
-        xs *d = emojis();
+        xs *d = emojis_rm_categories();
         int c = 0;
         const char *k, *v;
 
