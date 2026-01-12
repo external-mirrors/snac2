@@ -6,6 +6,8 @@ If `disable_emojireact` is set to `true` in `server.json`, EmojiReacts (incoming
 
 New command-line option `top_ten`, that returns the top ten most popular posts by a user (ordered by the sum of likes and boosts) (contributed by aov).
 
+Added a new set of per-user muted words; if a post contains any of them, it's hidden behind a dropdown (contributed by byte).
+
 ## 2.87
 
 Hide EmojiReacts from muted actors and blocked instances.
