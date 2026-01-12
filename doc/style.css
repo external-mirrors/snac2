@@ -40,3 +40,4 @@ blockquote { font-style: italic; }
   a { color: #7799dd }
   a:visited { color: #aa99dd }
 }
+select { max-width: 40%; }

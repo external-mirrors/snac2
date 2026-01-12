@@ -162,6 +162,31 @@ xs_str *actor_name(xs_dict *actor, const char *proxy)
 }
 
 
+xs_str *actor_pronouns(xs_dict *actor)
+/* gets the actor name */
+{
+    const xs_list *attachment;
+    const xs_dict *d;
+    const char *pronouns = "";
+    char *ret;
+
+    if (!xs_is_null((attachment = xs_dict_get(actor, "attachment")))) {
+        xs_list_foreach(attachment, d) {
+            char *prop = xs_utf8_to_lower(xs_dict_get(d, "name"));
+            /* make sure that we are reading the correct metadata */
+            if (strlen(prop) == 8 && strcmp(prop, "pronouns") == 0)
+                pronouns = xs_dict_get(d, "value");
+        }
+    }
+
+    /* <p> breaks page, cannot nest them */
+    ret = xs_replace_i(xs_dup(pronouns), "<p>", "");
+    ret = xs_replace_i(ret, "</p>", "");
+
+    return ret;
+}
+
+
 xs_str *format_text_with_emoji(snac *user, const char *text, int ems, const char *proxy)
 /* needed when we have local text with no tags attached */
 {
@@ -195,6 +220,10 @@ xs_html *html_actor_icon(snac *user, xs_dict *actor, const char *date,
     int fwer = 0;
 
     xs *name = actor_name(actor, proxy);
+    xs *pronouns = actor_pronouns(actor);
+    char pronouns_c = 0;
+    if (*pronouns != '\0')
+        pronouns_c = 1;
 
     /* get the avatar */
     if ((v = xs_dict_get(actor, "icon")) != NULL) {
@@ -250,6 +279,15 @@ xs_html *html_actor_icon(snac *user, xs_dict *actor, const char *date,
                 xs_html_attr("title", md5),
                 xs_html_text("»")));
     }
+
+    if (pronouns_c > 0)
+        xs_html_add(actor_icon,
+            xs_html_text(" "),
+            xs_html_tag("span",
+                xs_html_attr("class",   "snac-pronouns"),
+                xs_html_attr("title",   "user's pronouns"),
+                xs_html_raw(pronouns)));
+
 
     if (strcmp(xs_dict_get(actor, "type"), "Service") == 0) {
         xs_html_add(actor_icon,

@@ -88,6 +88,7 @@ static const char * const default_css =
     "  a { color: #7799dd }\n"
     "  a:visited { color: #aa99dd }\n"
     "}\n"
+    "select { max-width: 40%; }\n"
 ;
 
 const char *snac_blurb =
