@@ -182,8 +182,7 @@ xs_str *actor_pronouns(xs_dict *actor)
     }
 
     /* strip all HTML tags */
-    ret = xs_regex_replace(pronouns, "</?[>]+>", "");
-
+    ret = xs_regex_replace(pronouns, "</?[^>]+>", "");
     return ret;
 }
 
