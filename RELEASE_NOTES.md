@@ -10,6 +10,8 @@ Added a new set of per-user muted words; if a post contains any of them, it's hi
 
 If an account has a metadata named `pronouns`, it's shown by the name (contributed by violette).
 
+Mastodon API: children of a post are returned recursively, not just the first level (contributed by violette).
+
 ## 2.87
 
 Hide EmojiReacts from muted actors and blocked instances.
