@@ -222,9 +222,6 @@ xs_html *html_actor_icon(snac *user, xs_dict *actor, const char *date,
 
     xs *name = actor_name(actor, proxy);
     xs *pronouns = actor_pronouns(actor);
-    char pronouns_c = 0;
-    if (*pronouns != '\0')
-        pronouns_c = 1;
 
     /* get the avatar */
     if ((v = xs_dict_get(actor, "icon")) != NULL) {
@@ -259,16 +256,28 @@ xs_html *html_actor_icon(snac *user, xs_dict *actor, const char *date,
     if (href == NULL)
         href = xs_dup(actor_id);
 
+    xs_html *name_link = xs_html_tag("a",
+            xs_html_attr("href",    href),
+            xs_html_attr("class",   "p-author h-card snac-author"),
+            xs_html_raw(name)); /* name is already html-escaped */
+
+    if (*pronouns) {
+        xs_html_add(name_link,
+            xs_html_text(" ["),
+            xs_html_tag("span",
+                xs_html_attr("class",   "snac-pronouns"),
+                xs_html_attr("title",   "user's pronouns"),
+                xs_html_raw(pronouns)),
+            xs_html_text("]"));
+    }
+
     xs_html_add(actor_icon,
         xs_html_sctag("img",
             xs_html_attr("loading", "lazy"),
             xs_html_attr("class",   "snac-avatar"),
             xs_html_attr("src",     avatar),
             xs_html_attr("alt",     "[?]")),
-        xs_html_tag("a",
-            xs_html_attr("href",    href),
-            xs_html_attr("class",   "p-author h-card snac-author"),
-            xs_html_raw(name))); /* name is already html-escaped */
+        name_link);
 
     if (!xs_is_null(url)) {
         xs *md5 = xs_md5_hex(url, strlen(url));
@@ -280,14 +289,6 @@ xs_html *html_actor_icon(snac *user, xs_dict *actor, const char *date,
                 xs_html_attr("title", md5),
                 xs_html_text("»")));
     }
-
-    if (pronouns_c > 0)
-        xs_html_add(actor_icon,
-            xs_html_text(" "),
-            xs_html_tag("span",
-                xs_html_attr("class",   "snac-pronouns"),
-                xs_html_attr("title",   "user's pronouns"),
-                xs_html_raw(pronouns)));
 
 
     if (strcmp(xs_dict_get(actor, "type"), "Service") == 0) {
