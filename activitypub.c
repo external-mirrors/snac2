@@ -2958,7 +2958,7 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
         if (xs_is_null(object))
             snac_log(snac, xs_fmt("malformed message: no 'id' field"));
         else
-        if (timeline_admire(snac, object, actor, 1, xs_dup(msg)) == HTTP_STATUS_CREATED)
+        if (timeline_admire(snac, object, actor, 1, msg) == HTTP_STATUS_CREATED)
             snac_log(snac, xs_fmt("new '%s' %s %s", type, actor, object));
         else
             snac_log(snac, xs_fmt("repeated '%s' from %s to %s", type, actor, object));

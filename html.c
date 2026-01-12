@@ -16,6 +16,7 @@
 #include "xs_url.h"
 #include "xs_random.h"
 #include "xs_http.h"
+#include "xs_list_tools.h"
 
 #include "snac.h"
 
@@ -1864,6 +1865,38 @@ xs_html *html_top_controls(snac *user)
                     xs_html_attr("class", "button"),
                     xs_html_attr("value", L("Update hashtags")))))));
 
+    xs *muted_words_action = xs_fmt("%s/admin/muted-words", user->actor);
+    xs *muted_words = xs_join(xs_dict_get_def(user->config,
+                        "muted_words", xs_stock(XSTYPE_LIST)), "\n");
+
+    xs_html_add(top_controls,
+        xs_html_tag("details",
+        xs_html_tag("summary",
+            xs_html_text(L("Muted words..."))),
+        xs_html_tag("p",
+            xs_html_text(L("One word per line, partial matches count"))),
+        xs_html_tag("div",
+            xs_html_attr("class", "snac-muted-words"),
+            xs_html_tag("form",
+                xs_html_attr("autocomplete", "off"),
+                xs_html_attr("method", "post"),
+                xs_html_attr("action", muted_words_action),
+                xs_html_attr("enctype", "multipart/form-data"),
+
+                xs_html_tag("textarea",
+                    xs_html_attr("name", "muted_words"),
+                    xs_html_attr("cols", "40"),
+                    xs_html_attr("rows", "4"),
+                    xs_html_attr("placeholder", "nascar\nsuperbowl\nFIFA"),
+                    xs_html_text(muted_words)),
+
+                xs_html_tag("br", NULL),
+
+                xs_html_sctag("input",
+                    xs_html_attr("type", "submit"),
+                    xs_html_attr("class", "button"),
+                    xs_html_attr("value", L("Update muted words")))))));
+
     return top_controls;
 }
 
@@ -2141,6 +2174,30 @@ xs_html *html_entry_controls(snac *user, const char *actor,
     }
 
     return controls;
+}
+
+
+static const xs_str* words_in_content(const xs_list *words, const xs_val *content)
+/* returns a word that matches any of the words in content */
+{
+    if (!xs_is_list(words) || !xs_is_string(content)) {
+	    return NULL;
+    }
+    xs *c = xs_split(content, " ");
+    xs *sc = xs_list_sort(c, NULL);
+
+    const xs_str *wv;
+    const xs_str *cv;
+    xs_list_foreach(words, wv) {
+        xs_list_foreach(sc, cv) {
+            xs_tolower_i((xs_str*)cv);
+            if(xs_str_in(cv, wv) != -1){
+                return wv;
+            }
+        }
+    }
+
+    return NULL;
 }
 
 
@@ -2437,6 +2494,17 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
             xs_html_tag("summary",
                 xs_html_text(v),
                 xs_html_text(L(" [SENSITIVE CONTENT]"))));
+    }
+    else
+    if (user &&
+        /* muted_words is all lowercase and sorted for performance */
+        (v = words_in_content(xs_dict_get(user->config, "muted_words"),
+                              xs_dict_get(msg, "content"))) != NULL) {
+        snac_debug(user, 1, xs_fmt("word %s muted by user preferences: %s", v, id));
+        snac_content = xs_html_tag("details",
+            xs_html_tag("summary",
+                xs_html_text(L("Muted: ")),
+                xs_html_text(v)));
     }
     else {
         snac_content = xs_html_tag("div", NULL);
@@ -5808,6 +5876,33 @@ int html_post_handler(const xs_dict *req, const char *q_path,
             }
 
             snac.config = xs_dict_set(snac.config, "blocked_hashtags", new_hashtags);
+            user_persist(&snac, 0);
+        }
+
+        status = HTTP_STATUS_SEE_OTHER;
+    }
+    else
+    if (p_path && strcmp(p_path, "admin/muted-words") == 0) {
+        const char *words = xs_dict_get(p_vars, "muted_words");
+
+        if (xs_is_string(words)) {
+            xs *new_words = xs_list_new();
+            xs *l = xs_split(words, "\n");
+            const char *v;
+
+            xs_list_foreach(l, v) {
+                xs *s1 = xs_strip_i(xs_dup(v));
+                s1 = xs_replace_i(s1, " ", "");
+
+                if (*s1 == '\0')
+                    continue;
+
+                xs *s2 = xs_utf8_to_lower(s1);
+
+                new_words = xs_list_insert_sorted(new_words, s2);
+            }
+
+            snac.config = xs_dict_set(snac.config, "muted_words", new_words);
             user_persist(&snac, 0);
         }
 
