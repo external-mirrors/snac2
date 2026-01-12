@@ -12,6 +12,8 @@ If an account has a metadata named `pronouns`, it's shown by the name (contribut
 
 Mastodon API: children of a post are returned recursively, not just the first level (contributed by violette).
 
+Implemented optional metadata stripping for images and videos using external tools (contributed by Stefano Marinelli).
+
 ## 2.87
 
 Hide EmojiReacts from muted actors and blocked instances.
