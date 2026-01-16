@@ -3710,7 +3710,7 @@ xs_html *html_people_list(snac *user, xs_list *list, const char *header, const c
     xs_html *people = xs_html_tag("div",
         xs_html_tag("h2",
             xs_html_attr("class", "snac-header"),
-            xs_html_text(header)),
+            xs_html_raw(xs_fmt("%s - %d\n", header, xs_list_len(list)))),
         snac_posts = xs_html_tag("details",
                 xs_html_attr("open", NULL),
                 xs_html_tag("summary",
