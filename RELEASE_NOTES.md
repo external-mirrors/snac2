@@ -4,6 +4,8 @@
 
 Fixed crash in pronouns processing (contributed by byte).
 
+Added counters in the people page (contributed by byte).
+
 ## 2.88
 
 If `disable_emojireact` is set to `true` in `server.json`, EmojiReacts (incoming and outgoing) are totally disabled.
