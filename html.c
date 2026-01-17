@@ -167,6 +167,7 @@ xs_str *actor_pronouns(xs_dict *actor)
 {
     const xs_list *attachment;
     const xs_dict *d;
+    const char *v;
     const char *pronouns = "";
     xs_str *ret;
 
@@ -175,7 +176,9 @@ xs_str *actor_pronouns(xs_dict *actor)
             xs *prop = xs_utf8_to_lower(xs_dict_get(d, "name"));
             /* make sure that we are reading the correct metadata */
             if (strlen(prop) == 8 && strcmp(prop, "pronouns") == 0) {
-                pronouns = xs_dict_get(d, "value");
+                /* safeguard from NULL values */
+                v = xs_dict_get(d, "value");
+                pronouns = v ? v : pronouns;
                 break;
             }
         }
