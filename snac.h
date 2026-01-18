@@ -277,6 +277,7 @@ void notify_add(snac *snac, const char *type, const char *utype,
 xs_dict *notify_get(snac *snac, const char *id);
 int notify_new_num(snac *snac);
 xs_list *notify_list(snac *snac, int skip, int show);
+xs_list *notify_filter_list(snac *snac, xs_list *ids);
 void notify_clear(snac *snac);
 
 xs_dict *markers_get(snac *snac, const xs_list *markers);
