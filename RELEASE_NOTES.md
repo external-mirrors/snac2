@@ -6,6 +6,8 @@ Fixed crash in pronouns processing (contributed by byte).
 
 Added counters in the people page (contributed by byte).
 
+New command-line option `refresh`, to refresh all follower and following `Actor` objects, marking them as broken if they are.
+
 ## 2.88
 
 If `disable_emojireact` is set to `true` in `server.json`, EmojiReacts (incoming and outgoing) are totally disabled.
