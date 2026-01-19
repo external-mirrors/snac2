@@ -77,7 +77,8 @@ int usage(const char *cmd)
         "list_remove {basedir} {uid} {name}   Removes an existing list\n"
         "list_add {basedir} {uid} {name} {acct} Adds an account (@user@host or actor url) to a list\n"
         "list_del {basedir} {uid} {name} {actor} Deletes an actor URL from a list\n"
-        "top_ten {basedir} {uid} [{N}]        Prints the most popular posts\n";
+        "top_ten {basedir} {uid} [{N}]        Prints the most popular posts\n"
+        "refresh {basedir} {uid}              Refreshes all actors\n";
 
     if (cmd == NULL)
         printf("%s", cmds);
@@ -365,6 +366,20 @@ int main(int argc, char *argv[])
                 xs_number_get_l(xs_list_get(i, 1)),
                 xs_number_get_l(xs_list_get(i, 2)));
         }
+
+        return 0;
+    }
+
+    if (strcmp(cmd, "refresh") == 0) { /** **/
+        xs *fwers = follower_list(&snac);
+        xs *fwing = following_list(&snac);
+        const char *id;
+
+        xs_list_foreach(fwers, id)
+            enqueue_actor_refresh(&snac, id, 0);
+
+        xs_list_foreach(fwing, id)
+            enqueue_actor_refresh(&snac, id, 0);
 
         return 0;
     }

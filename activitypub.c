@@ -3395,7 +3395,7 @@ void process_user_queue_item(snac *user, xs_dict *q_item)
                 actor_add(actor, actor_o);
             }
             else {
-                if (status == HTTP_STATUS_GONE) {
+                if (status == HTTP_STATUS_GONE || status == HTTP_STATUS_NOT_FOUND) {
                     actor_failure(actor, 1);
                     snac_log(user, xs_fmt("actor_refresh marking actor %s as broken %d", actor, status));
                 }
