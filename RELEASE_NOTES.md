@@ -1,6 +1,6 @@
 # Release Notes
 
-## UNRELEASED
+## 2.89
 
 Fixed crash in pronouns processing (contributed by byte).
 
