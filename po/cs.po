@@ -8,694 +8,694 @@ msgstr ""
 "Language: cs\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: html.c:440
+#: html.c:534
 msgid "Sensitive content: "
 msgstr "Citlivý obsah: "
 
-#: html.c:448
+#: html.c:542
 msgid "Sensitive content description"
-msgstr "Varování k citlivému obsahu"
+msgstr "Varování o citlivém obsahu"
 
 msgid "Only for mentioned people: "
 msgstr "Pouze pro zmíněné osoby:"
 
-#: html.c:514
+#: html.c:570
 msgid "Reply to (URL): "
 msgstr "Odpovědět na (URL):"
 
-#: html.c:523
+#: html.c:579
 msgid "Don't send, but store as a draft"
 msgstr "Nesdílet, pouze uložit do rozepsaných"
 
-#: html.c:524
+#: html.c:580
 msgid "Draft:"
 msgstr "Rozepsané:"
 
-#: html.c:614
+#: html.c:670
 msgid "Attachments..."
 msgstr "Přílohy..."
 
-#: html.c:637
+#: html.c:693
 msgid "File:"
 msgstr "Soubor:"
 
-#: html.c:641
+#: html.c:697
 msgid "Clear this field to delete the attachment"
 msgstr "Pro smazání přilohy vymažte toto pole"
 
-#: html.c:650 html.c:675
+#: html.c:706 html.c:731
 msgid "Attachment description"
 msgstr "Popisek přílohy"
 
-#: html.c:686
+#: html.c:742
 msgid "Poll..."
 msgstr "Anketa..."
 
-#: html.c:688
+#: html.c:744
 msgid "Poll options (one per line, up to 8):"
 msgstr "Možnosti ankety (jedna na řádek, max 8):"
 
-#: html.c:700
+#: html.c:756
 msgid "One choice"
 msgstr "Vyber jednu"
 
-#: html.c:703
+#: html.c:759
 msgid "Multiple choices"
 msgstr "Vyber více možností"
 
-#: html.c:709
+#: html.c:765
 msgid "End in 5 minutes"
 msgstr "Konec za 5 minut"
 
-#: html.c:713
+#: html.c:769
 msgid "End in 1 hour"
 msgstr "Konec za 1 hodinu"
 
-#: html.c:716
+#: html.c:772
 msgid "End in 1 day"
 msgstr "Konec za 1 den"
 
-#: html.c:724
+#: html.c:780
 msgid "Post"
 msgstr "Poslat"
 
-#: html.c:826 html.c:833
+#: html.c:882 html.c:889
 msgid "Site description"
 msgstr "Popisek stránky"
 
-#: html.c:844
+#: html.c:900
 msgid "Admin email"
 msgstr "Email administrátora"
 
-#: html.c:857
+#: html.c:913
 msgid "Admin account"
 msgstr "Účet adminitrátora"
 
-#: html.c:922 html.c:1278
+#: html.c:978 html.c:1334
 #, c-format
 msgid "%d following, %d followers"
 msgstr "%d sledovaných, %d sledujících"
 
-#: html.c:1019
+#: html.c:1075
 msgid "RSS"
 msgstr "RSS"
 
-#: html.c:1024 html.c:1063
+#: html.c:1080 html.c:1119
 msgid "private"
 msgstr "soukromé"
 
-#: html.c:1059
+#: html.c:1115
 msgid "public"
 msgstr "veřejné"
 
-#: html.c:1067
+#: html.c:1123
 msgid "notifications"
 msgstr "upozornění"
 
-#: html.c:1072
+#: html.c:1128
 msgid "people"
 msgstr "lidé"
 
-#: html.c:1077
+#: html.c:1133
 msgid "instance"
 msgstr "instance"
 
-#: html.c:1086
+#: html.c:1142
 msgid ""
 "Search posts by URL or content (regular expression), @user@host accounts, or "
 "#tag"
 msgstr ""
 "Vyhledat příspěvek podle URL (regex), @uživatel@instance účtu, nebo #tagu"
 
-#: html.c:1087
+#: html.c:1143
 msgid "Content search"
 msgstr "Hledání obsahu"
 
-#: html.c:1213
+#: html.c:1269
 msgid "verified link"
 msgstr "ověřený odkaz"
 
-#: html.c:1270 html.c:2726 html.c:2739 html.c:2748 html.c:3680
+#: html.c:1326 html.c:3010 html.c:3023 html.c:3032 html.c:4095
 msgid "Location: "
 msgstr "Místo: "
 
-#: html.c:1302
+#: html.c:1358
 msgid "New Post..."
 msgstr "Nový příspěvek..."
 
-#: html.c:1304
+#: html.c:1360
 msgid "What's on your mind?"
 msgstr "Co se vám honí hlavou?"
 
-#: html.c:1313
+#: html.c:1369
 msgid "Operations..."
 msgstr "Operace..."
 
-#: html.c:1328 html.c:1949 html.c:3400 html.c:4817
+#: html.c:1384 html.c:2027 html.c:3776 html.c:4044 html.c:5261
 msgid "Follow"
 msgstr "Sledovat"
 
-#: html.c:1330
+#: html.c:1386
 msgid "(by URL or user@host)"
 msgstr "(podle URL nebo @uživatel@instance)"
 
-#: html.c:1345 html.c:1925 html.c:4766
+#: html.c:1401 html.c:2003 html.c:5210
 msgid "Boost"
 msgstr "Boostit"
 
-#: html.c:1347 html.c:1364
+#: html.c:1403 html.c:1420 html.c:1442
 msgid "(by URL)"
 msgstr "(podle URL)"
 
-#: html.c:1362 html.c:1904 html.c:4757
+#: html.c:1418 html.c:1982 html.c:5201
 msgid "Like"
 msgstr "Líbí"
 
-#: html.c:1490
+#: html.c:1568
 msgid "User Settings..."
 msgstr "Nastavení..."
 
-#: html.c:1499
+#: html.c:1577
 msgid "Display name:"
 msgstr "Jméno:"
 
-#: html.c:1505
+#: html.c:1583
 msgid "Your name"
 msgstr "Vaše jméno"
 
-#: html.c:1507
+#: html.c:1585
 msgid "Avatar: "
-msgstr "Avatar: "
+msgstr "Profilový obrázek: "
 
-#: html.c:1515
+#: html.c:1593
 msgid "Delete current avatar"
-msgstr "Smazat současný avatar"
+msgstr "Smazat profilový obrázek"
 
-#: html.c:1517
+#: html.c:1595
 msgid "Header image (banner): "
 msgstr "Obrázek v záhlaví profilu: "
 
-#: html.c:1525
+#: html.c:1603
 msgid "Delete current header image"
-msgstr "Smazat současný obrázek v záhlaví"
+msgstr "Smazat obrázek v záhlaví"
 
-#: html.c:1527
+#: html.c:1605
 msgid "Bio:"
 msgstr "Bio:"
 
-#: html.c:1533
+#: html.c:1611
 msgid "Write about yourself here..."
-msgstr "Napište sem něco o sobě..."
+msgstr "Napište něco o sobě..."
 
-#: html.c:1542
+#: html.c:1620
 msgid "Always show sensitive content"
-msgstr "Vždy zobrazit příspěvky s varováním o citlivém obsahu"
+msgstr "Rozbalit citlivé příspěvky"
 
-#: html.c:1544
+#: html.c:1622
 msgid "Email address for notifications:"
 msgstr "Emailová adresa pro upozornění"
 
-#: html.c:1552
+#: html.c:1630
 msgid "Telegram notifications (bot key and chat id):"
 msgstr "Upozornění na Telegram (bot klíč a chat id):"
 
-#: html.c:1566
+#: html.c:1644
 msgid "ntfy notifications (ntfy server and token):"
 msgstr "ntfy notifikace (ntfy server a token):"
 
-#: html.c:1588
+#: html.c:1666
 msgid "Maximum days to keep posts (0: server settings):"
 msgstr "Životnost příspěvků ve dnech (0: nastavení serveru):"
 
-#: html.c:1602
+#: html.c:1680
 msgid "Drop direct messages from people you don't follow"
 msgstr "Zahodit soukromé zprávy od lidí, které nesledujete"
 
-#: html.c:1611
+#: html.c:1689
 msgid "This account is a bot"
-msgstr "Tenhle účet je robot"
+msgstr "Tento účet je robotem"
 
-#: html.c:1620
+#: html.c:1698
 msgid "Auto-boost all mentions to this account"
-msgstr "Automaticky boostovat všechny zmíňky o tomto účtu"
+msgstr "Automaticky boostit všechna zmínění tohoto účtu"
 
-#: html.c:1629
+#: html.c:1707
 msgid "This account is private (posts are not shown through the web)"
 msgstr ""
 "Tento účet je soukromý (příspěvky nejsou zobrazitelné napříč internetem)"
 
-#: html.c:1639
+#: html.c:1717
 msgid "Collapse top threads by default"
-msgstr "Zobrazovat vlákna složená"
+msgstr "Složit vlákna"
 
-#: html.c:1648
+#: html.c:1726
 msgid "Follow requests must be approved"
-msgstr "Žádosti o sledování je nutno manuálně potvrdit"
+msgstr "Žádosti o sledování je nutné manuálně potvrdit"
 
-#: html.c:1657
+#: html.c:1735
 msgid "Publish follower and following metrics"
 msgstr "Zobrazit údaje o počtu sledovaných a sledujících"
 
-#: html.c:1659
+#: html.c:1737
 msgid "Current location:"
 msgstr "Geolokace:"
 
-#: html.c:1673
+#: html.c:1751
 msgid "Profile metadata (key=value pairs in each line):"
 msgstr "Metadata profilu (klíč=hodnota na jeden řádek):"
 
-#: html.c:1684
+#: html.c:1762
 msgid "Web interface language:"
 msgstr "Jazyk rozhraní:"
 
-#: html.c:1703
+#: html.c:1781
 msgid "New password:"
 msgstr "Nové heslo:"
 
-#: html.c:1710
+#: html.c:1788
 msgid "Repeat new password:"
-msgstr "Zopakujte nové heslo:"
+msgstr "Nové heslo znovu:"
 
-#: html.c:1720
+#: html.c:1798
 msgid "Update user info"
 msgstr "Uložit"
 
-#: html.c:1731
+#: html.c:1809
 msgid "Followed hashtags..."
 msgstr "Sledované hashtagy..."
 
-#: html.c:1733 html.c:1766
+#: html.c:1811 html.c:1844
 msgid "One hashtag per line"
 msgstr "Jeden hashtag na řádek"
 
-#: html.c:1755 html.c:1787
+#: html.c:1833 html.c:1865
 msgid "Update hashtags"
 msgstr "Aktualizovat hashtagy"
 
-#: html.c:1904
+#: html.c:1982
 msgid "Say you like this post"
 msgstr "Dát najevo, že se vám příspěvek líbí"
 
-#: html.c:1909 html.c:4775
+#: html.c:1987 html.c:5219
 msgid "Unlike"
 msgstr "Nelíbí"
 
-#: html.c:1909
+#: html.c:1987
 msgid "Nah don't like it that much"
 msgstr "Vlastně se mi to zas tak nelíbí"
 
-#: html.c:1915 html.c:4912
+#: html.c:1993 html.c:5356
 msgid "Unpin"
 msgstr "Odepnout"
 
-#: html.c:1915
+#: html.c:1993
 msgid "Unpin this post from your timeline"
 msgstr "Odepnout tento příspěvek z vaší osy"
 
-#: html.c:1918 html.c:4907
+#: html.c:1996 html.c:5351
 msgid "Pin"
 msgstr "Připnout"
 
-#: html.c:1918
+#: html.c:1996
 msgid "Pin this post to the top of your timeline"
 msgstr "Připnout tento příspěvěk na začátek vaší osy"
 
-#: html.c:1925
+#: html.c:2003
 msgid "Announce this post to your followers"
 msgstr "Ukázat tento příspěvek vaším sledujícím"
 
-#: html.c:1930 html.c:4783
+#: html.c:2008 html.c:5227
 msgid "Unboost"
 msgstr "Odboostit"
 
-#: html.c:1930
+#: html.c:2008
 msgid "I regret I boosted this"
-msgstr "Boostit to byl blbej nápad"
+msgstr "Boostit to byl špatný nápad"
 
-#: html.c:1936 html.c:4922
+#: html.c:2014 html.c:5366
 msgid "Unbookmark"
 msgstr "Zahodit"
 
-#: html.c:1936
+#: html.c:2014
 msgid "Delete this post from your bookmarks"
 msgstr "Odstranit tento příspěvěk ze záložek"
 
-#: html.c:1939 html.c:4917
+#: html.c:2017 html.c:5361
 msgid "Bookmark"
 msgstr "Uložit"
 
-#: html.c:1939
+#: html.c:2017
 msgid "Add this post to your bookmarks"
 msgstr "Uložit tento příspěvek do záložek"
 
-#: html.c:1945 html.c:3386 html.c:3577 html.c:4830
+#: html.c:2023 html.c:3762 html.c:3957 html.c:4042 html.c:5274
 msgid "Unfollow"
 msgstr "Přestat sledovat"
 
-#: html.c:1945 html.c:3387
+#: html.c:2023 html.c:3763 html.c:4042
 msgid "Stop following this user's activity"
 msgstr "Přestat sledovat tohoto uživatele"
 
-#: html.c:1949 html.c:3401
+#: html.c:2027 html.c:3777 html.c:4044
 msgid "Start following this user's activity"
 msgstr "Začít sledovat tohoto uživatele"
 
-#: html.c:1955 html.c:4860
+#: html.c:2033 html.c:5304
 msgid "Unfollow Group"
 msgstr "Přestat Sledovat Skupinu"
 
-#: html.c:1956
+#: html.c:2034
 msgid "Stop following this group or channel"
 msgstr "Přestat sledovat tuto skupinu nebo kanál"
 
-#: html.c:1960 html.c:4847
+#: html.c:2038 html.c:5291
 msgid "Follow Group"
 msgstr "Sledovat Skupinu"
 
-#: html.c:1961
+#: html.c:2039
 msgid "Start following this group or channel"
 msgstr "Začít sledovat tuto skupinu nebo kanál"
 
-#: html.c:1966 html.c:3423 html.c:4791
+#: html.c:2044 html.c:3799 html.c:5235
 msgid "MUTE"
 msgstr "ZTIŠIT"
 
-#: html.c:1967
+#: html.c:2045
 msgid "Block any activity from this user forever"
 msgstr "Jednou provždy zablokovat všechno od tohoto uživatele"
 
-#: html.c:1972 html.c:3405 html.c:4877
+#: html.c:2050 html.c:3781 html.c:5321
 msgid "Delete"
 msgstr "Smazat"
 
-#: html.c:1972
+#: html.c:2050
 msgid "Delete this post"
 msgstr "Smazat tento příspěvek"
 
-#: html.c:1975 html.c:4799
+#: html.c:2053 html.c:5243
 msgid "Hide"
 msgstr "Schovat"
 
-#: html.c:1975
+#: html.c:2053
 msgid "Hide this post and its children"
 msgstr "Schovat tento příspěvek a příspěvky pod ním"
 
-#: html.c:2017
+#: html.c:2095
 msgid "Edit..."
 msgstr "Editovat..."
 
-#: html.c:2039
+#: html.c:2133
 msgid "Reply..."
 msgstr "Odpovědět..."
 
-#: html.c:2090
+#: html.c:2184
 msgid "Truncated (too deep)"
 msgstr "Ořezáno (moc hluboké)"
 
-#: html.c:2108
+#: html.c:2202
 msgid "follows you"
 msgstr "sleduje vás"
 
-#: html.c:2182
+#: html.c:2276
 msgid "Pinned"
 msgstr "Připnuto"
 
-#: html.c:2190
+#: html.c:2284
 msgid "Bookmarked"
 msgstr "Zazáložkováno"
 
-#: html.c:2198
+#: html.c:2292
 msgid "Poll"
 msgstr "Anketa"
 
-#: html.c:2205
+#: html.c:2299
 msgid "Voted"
 msgstr "Odhlasováno"
 
-#: html.c:2214
+#: html.c:2308
 msgid "Event"
 msgstr "Událost"
 
-#: html.c:2246 html.c:2275
+#: html.c:2340 html.c:2369
 msgid "boosted"
-msgstr "boostuje"
+msgstr "boostí"
 
-#: html.c:2289
+#: html.c:2383
 msgid "in reply to"
 msgstr "odpověď pro"
 
-#: html.c:2345
+#: html.c:2439
 msgid " [SENSITIVE CONTENT]"
 msgstr "[CITLIVÝ OBSAH]"
 
-#: html.c:2512
+#: html.c:2796
 msgid "Vote"
 msgstr "Hlasuj"
 
-#: html.c:2522
+#: html.c:2806
 msgid "Closed"
 msgstr "Uzavřeno"
 
-#: html.c:2547
+#: html.c:2831
 msgid "Closes in"
 msgstr "Končí za"
 
-#: html.c:2627
+#: html.c:2911
 msgid "Video"
 msgstr "Video"
 
-#: html.c:2642
+#: html.c:2926
 msgid "Audio"
 msgstr "Audio"
 
-#: html.c:2670
+#: html.c:2954
 msgid "Attachment"
 msgstr "Příloha"
 
-#: html.c:2684
+#: html.c:2968
 msgid "Alt..."
 msgstr "Popisek..."
 
-#: html.c:2697
+#: html.c:2981
 msgid "Source channel or community"
-msgstr ""
+msgstr "Původní kanál nebo komunita"
 
-#: html.c:2791
+#: html.c:3075
 msgid "Time: "
 msgstr "Čas:"
 
-#: html.c:2872
+#: html.c:3156
 msgid "Older..."
 msgstr "Starší..."
 
-#: html.c:2974
+#: html.c:3258
 msgid "about this site"
 msgstr "o této stránce"
 
-#: html.c:2976
+#: html.c:3260
 msgid "powered by "
 msgstr "pohání "
 
-#: html.c:3041
+#: html.c:3329
 msgid "Dismiss"
 msgstr "Zahodit"
 
-#: html.c:3058
+#: html.c:3346
 #, c-format
 msgid "Timeline for list '%s'"
 msgstr "Časová osa pro seznam '%s'"
 
-#: html.c:3077 html.c:4169
+#: html.c:3365 html.c:4589
 msgid "Pinned posts"
 msgstr "Připnuté příspěvky"
 
-#: html.c:3089 html.c:4184
+#: html.c:3377 html.c:4604
 msgid "Bookmarked posts"
 msgstr "Záložky"
 
-#: html.c:3101 html.c:4199
+#: html.c:3389 html.c:4619
 msgid "Post drafts"
 msgstr "Rozepsané příspěvky"
 
-#: html.c:3177
+#: html.c:3465
 msgid "No more unseen posts"
-msgstr "Nic víc nového"
+msgstr "Nic nového"
 
-#: html.c:3181 html.c:3290
+#: html.c:3469 html.c:3578
 msgid "Back to top"
 msgstr "Zpátky nahoru"
 
-#: html.c:3243
+#: html.c:3531
 msgid "History"
 msgstr "Historie"
 
-#: html.c:3295 html.c:3734
+#: html.c:3583 html.c:4149
 msgid "More..."
 msgstr "Více..."
 
-#: html.c:3391 html.c:4813
+#: html.c:3767 html.c:5257
 msgid "Unlimit"
 msgstr "Povolit boosty"
 
-#: html.c:3392
+#: html.c:3768
 msgid "Allow announces (boosts) from this user"
 msgstr "Zobrazovat boosty od tohoto uživatele"
 
-#: html.c:3395 html.c:4809
+#: html.c:3771 html.c:5253
 msgid "Limit"
 msgstr "Skrýt boosty"
 
-#: html.c:3396
+#: html.c:3772
 msgid "Block announces (boosts) from this user"
 msgstr "Ztišit boosty od tohoto uživatele"
 
-#: html.c:3405
+#: html.c:3781
 msgid "Delete this user"
 msgstr "Smazat tohoto uživatele"
 
-#: html.c:3410 html.c:4927
+#: html.c:3786 html.c:5371
 msgid "Approve"
 msgstr "Schválit"
 
-#: html.c:3411
+#: html.c:3787
 msgid "Approve this follow request"
 msgstr "Schválit žádost o sledování"
 
-#: html.c:3414 html.c:4951
+#: html.c:3790 html.c:5395
 msgid "Discard"
 msgstr "Zahodit"
 
-#: html.c:3414
+#: html.c:3790
 msgid "Discard this follow request"
 msgstr "Zahodit žádost o sledování"
 
-#: html.c:3419 html.c:4795
+#: html.c:3795 html.c:5239
 msgid "Unmute"
 msgstr "Zrušit ztišení"
 
-#: html.c:3420
+#: html.c:3796
 msgid "Stop blocking activities from this user"
 msgstr "Přestat blokovat tohoto uživatele"
 
-#: html.c:3424
+#: html.c:3800
 msgid "Block any activity from this user"
 msgstr "Zablokovat všechno od tohoto uživatele"
 
-#: html.c:3432
+#: html.c:3808
 msgid "Direct Message..."
 msgstr "Soukomá zpráva..."
 
-#: html.c:3467
+#: html.c:3843
 msgid "Pending follow confirmations"
 msgstr "Dosud nepotvrzené žádosti o sledování"
 
-#: html.c:3471
+#: html.c:3847
 msgid "People you follow"
 msgstr "Lidé, které sledujete"
 
-#: html.c:3472
+#: html.c:3848
 msgid "People that follow you"
 msgstr "Lidé, kteří vás sledují"
 
-#: html.c:3511
+#: html.c:3887
 msgid "Clear all"
 msgstr "Smazat vše"
 
-#: html.c:3571
+#: html.c:3951
 msgid "Mention"
 msgstr "Zmínil vás"
 
-#: html.c:3574
+#: html.c:3954
 msgid "Finished poll"
 msgstr "Ukončená anketa"
 
-#: html.c:3590
+#: html.c:3979
 msgid "Follow Request"
 msgstr "Žádost o sledování"
 
-#: html.c:3674
+#: html.c:4089
 msgid "Context"
 msgstr "Kontext"
 
-#: html.c:3692
+#: html.c:4107
 msgid "New"
 msgstr "Nové"
 
-#: html.c:3707
+#: html.c:4122
 msgid "Already seen"
-msgstr "Zobrazeno dříve"
+msgstr "Již viděno"
 
-#: html.c:3722
+#: html.c:4137
 msgid "None"
 msgstr "Nic"
 
-#: html.c:3994
+#: html.c:4414
 #, c-format
 msgid "Search results for account %s"
 msgstr "Výsledky vyhledávání účtu %s"
 
-#: html.c:4001
+#: html.c:4421
 #, c-format
 msgid "Account %s not found"
 msgstr "Účet %s nenalezen"
 
-#: html.c:4032
+#: html.c:4452
 #, c-format
 msgid "Search results for tag %s"
 msgstr "Výsledky k tagu %s"
 
-#: html.c:4032
+#: html.c:4452
 #, c-format
 msgid "Nothing found for tag %s"
 msgstr "Nic k tagu %s"
 
-#: html.c:4048
+#: html.c:4468
 #, c-format
 msgid "Search results for '%s' (may be more)"
 msgstr "Výsledky vyhledávání pro '%s' (může toho být víc)"
 
-#: html.c:4051
+#: html.c:4471
 #, c-format
 msgid "Search results for '%s'"
 msgstr "Výsledky vyhledávání pro '%s'"
 
-#: html.c:4054
+#: html.c:4474
 #, c-format
 msgid "No more matches for '%s'"
 msgstr "Nic víc pro '%s'"
 
-#: html.c:4056
+#: html.c:4476
 #, c-format
 msgid "Nothing found for '%s'"
 msgstr "Žádný výsledek pro '%s'"
 
-#: html.c:4154
+#: html.c:4574
 msgid "Showing instance timeline"
 msgstr "Časová osa místní instance"
 
-#: html.c:4237
+#: html.c:4657
 #, c-format
 msgid "Showing timeline for list '%s'"
 msgstr "Časová osa pro seznam '%s'"
 
-#: httpd.c:258
+#: httpd.c:259
 #, c-format
 msgid "Search results for tag #%s"
 msgstr "Výsledky vyhledávání tagu #%s"
 
-#: httpd.c:267
+#: httpd.c:268
 msgid "Recent posts by users in this instance"
 msgstr "Nedávné příspěvky od uživatelů této instance"
 
-#: html.c:1764
+#: html.c:1842
 msgid "Blocked hashtags..."
 msgstr "Blokované hashtagy..."
 
-#: html.c:518
+#: html.c:574
 msgid "Optional URL to reply to"
 msgstr "URL adresa příspěvku, na který odpovědět"
 
-#: html.c:695
+#: html.c:751
 msgid ""
 "Option 1...\n"
 "Option 2...\n"
@@ -707,94 +707,106 @@ msgstr ""
 "Možnost 3...\n"
 "..."
 
-#: html.c:1558
+#: html.c:1636
 msgid "Bot API key"
 msgstr "API klíč Bota"
 
-#: html.c:1564
+#: html.c:1642
 msgid "Chat id"
 msgstr "Chat id"
 
-#: html.c:1572
+#: html.c:1650
 msgid "ntfy server - full URL (example: https://ntfy.sh/YourTopic)"
 msgstr "ntfy server - celá URL adresa (např: https://ntfy.sh/VaseTema)"
 
-#: html.c:1578
+#: html.c:1656
 msgid "ntfy token - if needed"
 msgstr "ntfy token - pokud je zapotřebí"
 
-#: html.c:3078
+#: html.c:3366
 msgid "pinned"
 msgstr "připnuté"
 
-#: html.c:3090
+#: html.c:3378
 msgid "bookmarks"
 msgstr "záložky"
 
-#: html.c:3102
+#: html.c:3390
 msgid "drafts"
 msgstr "rozepsané"
 
-#: html.c:584
+#: html.c:640
 msgid "Scheduled post..."
 msgstr "Naplánovat příspěvek..."
 
 msgid "Post date and time:"
 msgstr "Den a čas:"
 
-#: html.c:3113 html.c:4214
+#: html.c:3401 html.c:4634
 msgid "Scheduled posts"
 msgstr "Naplánované příspěvky"
 
-#: html.c:3114
+#: html.c:3402
 msgid "scheduled posts"
 msgstr "naplánované příspěvky"
 
-#: html.c:578
+#: html.c:634
 #, c-format
 msgid "Post date and time (timezone: %s):"
 msgstr "Den a čas (časové pásmo: %s)"
 
-#: html.c:1689
+#: html.c:1767
 msgid "Time zone:"
 msgstr "Časové pásmo:"
 
-#: html.c:559
+#: html.c:615
 msgid "Language:"
 msgstr "Jazyk:"
 
-#: html.c:1580
+#: html.c:1658
 msgid "Notify webhook:"
 msgstr "Notify webhook:"
 
-#: html.c:1586
+#: html.c:1664
 msgid "http://example.com/webhook"
 msgstr "http://priklad.cz/webhook"
 
-#: html.c:1694
+#: html.c:1772
 msgid "Languages you usually post in:"
 msgstr "Jazyky ve kterých píšete:"
 
-#: html.c:1700
+#: html.c:1778
 msgid "en fr es de_AT"
 msgstr "cs en fr de_AT"
 
-#: html.c:460
+#: html.c:428
 msgid "Visibility: "
-msgstr "Viditelnost"
+msgstr "Viditelnost: "
 
-#: html.c:468
 msgid "Public"
 msgstr "Veřejné"
 
-#: html.c:477
 msgid "Unlisted"
 msgstr "Neveřejné"
 
-#: html.c:486
 msgid "Followers-only"
 msgstr "Pouze pro sledující"
 
-#: html.c:495
 msgid "Direct Message"
 msgstr "Soukromá Zpráva"
+
+#: html.c:488 html.c:2534 html.c:2559 html.c:5177
+msgid "EmojiUnreact"
+msgstr "EmojiOdebrat"
+
+#: html.c:488 html.c:1440 html.c:2534 html.c:2559 html.c:5188
+msgid "EmojiReact"
+msgstr "EmojiReakce"
+
+#: html.c:2115
+msgid "Emoji react..."
+msgstr "Reagovat emoji..."
+
+#: html.c:2609
+msgid "Emoji reactions: "
+msgstr "Emoji reakce: "

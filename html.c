@@ -1,5 +1,5 @@
 /* snac - A simple, minimalistic ActivityPub instance */
-/* copyright (c) 2022 - 2025 grunfink et al. / MIT license */
+/* copyright (c) 2022 - 2026 grunfink et al. / MIT license */
 
 #include "xs.h"
 #include "xs_io.h"
@@ -16,6 +16,7 @@
 #include "xs_url.h"
 #include "xs_random.h"
 #include "xs_http.h"
+#include "xs_list_tools.h"
 
 #include "snac.h"
 
@@ -54,9 +55,10 @@ int login(snac *user, const xs_dict *headers)
     return logged_in;
 }
 
-
-xs_str *replace_shortnames(xs_str *s, const xs_list *tag, int ems, const char *proxy)
-/* replaces all the :shortnames: with the emojis in tag */
+xs_str *_replace_shortnames(xs_str *s, const xs_list *tag, int ems,
+                            const char *proxy, const xs_list *cl, const char *act_o)
+/* replace but also adds a class list and an actor in its alt text.
+ * Used for emoji reactions */
 {
     if (!xs_is_null(tag)) {
         xs *tag_list = NULL;
@@ -69,11 +71,17 @@ xs_str *replace_shortnames(xs_str *s, const xs_list *tag, int ems, const char *p
             tag_list = xs_dup(tag);
         }
 
-        xs *style = xs_fmt("height: %dem; width: %dem; vertical-align: middle;", ems, ems);
+        xs *style = xs_fmt("max-height: %dem; max-width: %dem;", ems, ems);
         xs *class = xs_fmt("snac-emoji snac-emoji-%d-em", ems);
+        if (cl) {
+            xs *l = xs_join(cl, " ");
+            class = xs_str_cat(class, " ", l);
+        }
 
-        const xs_dict *v;
         int c = 0;
+        const xs_val *v;
+
+        c = 0;
 
         xs_set rep_emoji;
         xs_set_init(&rep_emoji);
@@ -100,6 +108,8 @@ xs_str *replace_shortnames(xs_str *s, const xs_list *tag, int ems, const char *p
                         if (!xs_is_string(mt))
                             mt = xs_mime_by_ext(u);
 
+                        xs *act = act_o ? xs_fmt("%s\n%s", n, act_o) : xs_fmt("%s", n);
+
                         if (strcmp(mt, "image/svg+xml") == 0 && !xs_is_true(xs_dict_get(srv_config, "enable_svg")))
                             s = xs_replace_i(s, n, "");
                         else {
@@ -108,8 +118,8 @@ xs_str *replace_shortnames(xs_str *s, const xs_list *tag, int ems, const char *p
                             xs_html *img = xs_html_sctag("img",
                                 xs_html_attr("loading", "lazy"),
                                 xs_html_attr("src", url),
-                                xs_html_attr("alt", n),
-                                xs_html_attr("title", n),
+                                xs_html_attr("alt", act),
+                                xs_html_attr("title", act),
                                 xs_html_attr("class", class),
                                 xs_html_attr("style", style));
 
@@ -130,6 +140,13 @@ xs_str *replace_shortnames(xs_str *s, const xs_list *tag, int ems, const char *p
 }
 
 
+xs_str *replace_shortnames(xs_str *s, const xs_list *tag, int ems, const char *proxy)
+/* replaces all the :shortnames: with the emojis in tag */
+{
+    return _replace_shortnames(s, tag, ems, proxy, NULL, NULL);
+}
+
+
 xs_str *actor_name(xs_dict *actor, const char *proxy)
 /* gets the actor name */
 {
@@ -142,6 +159,34 @@ xs_str *actor_name(xs_dict *actor, const char *proxy)
     }
 
     return replace_shortnames(xs_html_encode(v), xs_dict_get(actor, "tag"), 1, proxy);
+}
+
+
+xs_str *actor_pronouns(xs_dict *actor)
+/* gets the actor name */
+{
+    const xs_list *attachment;
+    const xs_dict *d;
+    const char *v;
+    const char *pronouns = "";
+    xs_str *ret;
+
+    if (xs_is_list((attachment = xs_dict_get(actor, "attachment")))) {
+        xs_list_foreach(attachment, d) {
+            xs *prop = xs_utf8_to_lower(xs_dict_get(d, "name"));
+            /* make sure that we are reading the correct metadata */
+            if (strlen(prop) == 8 && strcmp(prop, "pronouns") == 0) {
+                /* safeguard from NULL values */
+                v = xs_dict_get(d, "value");
+                pronouns = v ? v : pronouns;
+                break;
+            }
+        }
+    }
+
+    /* strip all HTML tags */
+    ret = xs_regex_replace(pronouns, "</?[^>]+>", "");
+    return ret;
 }
 
 
@@ -178,6 +223,7 @@ xs_html *html_actor_icon(snac *user, xs_dict *actor, const char *date,
     int fwer = 0;
 
     xs *name = actor_name(actor, proxy);
+    xs *pronouns = actor_pronouns(actor);
 
     /* get the avatar */
     if ((v = xs_dict_get(actor, "icon")) != NULL) {
@@ -205,12 +251,27 @@ xs_html *html_actor_icon(snac *user, xs_dict *actor, const char *date,
            anchored link to the people page instead of the actor url */
         if (fwer || fwing) {
             xs *md5 = xs_md5_hex(actor_id, strlen(actor_id));
-            href = xs_fmt("%s/people#%s", user->actor, md5);
+            href = xs_fmt("%s/people/%s", user->actor, md5);
         }
     }
 
     if (href == NULL)
         href = xs_dup(actor_id);
+
+    xs_html *name_link = xs_html_tag("a",
+            xs_html_attr("href",    href),
+            xs_html_attr("class",   "p-author h-card snac-author"),
+            xs_html_raw(name)); /* name is already html-escaped */
+
+    if (*pronouns) {
+        xs_html_add(name_link,
+            xs_html_text(" ["),
+            xs_html_tag("span",
+                xs_html_attr("class",   "snac-pronouns"),
+                xs_html_attr("title",   "user's pronouns"),
+                xs_html_raw(pronouns)),
+            xs_html_text("]"));
+    }
 
     xs_html_add(actor_icon,
         xs_html_sctag("img",
@@ -218,10 +279,7 @@ xs_html *html_actor_icon(snac *user, xs_dict *actor, const char *date,
             xs_html_attr("class",   "snac-avatar"),
             xs_html_attr("src",     avatar),
             xs_html_attr("alt",     "[?]")),
-        xs_html_tag("a",
-            xs_html_attr("href",    href),
-            xs_html_attr("class",   "p-author h-card snac-author"),
-            xs_html_raw(name))); /* name is already html-escaped */
+        name_link);
 
     if (!xs_is_null(url)) {
         xs *md5 = xs_md5_hex(url, strlen(url));
@@ -233,6 +291,7 @@ xs_html *html_actor_icon(snac *user, xs_dict *actor, const char *date,
                 xs_html_attr("title", md5),
                 xs_html_text("»")));
     }
+
 
     if (strcmp(xs_dict_get(actor, "type"), "Service") == 0) {
         xs_html_add(actor_icon,
@@ -398,6 +457,83 @@ xs_html *html_msg_icon(snac *user, const char *actor_id, const xs_dict *msg,
     return actor_icon;
 }
 
+void html_note_render_visibility(snac* user, xs_html *form, const int scope)
+{
+    // scopes aren't sorted by value unfortunately, so simple math won't work to limit them. using map-like thing here
+    static const int public_scopes[5] = {SCOPE_PUBLIC, SCOPE_UNLISTED, SCOPE_FOLLOWERS, SCOPE_MENTIONED, -1};
+    static const int unlisted_scopes[4] = {SCOPE_UNLISTED, SCOPE_FOLLOWERS, SCOPE_MENTIONED, -1};
+    static const int followers_scopes[3] = {SCOPE_FOLLOWERS, SCOPE_MENTIONED, -1};
+    static const int mentioned_scopes[2] = {SCOPE_MENTIONED, -1};
+    static const int * const scopes[4] = { public_scopes, mentioned_scopes, unlisted_scopes, followers_scopes};
+    static const char * const scopes_tags[4] = { "public", "mentioned", "unlisted", "followers"};
+    static const char * const scopes_names[4] = { "Public", "Direct Message", "Unlisted", "Followers-only"};
+
+    xs_html *paragraph = xs_html_tag("p", xs_html_text(L("Visibility: ")));
+    const int* to_render = scopes[scope];
+    for( int i = 0; to_render[i] != -1; i++ ){
+        const int scope_i = to_render[i];
+        const char* value = scopes_tags[scope_i];
+        const char* name = scopes_names[scope_i];
+        xs_html_add(paragraph,
+            xs_html_tag("label",
+                xs_html_sctag("input",
+                    xs_html_attr("type", "radio"),
+                    xs_html_attr("name", "visibility"),
+                    xs_html_attr("value", value),
+                    xs_html_attr(scope == scope_i ? "checked" : "", NULL)),
+                xs_html_text(" "),
+                xs_html_text(L(name)),
+                xs_html_text(" "))
+        );
+    }
+    xs_html_add(form, paragraph);
+}
+
+/* html_note but moddled for emoji's needs. here and not bellow, since the
+ * other one is already so complex. */
+xs_html *html_emoji(snac *user, const char *summary,
+                   const char *div_id, const char *form_id,
+                   const char* placeholder, const char *post_id,
+                   const char* eid)
+{
+    xs *action = xs_fmt("%s/admin/action", user->actor);
+
+    xs_html *form;
+    const int react = eid == NULL ? 0 : 1;
+
+    xs_html *note = xs_html_tag("div",
+        xs_html_tag("details",
+            xs_html_tag("summary",
+                xs_html_text(summary)),
+                xs_html_tag("p", NULL),
+                xs_html_tag("div",
+                    xs_html_attr("class", "snac-note"),
+                    xs_html_attr("id",    div_id),
+                    form = xs_html_tag("form",
+                        xs_html_attr("autocomplete", "off"),
+                        xs_html_attr("method",       "post"),
+                        xs_html_attr("action",       action),
+                        xs_html_attr("enctype",      "multipart/form-data"),
+                        xs_html_attr("id",           form_id),
+                        xs_html_sctag("input",
+                            xs_html_attr("type",     "hidden"),
+                            xs_html_attr("name",     "id"),
+                            xs_html_attr("value",    post_id)),
+                        xs_html_sctag("input",
+                            xs_html_attr("type",     react ? "hidden" : "text"),
+                            xs_html_attr("name",     "eid"),
+                            xs_html_attr(react ? "value" : "placeholder", react ? eid : placeholder)),
+                        xs_html_text(" "),
+                        xs_html_sctag("input",
+                            xs_html_attr("type",    "submit"),
+                            xs_html_attr("name",    "action"),
+                            xs_html_attr("eid",    "action"),
+                            xs_html_attr("value",   react ? L("EmojiUnreact") : L("EmojiReact"))),
+                        xs_html_text(" "),
+                    xs_html_tag("p", NULL)))));
+
+    return note;
+}
 
 xs_html *html_note(snac *user, const char *summary,
                    const char *div_id, const char *form_id,
@@ -455,46 +591,8 @@ xs_html *html_note(snac *user, const char *summary,
                 xs_html_attr("type",  "hidden"),
                 xs_html_attr("name",  "to"),
                 xs_html_attr("value", actor_id)));
-    else {
-        xs_html_add(form,
-            xs_html_tag("p",
-                xs_html_text(L("Visibility: ")),
-                xs_html_tag("label",
-                    xs_html_sctag("input",
-                        xs_html_attr("type", "radio"),
-                        xs_html_attr("name", "visibility"),
-                        xs_html_attr("value", "public"),
-                        xs_html_attr(scope == SCOPE_PUBLIC ? "checked" : "", NULL)),
-                    xs_html_text(" "),
-                    xs_html_text(L("Public"))),
-                xs_html_text(" "),
-                xs_html_tag("label",
-                    xs_html_sctag("input",
-                        xs_html_attr("type", "radio"),
-                        xs_html_attr("name", "visibility"),
-                        xs_html_attr("value", "unlisted"),
-                        xs_html_attr(scope == SCOPE_UNLISTED ? "checked" : "", NULL)),
-                    xs_html_text(" "),
-                    xs_html_text(L("Unlisted"))),
-                xs_html_text(" "),
-                xs_html_tag("label",
-                    xs_html_sctag("input",
-                        xs_html_attr("type", "radio"),
-                        xs_html_attr("name", "visibility"),
-                        xs_html_attr("value", "followers"),
-                        xs_html_attr(scope == SCOPE_FOLLOWERS ? "checked" : "", NULL)),
-                    xs_html_text(" "),
-                    xs_html_text(L("Followers-only"))),
-                xs_html_text(" "),
-                xs_html_tag("label",
-                    xs_html_sctag("input",
-                        xs_html_attr("type", "radio"),
-                        xs_html_attr("name", "visibility"),
-                        xs_html_attr("value", "mentioned"),
-                        xs_html_attr(scope == SCOPE_MENTIONED ? "checked" : "", NULL)),
-                    xs_html_text(" "),
-                    xs_html_text(L("Direct Message")))));
-    }
+    if (edit_id == NULL)
+        html_note_render_visibility(user, form, scope);
 
     if (redir)
         xs_html_add(form,
@@ -1363,6 +1461,28 @@ xs_html *html_top_controls(snac *user)
                     xs_html_attr("value",   L("Like"))),
                 xs_html_text(" "),
                 xs_html_text(L("(by URL)"))),
+            xs_html_tag("form",
+                xs_html_attr("autocomplete", "off"),
+                xs_html_attr("method",       "post"),
+                xs_html_attr("action",       ops_action),
+                xs_html_sctag("input",
+                    xs_html_attr("type",     "text"),
+                    xs_html_attr("name",     "eid"),
+                    xs_html_attr("required", "required"),
+                    xs_html_attr("placeholder", ":neocat:")),
+                xs_html_text(" "),
+                xs_html_sctag("input",
+                    xs_html_attr("type",     "text"),
+                    xs_html_attr("name",     "id"),
+                    xs_html_attr("required", "required"),
+                    xs_html_attr("placeholder", "https:/" "/fedi.example.com/bob/...")),
+                xs_html_text(" "),
+                xs_html_sctag("input",
+                    xs_html_attr("type",    "submit"),
+                    xs_html_attr("name",    "action"),
+                    xs_html_attr("value",   L("EmojiReact"))),
+                xs_html_text(" "),
+                xs_html_text(L("(by URL)"))),
             xs_html_tag("p", NULL)));
 
     /** user settings **/
@@ -1787,6 +1907,38 @@ xs_html *html_top_controls(snac *user)
                     xs_html_attr("class", "button"),
                     xs_html_attr("value", L("Update hashtags")))))));
 
+    xs *muted_words_action = xs_fmt("%s/admin/muted-words", user->actor);
+    xs *muted_words = xs_join(xs_dict_get_def(user->config,
+                        "muted_words", xs_stock(XSTYPE_LIST)), "\n");
+
+    xs_html_add(top_controls,
+        xs_html_tag("details",
+        xs_html_tag("summary",
+            xs_html_text(L("Muted words..."))),
+        xs_html_tag("p",
+            xs_html_text(L("One word per line, partial matches count"))),
+        xs_html_tag("div",
+            xs_html_attr("class", "snac-muted-words"),
+            xs_html_tag("form",
+                xs_html_attr("autocomplete", "off"),
+                xs_html_attr("method", "post"),
+                xs_html_attr("action", muted_words_action),
+                xs_html_attr("enctype", "multipart/form-data"),
+
+                xs_html_tag("textarea",
+                    xs_html_attr("name", "muted_words"),
+                    xs_html_attr("cols", "40"),
+                    xs_html_attr("rows", "4"),
+                    xs_html_attr("placeholder", "nascar\nsuperbowl\nFIFA"),
+                    xs_html_text(muted_words)),
+
+                xs_html_tag("br", NULL),
+
+                xs_html_sctag("input",
+                    xs_html_attr("type", "submit"),
+                    xs_html_attr("class", "button"),
+                    xs_html_attr("value", L("Update muted words")))))));
+
     return top_controls;
 }
 
@@ -1898,7 +2050,7 @@ xs_html *html_entry_controls(snac *user, const char *actor,
                 xs_html_attr("name",     "redir"),
                 xs_html_attr("value",    redir))));
 
-    if (!xs_startswith(id, user->actor)) {
+    if (!is_msg_mine(user, id)) {
         if (xs_list_in(likes, user->md5) == -1) {
             /* not already liked; add button */
             xs_html_add(form,
@@ -2026,6 +2178,22 @@ xs_html *html_entry_controls(snac *user, const char *actor,
             xs_html_tag("p", NULL));
     }
 
+    if (!xs_is_true(xs_dict_get(srv_config, "disable_emojireact"))) { /** emoji react **/
+        /* the post textarea */
+        xs *div_id  = xs_fmt("%s_reply", md5);
+        xs *form_id = xs_fmt("%s_reply_form", md5);
+        xs *e_react = emoji_reacted(user, id);
+
+        xs_html_add(controls, xs_html_tag("div",
+            xs_html_tag("p", NULL),
+            html_emoji(
+                user, L("Emoji react..."),
+                div_id, form_id,
+                ":neocat:", id,
+                e_react)),
+            xs_html_tag("p", NULL));
+    }
+
     { /** reply **/
         /* the post textarea */
         xs *ct      = build_mentions(user, msg);
@@ -2048,6 +2216,30 @@ xs_html *html_entry_controls(snac *user, const char *actor,
     }
 
     return controls;
+}
+
+
+static const xs_str* words_in_content(const xs_list *words, const xs_val *content)
+/* returns a word that matches any of the words in content */
+{
+    if (!xs_is_list(words) || !xs_is_string(content)) {
+	    return NULL;
+    }
+    xs *c = xs_split(content, " ");
+    xs *sc = xs_list_sort(c, NULL);
+
+    const xs_str *wv;
+    const xs_str *cv;
+    xs_list_foreach(words, wv) {
+        xs_list_foreach(sc, cv) {
+            xs_tolower_i((xs_str*)cv);
+            if(xs_str_in(cv, wv) != -1){
+                return wv;
+            }
+        }
+    }
+
+    return NULL;
 }
 
 
@@ -2262,7 +2454,7 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
                 }
 
                 if (!read_only && (fwers || fwing))
-                    href = xs_fmt("%s/people#%s", user->actor, p);
+                    href = xs_fmt("%s/people/%s", user->actor, p);
                 else
                     href = xs_dup(id);
 
@@ -2345,12 +2537,199 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
                 xs_html_text(v),
                 xs_html_text(L(" [SENSITIVE CONTENT]"))));
     }
+    else
+    if (user &&
+        /* muted_words is all lowercase and sorted for performance */
+        (v = words_in_content(xs_dict_get(user->config, "muted_words"),
+                              xs_dict_get(msg, "content"))) != NULL) {
+        snac_debug(user, 1, xs_fmt("word %s muted by user preferences: %s", v, id));
+        snac_content = xs_html_tag("details",
+            xs_html_tag("summary",
+                xs_html_text(L("Muted: ")),
+                xs_html_text(v)));
+    }
     else {
         snac_content = xs_html_tag("div", NULL);
     }
 
     xs_html_add(snac_content_wrap,
         snac_content);
+
+    /* add all emoji reacts */
+    int is_emoji = 0;
+    if (!xs_is_true(xs_dict_get(srv_config, "disable_emojireact"))) {
+        int c = 0;
+        const xs_dict *k;
+        xs *ls = xs_list_new();
+        xs *sfrl = xs_dict_new();
+        xs *rl = object_get_emoji_reacts(id);
+
+        while (xs_list_next(rl, &v, &c)) {
+            xs *m = NULL;
+            if (valid_status(object_get_by_md5(v, &m))) {
+                const char *content = xs_dict_get(m, "content");
+                const char *actor = xs_dict_get(m, "actor");
+                const xs_list *contentl = xs_dict_get(sfrl, content);
+
+                if ((user && is_muted(user, actor)) || is_instance_blocked(actor))
+                    continue;
+
+                xs *actors = xs_list_new();
+                actors = xs_list_append(actors, actor);
+                char me = actor && user && strcmp(actor, user->actor) == 0;
+                int count = 1;
+
+                if (contentl) {
+                    count = atoi(xs_list_get(contentl, 0)) + 1;
+                    const xs_list *actorsc = xs_list_get(contentl, 1);
+                    if (strncmp(xs_list_get(contentl, 2), "1", 1) == 0)
+                        me = 1;
+
+                    if (xs_list_in(actorsc, actor) != -1) {
+                        xs_free(actors);
+                        actors = xs_dup(actorsc);
+                    }
+                    else
+                        actors = xs_list_cat(actors, actorsc);
+                }
+
+                xs *fl = xs_list_new();
+                xs *c1 = xs_fmt("%d", count);
+                xs *c2 = xs_fmt("%d", me);
+                fl = xs_list_append(fl, c1, actors, c2);
+                sfrl = xs_dict_append(sfrl, content, fl);
+            }
+        }
+
+        c = 0;
+
+        while (xs_list_next(rl, &k, &c)) {
+            xs *m = NULL;
+            if (valid_status(object_get_by_md5(k, &m))) {
+                const xs_dict *tag = xs_dict_get(m, "tag");
+                const xs_dict *ide = xs_dict_get(m, "id");
+
+                const char *content = xs_dict_get(m, "content");
+                const char *shortname;
+                shortname = xs_dict_get(m, "content");
+
+                const xs_list *items = xs_dict_get(sfrl, content);
+
+                if (!xs_is_null(items)) {
+                    const char *nb = xs_list_get(items, 0);
+                    const xs_list *actors = xs_list_get(items, 1);
+                    const char me = *xs_list_get(items, 2) == '1';
+
+                    is_emoji = 1;
+
+                    xs *al = xs_join(actors, ",\n\t");
+                    xs *act = atoi(nb) > 1 ?
+                        xs_fmt("%d different actors \n\t%s", atoi(nb), al) :
+                        xs_dup(xs_dict_get(m, "actor"));
+
+                    xs *class = xs_list_new();
+                    class = xs_list_append(class, "snac-reaction");
+
+                    xs_html *ret = NULL;
+                    if (tag && shortname) {
+                        xs *cl = xs_list_new();
+                        cl = xs_list_append(cl, "snac-reaction-image");
+                        xs *emoji = _replace_shortnames(xs_dup(shortname), tag, 2, proxy, cl, act);
+
+                        emoji = xs_strip_chars_i(emoji, ":");
+
+                        if (me)
+                            class = xs_list_append(class, "snac-reacted");
+
+                        xs *l1 = xs_join(class, " ");
+                        ret = xs_html_tag("button",
+                                xs_html_attr("type", "submit"),
+                                xs_html_attr("name", "action"),
+                                xs_html_attr("value", me ? L("EmojiReact") : L("EmojiUnreact")),
+                                xs_html_raw(emoji),
+                                xs_html_tag("span",
+                                    xs_html_raw(nb),
+                                    xs_html_attr("style", "padding-left: 5px;")),
+                                xs_html_attr("title", act),
+                                xs_html_attr("class", l1));
+
+                        if (!(ide && xs_startswith(ide, srv_baseurl)))
+                            xs_html_add(ret, xs_html_attr("disabled", "true"));
+                    }
+                    else if (shortname) {
+                        xs *sn = xs_dup(shortname);
+                        const char *sna = sn;
+                        unsigned int utf = xs_utf8_dec((const char **)&sna);
+
+                        if (xs_is_emoji(utf)) {
+                            const char *style = "font-size: large;";
+                            if (me)
+                                class = xs_list_append(class, "snac-reacted");
+                            xs *l1 = xs_join(class, " ");
+                            xs *s1 = xs_fmt("&#%d", utf);
+                            ret = xs_html_tag("button",
+                                    xs_html_attr("type", "submit"),
+                                    xs_html_attr("name", "action"),
+                                    xs_html_attr("value", me ? L("EmojiUnreact") : L("EmojiReact")),
+                                    xs_html_raw(s1),
+                                    xs_html_tag("span",
+                                        xs_html_raw(nb),
+                                        xs_html_attr("style", "font-size: initial; padding-left: 5px;")),
+                                    xs_html_attr("title", act),
+                                    xs_html_attr("class", l1),
+                                    xs_html_attr("style", style));
+                        }
+                    }
+                    if (ret) {
+                        xs *s1;
+                        if (user) {
+                            xs *action = xs_fmt("%s/admin/action", user->actor);
+                            xs *form_id = xs_fmt("%s_reply_form", md5);
+
+                            xs_html *form =
+                                xs_html_tag("form",
+                                xs_html_attr("autocomplete", "off"),
+                                xs_html_attr("method",       "post"),
+                                xs_html_attr("action",       action),
+                                xs_html_attr("enctype",      "multipart/form-data"),
+                                xs_html_attr("style",      "display: inline-flex;"
+                                    "vertical-align: middle;"),
+                                xs_html_attr("id",           form_id),
+                                xs_html_sctag("input",
+                                    xs_html_attr("type",  "hidden"),
+                                    xs_html_attr("name",  "id"),
+                                    xs_html_attr("value", id)),
+                                xs_html_sctag("input",
+                                    xs_html_attr("type",  "hidden"),
+                                    xs_html_attr("name",  "eid"),
+                                    xs_html_attr("value", shortname)),
+                                ret);
+                            s1 = xs_html_render(form);
+                        }
+                        else
+                            s1 = xs_html_render(ret);
+
+                        ls = xs_list_append(ls, s1);
+                        sfrl = xs_dict_del(sfrl, content);
+                    }
+                }
+            }
+        }
+
+        c = 0;
+
+        xs_html *emoji_div;
+        if (xs_list_len(ls) > 0) {
+                emoji_div = xs_html_tag("div", xs_html_text(L("Emoji reactions: ")),
+                        xs_html_attr("class", "snac-reaction-div"));
+
+            while (ls != NULL && xs_list_next(ls, &k, &c))
+                xs_html_add(emoji_div, xs_html_raw(k));
+
+            xs_html_add(snac_content_wrap, emoji_div);
+        }
+
+    }
 
     {
         /** build the content string **/
@@ -2378,7 +2757,8 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
 
         c = xs_replace_i(c, "<br><br>", "<p>");
 
-        c = xs_str_cat(c, "<p>");
+        if (is_emoji == 0)
+            c = xs_str_cat(c, "<p>");
 
         /* replace the :shortnames: */
         c = replace_shortnames(c, xs_dict_get(msg, "tag"), 2, proxy);
@@ -2426,7 +2806,7 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
         if (read_only)
             closed = 1; /* non-identified page; show as closed */
         else
-        if (user && xs_startswith(id, user->actor))
+        if (user && is_msg_mine(user, id))
             closed = 1; /* we questioned; closed for us */
         else
         if (user && was_question_voted(user, id))
@@ -2634,7 +3014,7 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
                             xs_html_attr("title", name))));
             }
             else
-            if (xs_startswith(type, "video/")) {
+            if (xs_startswith(type, "video/") || strcmp(type, "Video") == 0) {
                 xs_html_add(content_attachments,
                     xs_html_tag("video",
                         xs_html_attr("preload", "none"),
@@ -3003,7 +3383,7 @@ xs_html *html_footer(const snac *user)
 xs_str *html_timeline(snac *user, const xs_list *list, int read_only,
                       int skip, int show, int show_more,
                       const char *title, const char *page,
-                      int utl, const char *error)
+                      int utl, const char *error, int terse)
 /* returns the HTML for the timeline */
 {
     xs_list *p = (xs_list *)list;
@@ -3031,7 +3411,11 @@ xs_str *html_timeline(snac *user, const xs_list *list, int read_only,
 
     if (user) {
         head = html_user_head(user, desc, alternate);
-        body = html_user_body(user, read_only);
+
+        if (terse)
+            body = xs_html_tag("body", NULL);
+        else
+            body = html_user_body(user, read_only);
     }
     else {
         head = html_instance_head();
@@ -3251,7 +3635,7 @@ xs_str *html_timeline(snac *user, const xs_list *list, int read_only,
 
     if (list && user && read_only) {
         /** history **/
-        if (xs_type(xs_dict_get(srv_config, "disable_history")) != XSTYPE_TRUE) {
+        if (xs_type(xs_dict_get(srv_config, "disable_history")) != XSTYPE_TRUE && !terse) {
             xs_html *ul = xs_html_tag("ul", NULL);
 
             xs_html *history = xs_html_tag("div",
@@ -3323,13 +3707,19 @@ xs_str *html_timeline(snac *user, const xs_list *list, int read_only,
 }
 
 
-xs_html *html_people_list(snac *user, xs_list *list, const char *header, const char *t, const char *proxy)
+xs_html *html_people_list(snac *user, xs_list *list, const char *header, const char *t, const char *proxy, int do_count)
 {
     xs_html *snac_posts;
+    xs *header_cnt;
+    if (do_count)
+        header_cnt = xs_fmt("%s - %d\n", header, xs_list_len(list));
+    else
+        header_cnt = xs_fmt("%s\n", header);
+
     xs_html *people = xs_html_tag("div",
         xs_html_tag("h2",
             xs_html_attr("class", "snac-header"),
-            xs_html_text(header)),
+            xs_html_text(header_cnt)),
         snac_posts = xs_html_tag("details",
                 xs_html_attr("open", NULL),
                 xs_html_tag("summary",
@@ -3570,12 +3960,12 @@ xs_str *html_people(snac *user)
 
     if (xs_list_len(pending) || xs_is_true(xs_dict_get(user->config, "approve_followers"))) {
         xs_html_add(lists,
-            html_people_list(user, pending, L("Pending follow confirmations"), "p", proxy));
+            html_people_list(user, pending, L("Pending follow confirmations"), "p", proxy, 1));
     }
 
     xs_html_add(lists,
-        html_people_list(user, wing, L("People you follow"), "i", proxy),
-        html_people_list(user, wers, L("People that follow you"), "e", proxy));
+        html_people_list(user, wing, L("People you follow"), "i", proxy, 1),
+        html_people_list(user, wers, L("People that follow you"), "e", proxy, 1));
 
     xs_html *html = xs_html_tag("html",
         html_user_head(user, NULL, NULL),
@@ -3586,6 +3976,108 @@ xs_str *html_people(snac *user)
     return xs_html_render_s(html, "<!DOCTYPE html>\n");
 }
 
+/* Filter list to display only posts by actor.  We'll probably show
+   fewer than show posts.  Should we try harder to find some?  */
+xs_str *html_people_one(snac *user, const char *actor, const xs_list *list,
+                        int skip, int show, int show_more, const char *page)
+{
+    const char *proxy = NULL;
+    xs_list *p = (xs_list *)list;
+    const char *v;
+
+    if (xs_is_true(xs_dict_get(srv_config, "proxy_media")))
+        proxy = user->actor;
+
+    xs_html *body = html_user_body(user, 0);
+
+    xs_html *lists = xs_html_tag("div",
+        xs_html_attr("class", "snac-posts"));
+
+    xs *foll = xs_list_append(xs_list_new(), actor);
+
+    xs_html_add(lists,
+        html_people_list(user, foll, L("Contact's posts"), "p", proxy, 0));
+
+    xs_html_add(body, lists);
+
+    while (xs_list_iter(&p, &v)) {
+        xs *msg = NULL;
+        int status;
+
+        status = timeline_get_by_md5(user, v, &msg);
+
+        if (!valid_status(status))
+            continue;
+
+        const char *id = xs_dict_get(msg, "id");
+        const char *by = get_atto(msg);
+        xs *actor_md5 = NULL;
+        xs_list *boosts = NULL;
+        xs_list *likes = NULL;
+        xs_list *reacts = NULL;
+        /* Besides actor's posts, also show actor's boosts, and also
+           posts by user with likes or reacts by actor.  I.e., any
+           actor's actions that user could have seen in the timeline
+           or in notifications.  */
+        if (!(by && strcmp(actor, by) == 0) &&
+            xs_list_in((boosts = object_announces(id)),
+                       (actor_md5 = xs_md5_hex(actor, strlen(actor)))) == -1 &&
+            (!(by && strcmp(user->actor, by) == 0) ||
+             (xs_list_in((likes = object_likes(id)), actor_md5) == -1 &&
+              xs_list_in((reacts = object_get_emoji_reacts(id)), actor_md5) == -1)))
+            continue;
+
+        xs_html *entry = html_entry(user, msg, 0, 0, v, 1);
+
+        if (entry != NULL)
+            xs_html_add(lists,
+                entry);
+    }
+
+    if (show_more) {
+        xs *m  = NULL;
+        xs *m10  = NULL;
+        xs *ss = xs_fmt("skip=%d&show=%d", skip + show, show);
+
+        xs *url = xs_dup(user == NULL ? srv_baseurl : user->actor);
+
+        if (page != NULL)
+            url = xs_str_cat(url, page);
+
+        if (xs_str_in(url, "?") != -1)
+            m = xs_fmt("%s&%s", url, ss);
+        else
+            m = xs_fmt("%s?%s", url, ss);
+
+        m10 = xs_fmt("%s0", m);
+
+        xs_html *more_links = xs_html_tag("p",
+            xs_html_tag("a",
+                xs_html_attr("href", url),
+                xs_html_attr("name", "snac-more"),
+                xs_html_text(L("Back to top"))),
+            xs_html_text(" - "),
+            xs_html_tag("a",
+                xs_html_attr("href", m),
+                xs_html_attr("name", "snac-more"),
+                xs_html_text(L("More..."))),
+            xs_html_text(" - "),
+            xs_html_tag("a",
+                xs_html_attr("href", m10),
+                xs_html_attr("name", "snac-more"),
+                xs_html_text(L("More (x 10)..."))));
+
+        xs_html_add(body,
+            more_links);
+    }
+
+    xs_html *html = xs_html_tag("html",
+        html_user_head(user, NULL, NULL),
+        xs_html_add(body,
+            html_footer(user)));
+
+    return xs_html_render_s(html, "<!DOCTYPE html>\n");
+}
 
 xs_str *html_notifications(snac *user, int skip, int show)
 {
@@ -3654,6 +4146,9 @@ xs_str *html_notifications(snac *user, int skip, int show)
         if (xs_is_string(id2) && xs_set_add(&rep, id2) != 1)
             continue;
 
+        if (strcmp(type, "EmojiReact") == 0 && xs_is_true(xs_dict_get(srv_config, "disable_emojireact")))
+            continue;
+
         object_get(id, &obj);
 
         const char *msg_id = NULL;
@@ -3689,9 +4184,18 @@ xs_str *html_notifications(snac *user, int skip, int show)
         if (strcmp(type, "EmojiReact") == 0 || strcmp(type, "Like") == 0) {
             const char *content = xs_dict_get_path(noti, "msg.content");
 
+            xs *cd = xs_dup(content);
+            const char *sna = cd;
+            const xs_dict *tag = xs_dict_get_path(noti, "msg.tag");
+            unsigned int utf = xs_utf8_dec((const char **)&sna);
+
+            int isEmoji = 0;
+            if (xs_is_emoji(utf) || (tag && xs_list_len(tag) > 0))
+                isEmoji = 1;
+
             if (xs_type(content) == XSTYPE_STRING) {
                 xs *emoji = replace_shortnames(xs_dup(content), xs_dict_get_path(noti, "msg.tag"), 1, proxy);
-                wrk = xs_fmt("%s (%s&#xFE0F;)", type, emoji);
+                wrk = xs_fmt("%s (%s&#xFE0F;)", isEmoji ? "EmojiReact" : "Like", emoji);
                 label = wrk;
             }
         }
@@ -3909,6 +4413,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
     int cache = 1;
     int save = 1;
     int proxy = 0;
+    int terse = 0;
     const char *v;
 
     const xs_dict *q_vars = xs_dict_get(req, "q_vars");
@@ -3920,6 +4425,9 @@ int html_get_handler(const xs_dict *req, const char *q_path,
         srv_log(xs_fmt("html_get_handler bad query '%s'", q_path));
         return HTTP_STATUS_NOT_FOUND;
     }
+
+    if (!xs_is_null(xs_dict_get(q_vars, "terse")))
+        terse = 1;
 
     if (strcmp(v, "share-bridge") == 0) {
         /* temporary redirect for a post */
@@ -3988,8 +4496,12 @@ int html_get_handler(const xs_dict *req, const char *q_path,
         cache = 0;
 
     int skip = 0;
+    const char *max_show_default = "50";
+    int max_show = xs_number_get(xs_dict_get_def(srv_config, "max_timeline_entries",
+                                 max_show_default));
     int def_show = xs_number_get(xs_dict_get_def(srv_config, "def_timeline_entries",
-                                 xs_dict_get_def(srv_config, "max_timeline_entries", "50")));
+                                 xs_dict_get_def(srv_config, "max_timeline_entries",
+                                 max_show_default)));
     int show = def_show;
 
     if ((v = xs_dict_get(q_vars, "skip")) != NULL)
@@ -4015,13 +4527,15 @@ int html_get_handler(const xs_dict *req, const char *q_path,
     /* a show of 0 has no sense */
     if (show == 0)
         show = def_show;
+    if (show > max_show)
+        show = max_show;
 
     if (p_path == NULL) { /** public timeline **/
         xs *h = xs_str_localtime(0, "%Y-%m.html");
 
         if (xs_type(xs_dict_get(snac.config, "private")) == XSTYPE_TRUE) {
             /** empty public timeline for private users **/
-            *body = html_timeline(&snac, NULL, 1, 0, 0, 0, NULL, "", 1, error);
+            *body = html_timeline(&snac, NULL, 1, 0, 0, 0, NULL, "", 1, error, terse);
             *b_size = strlen(*body);
             status  = HTTP_STATUS_OK;
         }
@@ -4044,7 +4558,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
             xs *pins = pinned_list(&snac);
             pins = xs_list_cat(pins, list);
 
-            *body = html_timeline(&snac, pins, 1, skip, show, more, NULL, "", 1, error);
+            *body = html_timeline(&snac, pins, 1, skip, show, more, NULL, "", 1, error, terse);
 
             *b_size = strlen(*body);
             status  = HTTP_STATUS_OK;
@@ -4060,8 +4574,14 @@ int html_get_handler(const xs_dict *req, const char *q_path,
             status = HTTP_STATUS_UNAUTHORIZED;
         }
         else {
-            const char *q = xs_dict_get(q_vars, "q");
+            const char *q = NULL;
+            xs *cq = xs_dup(xs_dict_get(q_vars, "q"));
             xs *url_acct = NULL;
+
+            if (xs_is_string(cq)) {
+                cq = xs_strip_i(cq);
+                q = cq;
+            }
 
             /* searching for an URL? */
             if (q && xs_match(q, "https://*|http://*")) {
@@ -4126,11 +4646,11 @@ int html_get_handler(const xs_dict *req, const char *q_path,
                             actor_add(actor, actor_obj);
 
                             /* create a people list with only one element */
-                            l = xs_list_append(xs_list_new(), actor);
+                            l = xs_list_append(l, actor);
 
                             xs *title = xs_fmt(L("Search results for account %s"), q);
 
-                            page = html_people_list(&snac, l, title, "wf", NULL);
+                            page = html_people_list(&snac, l, title, "wf", NULL, 1);
                         }
                     }
 
@@ -4168,7 +4688,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
                     xs *title = xs_fmt(xs_list_len(tl) ?
                         L("Search results for tag %s") : L("Nothing found for tag %s"), q);
 
-                    *body = html_timeline(&snac, tl, 0, skip, show, more, title, page, 0, error);
+                    *body = html_timeline(&snac, tl, 0, skip, show, more, title, page, 0, error, terse);
                     *b_size = strlen(*body);
                     status  = HTTP_STATUS_OK;
                 }
@@ -4193,7 +4713,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
                         title = xs_fmt(L("Nothing found for '%s'"), q);
 
                     *body   = html_timeline(&snac, tl, 0, skip, tl_len, to || tl_len == show,
-                                            title, page, 0, error);
+                                            title, page, 0, error, terse);
                     *b_size = strlen(*body);
                     status  = HTTP_STATUS_OK;
                 }
@@ -4220,7 +4740,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
                     xs *list = timeline_list(&snac, "private", skip, show, &more);
 
                     *body = html_timeline(&snac, list, 0, skip, show,
-                            more, NULL, "/admin", 1, error);
+                            more, NULL, "/admin", 1, error, terse);
 
                     *b_size = strlen(*body);
                     status  = HTTP_STATUS_OK;
@@ -4247,7 +4767,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
                 xs *list0 = xs_list_append(xs_list_new(), md5);
                 xs *list  = timeline_top_level(&snac, list0);
 
-                *body   = html_timeline(&snac, list, 0, 0, 0, 0, NULL, "/admin", 1, error);
+                *body   = html_timeline(&snac, list, 0, 0, 0, 0, NULL, "/admin", 1, error, terse);
                 *b_size = strlen(*body);
                 status  = HTTP_STATUS_OK;
             }
@@ -4263,6 +4783,37 @@ int html_get_handler(const xs_dict *req, const char *q_path,
             *body   = html_people(&snac);
             *b_size = strlen(*body);
             status  = HTTP_STATUS_OK;
+        }
+    }
+    else
+    if (xs_startswith(p_path, "people/")) { /** a single actor **/
+        if (!login(&snac, req)) {
+            *body  = xs_dup(uid);
+            status = HTTP_STATUS_UNAUTHORIZED;
+        }
+        else {
+            xs *actor_dict = NULL;
+            const char *actor_id = NULL;
+            xs *actor = NULL;
+            xs_list *page_lst = xs_split_n(p_path, "?", 2);
+            xs *page = xs_str_cat(xs_str_new("/"), xs_list_get(page_lst, 0));
+            xs_list *l = xs_split_n(page, "/", 3);
+            const char *actor_md5 = xs_list_get(l, 2);
+
+            if (valid_status(object_get_by_md5(actor_md5, &actor_dict)) &&
+               (actor_id = xs_dict_get(actor_dict, "id")) != NULL &&
+               valid_status(actor_get(actor_id, &actor))) {
+                int more = 0;
+                xs *list = timeline_simple_list(&snac, "private", skip, show, &more);
+
+                *body   = html_people_one(&snac, actor_id, list, skip, show, more, page);
+                *b_size = strlen(*body);
+                status  = HTTP_STATUS_OK;
+            }
+            else {
+                *body = xs_dup(uid);
+                status = HTTP_STATUS_NOT_FOUND;
+            }
         }
     }
     else
@@ -4288,7 +4839,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
             xs *next = timeline_instance_list(skip + show, 1);
 
             *body = html_timeline(&snac, list, 0, skip, show,
-                xs_list_len(next), L("Showing instance timeline"), "/instance", 0, error);
+                xs_list_len(next), L("Showing instance timeline"), "/instance", 0, error, terse);
             *b_size = strlen(*body);
             status  = HTTP_STATUS_OK;
         }
@@ -4303,7 +4854,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
             xs *list = pinned_list(&snac);
 
             *body = html_timeline(&snac, list, 0, skip, show,
-                0, L("Pinned posts"), "", 0, error);
+                0, L("Pinned posts"), "", 0, error, terse);
             *b_size = strlen(*body);
             status  = HTTP_STATUS_OK;
         }
@@ -4318,7 +4869,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
             xs *list = bookmark_list(&snac);
 
             *body = html_timeline(&snac, list, 0, skip, show,
-                0, L("Bookmarked posts"), "", 0, error);
+                0, L("Bookmarked posts"), "", 0, error, terse);
             *b_size = strlen(*body);
             status  = HTTP_STATUS_OK;
         }
@@ -4333,7 +4884,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
             xs *list = draft_list(&snac);
 
             *body = html_timeline(&snac, list, 0, skip, show,
-                0, L("Post drafts"), "", 0, error);
+                0, L("Post drafts"), "", 0, error, terse);
             *b_size = strlen(*body);
             status  = HTTP_STATUS_OK;
         }
@@ -4348,7 +4899,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
             xs *list = scheduled_list(&snac);
 
             *body = html_timeline(&snac, list, 0, skip, show,
-                0, L("Scheduled posts"), "", 0, error);
+                0, L("Scheduled posts"), "", 0, error, terse);
             *b_size = strlen(*body);
             status  = HTTP_STATUS_OK;
         }
@@ -4374,7 +4925,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
                 xs *title = xs_fmt(L("Showing timeline for list '%s'"), name);
 
                 *body = html_timeline(&snac, ttl, 0, skip, show,
-                    xs_list_len(next), title, base, 1, error);
+                    xs_list_len(next), title, base, 1, error, terse);
                 *b_size = strlen(*body);
                 status  = HTTP_STATUS_OK;
             }
@@ -4394,7 +4945,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
 
             list = xs_list_append(list, md5);
 
-            *body   = html_timeline(&snac, list, 1, 0, 0, 0, NULL, "", 1, error);
+            *body   = html_timeline(&snac, list, 1, 0, 0, 0, NULL, "", 1, error, terse);
             *b_size = strlen(*body);
             status  = HTTP_STATUS_OK;
         }
@@ -4582,8 +5133,8 @@ int html_get_handler(const xs_dict *req, const char *q_path,
                     xs *msg = msg_admiration(&snac, id, *action == 'L' ? "Like" : "Announce");
 
                     if (msg != NULL) {
+                        timeline_admire(&snac, xs_dict_get(msg, "object"), snac.actor, *action == 'L' ? 1 : 0, msg);
                         enqueue_message(&snac, msg);
-                        timeline_admire(&snac, xs_dict_get(msg, "object"), snac.actor, *action == 'L' ? 1 : 0);
 
                         status = HTTP_STATUS_SEE_OTHER;
                     }
@@ -4858,6 +5409,9 @@ int html_post_handler(const xs_dict *req, const char *q_path,
                         /* overwrite object, not updating the indexes */
                         object_add_ow(edit_id, msg);
 
+                        /* index tags */
+                        tag_index(edit_id, msg);
+
                         /* update message */
                         c_msg = msg_update(&snac, msg);
                     }
@@ -4891,12 +5445,36 @@ int html_post_handler(const xs_dict *req, const char *q_path,
 
         status = HTTP_STATUS_SEE_OTHER;
 
+        if (strcmp(action, L("EmojiUnreact")) == 0) { /** **/
+            const char *eid = xs_dict_get(p_vars, "eid");
+
+            if (eid != NULL) {
+                xs *n_msg = msg_emoji_unreact(&snac, id, eid);
+
+                if (n_msg != NULL)
+                    enqueue_message(&snac, n_msg);
+            }
+        }
+        else
+        if (strcmp(action, L("EmojiReact")) == 0) { /** **/
+            xs *eid = xs_dup(xs_dict_get(p_vars, "eid"));
+
+            eid = xs_strip_chars_i(eid, ":");
+
+            const xs_dict *ret = msg_emoji_init(&snac, id, eid);
+            /* fails if either invalid or already reacted */
+            if (!ret)
+                ret = msg_emoji_unreact(&snac, id, eid);
+            if (!ret)
+                status = HTTP_STATUS_NOT_FOUND;
+        }
+        else
         if (strcmp(action, L("Like")) == 0) { /** **/
             xs *msg = msg_admiration(&snac, id, "Like");
 
             if (msg != NULL) {
+                timeline_admire(&snac, xs_dict_get(msg, "object"), snac.actor, 1, msg);
                 enqueue_message(&snac, msg);
-                timeline_admire(&snac, xs_dict_get(msg, "object"), snac.actor, 1);
             }
         }
         else
@@ -4904,8 +5482,8 @@ int html_post_handler(const xs_dict *req, const char *q_path,
             xs *msg = msg_admiration(&snac, id, "Announce");
 
             if (msg != NULL) {
+                timeline_admire(&snac, xs_dict_get(msg, "object"), snac.actor, 0, msg);
                 enqueue_message(&snac, msg);
-                timeline_admire(&snac, xs_dict_get(msg, "object"), snac.actor, 0);
             }
         }
         else
@@ -5022,7 +5600,7 @@ int html_post_handler(const xs_dict *req, const char *q_path,
             }
             else {
                 /* delete an entry */
-                if (xs_startswith(id, snac.actor) && !is_draft(&snac, id)) {
+                if (is_msg_mine(&snac, id) && !is_draft(&snac, id)) {
                     /* it's a post by us: generate a delete */
                     xs *msg = msg_delete(&snac, id);
 
@@ -5346,6 +5924,33 @@ int html_post_handler(const xs_dict *req, const char *q_path,
             }
 
             snac.config = xs_dict_set(snac.config, "blocked_hashtags", new_hashtags);
+            user_persist(&snac, 0);
+        }
+
+        status = HTTP_STATUS_SEE_OTHER;
+    }
+    else
+    if (p_path && strcmp(p_path, "admin/muted-words") == 0) {
+        const char *words = xs_dict_get(p_vars, "muted_words");
+
+        if (xs_is_string(words)) {
+            xs *new_words = xs_list_new();
+            xs *l = xs_split(words, "\n");
+            const char *v;
+
+            xs_list_foreach(l, v) {
+                xs *s1 = xs_strip_i(xs_dup(v));
+                s1 = xs_replace_i(s1, " ", "");
+
+                if (*s1 == '\0')
+                    continue;
+
+                xs *s2 = xs_utf8_to_lower(s1);
+
+                new_words = xs_list_insert_sorted(new_words, s2);
+            }
+
+            snac.config = xs_dict_set(snac.config, "muted_words", new_words);
             user_persist(&snac, 0);
         }
 

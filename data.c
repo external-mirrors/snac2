@@ -1,5 +1,5 @@
 /* snac - A simple, minimalistic ActivityPub instance */
-/* copyright (c) 2022 - 2025 grunfink et al. / MIT license */
+/* copyright (c) 2022 - 2026 grunfink et al. / MIT license */
 
 #include "xs.h"
 #include "xs_hex.h"
@@ -89,8 +89,15 @@ int srv_open(const char *basedir, int auto_upgrade)
                 else {
                     if (xs_number_get(xs_dict_get(srv_config, "layout")) < disk_layout)
                         error = xs_fmt("ERROR: disk layout changed - execute 'snac upgrade' first");
-                    else
-                        ret = 1;
+                    else {
+                        if (!check_strip_tool()) {
+                            const char *mp = xs_dict_get(srv_config, "mogrify_path");
+                            if (mp == NULL) mp = "mogrify";
+                            error = xs_fmt("ERROR: strip_exif enabled but '%s' not found or not working (set 'mogrify_path' in server.json)", mp);
+                        }
+                        else
+                            ret = 1;
+                    }
                 }
             }
 
@@ -1043,6 +1050,14 @@ xs_list *object_children(const char *id)
 }
 
 
+xs_list *object_get_emoji_reacts(const char *id)
+/* returns the list of an object's emoji reactions */
+{
+    xs *fn = _object_index_fn(id, "_e.idx");
+    return index_list(fn, XS_ALL);
+}
+
+
 xs_list *object_likes(const char *id)
 {
     xs *fn = _object_index_fn(id, "_l.idx");
@@ -1086,12 +1101,26 @@ int object_admire(const char *id, const char *actor, int like)
 
 
 int object_unadmire(const char *id, const char *actor, int like)
-/* actor no longer likes or announces this object */
+/* actor retrives their likes, announces or emojis this object */
 {
+    switch (like) {
+    case 0:
+        like = 'a';
+        break;
+    case 1:
+        like = 'l';
+        break;
+    case 2:
+        like = 'e';
+        break;
+    }
     int status;
     xs *fn = _object_fn(id);
 
-    fn = xs_replace_i(fn, ".json", like ? "_l.idx" : "_a.idx");
+    char sfx[7] = "_x.idx";
+    sfx[1] = like;
+
+    fn = xs_replace_i(fn, ".json", sfx);
 
     status = index_del(fn, actor);
 
@@ -1099,7 +1128,46 @@ int object_unadmire(const char *id, const char *actor, int like)
         index_gc(fn);
 
     srv_debug(0,
-        xs_fmt("object_unadmire (%s) %s %s %d", like ? "Like" : "Announce", actor, fn, status));
+        xs_fmt("object_unadmire (%s) %s %s %d", like >= 'e' ?
+            (like == 'l' ? "Like" : "EmojiReact") : "Announce" , actor, fn, status));
+
+    return status;
+}
+
+int object_emoji_react(const char *mid, const char *eid)
+/* actor reacts w/ an emoji */
+{
+    int status = HTTP_STATUS_OK;
+    xs *fn     = _object_fn(mid);
+
+    fn = xs_replace_i(fn, ".json", "_e.idx");
+
+    if (!index_in(fn, eid)) {
+        status = index_add(fn, eid);
+
+        srv_debug(1, xs_fmt("object_emoji_react (%s) added %s to %s", "EmojiReact", eid, fn));
+    }
+
+    return status;
+}
+
+
+int object_rm_emoji_react(const char *mid, const char *eid)
+/* actor retrives their emoji reaction */
+{
+    int status;
+    xs *fn = _object_fn(mid);
+
+    fn = xs_replace_i(fn, ".json", "_e.idx");
+
+    status = index_del(fn, eid);
+    object_del(eid);
+
+    if (valid_status(status))
+        index_gc(fn);
+
+    srv_debug(0,
+        xs_fmt("object_unadmire (EmojiReact) %s %s %d", eid, fn, status));
 
     return status;
 }
@@ -1358,6 +1426,20 @@ int pending_count(snac *user)
 }
 
 
+int is_msg_mine(snac *user, const char *id)
+/* returns true if a post id is by the given user */
+{
+    int ret = 0;
+
+    if (xs_is_string(id)) {
+        xs *s1 = xs_fmt("%s/", user->actor);
+        ret = xs_startswith(id, s1);
+    }
+
+    return ret;
+}
+
+
 /** timeline **/
 
 double timeline_mtime(snac *snac)
@@ -1453,7 +1535,7 @@ void timeline_update_indexes(snac *snac, const char *id)
 {
     object_user_cache_add(snac, id, "private");
 
-    if (xs_startswith(id, snac->actor)) {
+    if (is_msg_mine(snac, id)) {
         xs *msg = NULL;
 
         if (valid_status(object_get(id, &msg))) {
@@ -1492,19 +1574,48 @@ int timeline_add(snac *snac, const char *id, const xs_dict *o_msg)
 }
 
 
-int timeline_admire(snac *snac, const char *id, const char *admirer, int like)
-/* updates a timeline entry with a new admiration */
+int timeline_emoji_react(const char *act, const char *id, const xs_dict *msg_o)
+/* adds an emoji reaction to a message */
 {
+    xs *msg = xs_dup(msg_o);
+    msg = xs_dict_append(msg, "attributedTo", act);
+    msg = xs_dict_set(msg, "type", "EmojiReact");
+    const char *emote_id = xs_dict_get(msg, "id");
+
+    int ret = object_add(emote_id, msg);
+    if (ret == HTTP_STATUS_OK || ret == HTTP_STATUS_CREATED)
+        ret = object_emoji_react(id, emote_id);
+
+    return ret;
+}
+
+
+int timeline_admire(snac *snac, const char *id,
+                    const char *admirer, int like, const xs_dict *msg)
+/* updates a timeline entry with a new admiration or emoji reaction */
+{
+    int ret;
+    const char *content = xs_dict_get_path(msg, "content");
+    const char *type = xs_dict_get_path(msg, "type");
+
     /* if we are admiring this, add to both timelines */
     if (!like && strcmp(admirer, snac->actor) == 0) {
         object_user_cache_add(snac, id, "public");
         object_user_cache_add(snac, id, "private");
     }
 
-    int ret = object_admire(id, admirer, like);
+    /* use utf <3 as a like, as it is ugly */
+    if (type && xs_match(type, "Like|EmojiReact|Emoji") &&
+            content && strcmp(content, "❤") != 0) {
+        ret = timeline_emoji_react(snac->actor, id, msg);
+        snac_debug(snac, 1, xs_fmt("timeline_emoji_react %s", id));
+    }
 
-    snac_debug(snac, 1, xs_fmt("timeline_admire (%s) %s %s",
-            like ? "Like" : "Announce", id, admirer));
+    else {
+        ret = object_admire(id, admirer, like);
+        snac_debug(snac, 1, xs_fmt("timeline_admire (%s) %s %s",
+                like ? "Like" : "Announce", id, admirer));
+    }
 
     return ret;
 }
@@ -1853,6 +1964,25 @@ xs_list *muted_list(snac *user)
     return l;
 }
 
+/** emojis react **/
+
+xs_str *emoji_reacted(snac *user, const char *id)
+/* returns the emoji an user reacted to a message */
+{
+    xs *emojis = object_get_emoji_reacts(id);
+    int c = 0;
+    const char *v;
+
+    while (xs_list_next(emojis, &v, &c)) {
+        xs *msg = NULL;
+        if (object_get_by_md5(v, &msg)) {
+            const xs_val *act = xs_dict_get(msg, "actor");
+            if (act && strcmp(act, user->actor) == 0)
+                return xs_dup(xs_dict_get(msg, "content"));
+        }
+    }
+    return NULL;
+}
 
 /** bookmarking **/
 
@@ -1913,7 +2043,7 @@ int pin(snac *user, const char *id)
 {
     int ret = -2;
 
-    if (xs_startswith(id, user->actor)) {
+    if (is_msg_mine(user, id)) {
         if (is_pinned(user, id))
             ret = -3;
         else
@@ -2587,6 +2717,8 @@ void static_put(snac *snac, const char *id, const char *data, int size)
     if (fn && (f = fopen(fn, "wb")) != NULL) {
         fwrite(data, size, 1, f);
         fclose(f);
+
+        strip_media(fn);
     }
 }
 
@@ -3513,7 +3645,7 @@ void enqueue_output(snac *snac, const xs_dict *msg,
                     const xs_str *inbox, int retries, int p_status)
 /* enqueues an output message to an inbox */
 {
-    if (xs_startswith(inbox, snac->actor)) {
+    if (is_msg_mine(snac, inbox)) {
         snac_debug(snac, 1, xs_str_new("refusing enqueue to myself"));
         return;
     }
@@ -4041,7 +4173,7 @@ void delete_purged_posts(snac *user, int days)
                 if (xs_is_dict(msg)) {
                     const char *id = xs_dict_get(msg, "id");
 
-                    if (xs_is_string(id) && xs_startswith(id, user->actor)) {
+                    if (xs_is_string(id) && is_msg_mine(user, id)) {
                         xs *d_msg = msg_delete(user, id);
 
                         enqueue_message(user, d_msg);

@@ -1,4 +1,4 @@
-/* copyright (c) 2022 - 2025 grunfink et al. / MIT license */
+/* copyright (c) 2022 - 2026 grunfink et al. / MIT license */
 
 #ifndef _XS_JSON_H
 
@@ -27,6 +27,8 @@ int xs_json_load_object(FILE *f, int maxdepth, xs_dict **d);
 #ifdef XS_IMPLEMENTATION
 
 /** IMPLEMENTATION **/
+
+#include "xs_unicode.h"
 
 /** JSON dumps **/
 

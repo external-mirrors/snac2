@@ -110,6 +110,9 @@ URLs to RSS feeds of ActivityPub objects are also allowed
 .It Blocked hashtags...
 Enter here the list of hashtags you want to block, one
 per line, with or without the # symbol.
+.It Muted words...
+Enter here a list of words to be silenced. If a post includes
+any of this words, it's hidden behind a dropdown.
 .El
 .Pp
 The user setup dialog allows some user information to be
@@ -218,13 +221,20 @@ also private and cannot be liked nor boosted.
 For each entry in the timeline, a set of reasonable actions
 in the form of buttons will be shown. These can be:
 .Bl -tag -offset indent
-.It Reply
+.It Reply...
 Unveils a text area to write your intelligent and acute comment
 to an uninformed fellow. This note is sent to the original
 author as well as to your followers. The note can include
 mentions in the @user@format; these people will also become
 recipients of the message. If you reply to a boost or like,
 you are really replying to the note, not to the admirer of it.
+.It Emoji react...
+Unveils a text area that allows a user to react with an emoji
+by typing its identifier, that should match one of the emojis
+defined in the
+.Pa emojis.json
+file. By now, only those emoji identifiers surrounded by colons
+can be used.
 .It Like
 Click this if you admire this post. The poster and your
 followers will be informed.
@@ -405,6 +415,9 @@ Removes an existing list.
 Adds an account (by its @name@host handle or actor URL) to a list.
 .It Cm list_del Ar basedir Ar uid Ar name Ar actor_url
 Deletes an actor (by its actor URL) from a list.
+.It Cm top_ten Ar basedir Ar uid Op N
+Returns the ids of the top ten (or top N) most popular posts (considering the
+sum of likes and boosts).
 .El
 .Ss Migrating an account to/from Mastodon
 See 

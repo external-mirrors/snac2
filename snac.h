@@ -1,7 +1,7 @@
 /* snac - A simple, minimalistic ActivityPub instance */
-/* copyright (c) 2022 - 2025 grunfink et al. / MIT license */
+/* copyright (c) 2022 - 2026 grunfink et al. / MIT license */
 
-#define VERSION "2.85-dev"
+#define VERSION "2.89"
 
 #define USER_AGENT "snac/" VERSION
 
@@ -105,6 +105,9 @@ int validate_uid(const char *uid);
 xs_str *hash_password(const char *uid, const char *passwd, const char *nonce);
 int check_password(const char *uid, const char *passwd, const char *hash);
 
+int strip_media(const char *fn);
+int check_strip_tool(void);
+
 void srv_archive(const char *direction, const char *url, xs_dict *req,
                  const char *payload, int p_size,
                  int status, xs_dict *headers,
@@ -146,12 +149,15 @@ void object_touch(const char *id);
 int object_admire(const char *id, const char *actor, int like);
 int object_unadmire(const char *id, const char *actor, int like);
 
+int object_emoji_react(const char *mid, const char *eid);
+int object_rm_emoji_react(const char *mid, const char *eid);
 int object_likes_len(const char *id);
 int object_announces_len(const char *id);
 
 xs_list *object_children(const char *id);
 xs_list *object_likes(const char *id);
 xs_list *object_announces(const char *id);
+xs_list *object_get_emoji_reacts(const char *id);
 int object_parent(const char *md5, char parent[MD5_HEX_SIZE]);
 
 int object_user_cache_add(snac *snac, const char *id, const char *cachedir);
@@ -180,7 +186,8 @@ xs_str *user_index_fn(snac *user, const char *idx_name);
 xs_list *timeline_simple_list(snac *user, const char *idx_name, int skip, int show, int *more);
 xs_list *timeline_list(snac *snac, const char *idx_name, int skip, int show, int *more);
 int timeline_add(snac *snac, const char *id, const xs_dict *o_msg);
-int timeline_admire(snac *snac, const char *id, const char *admirer, int like);
+int timeline_admire(snac *snac, const char *id, const char *admirer, int like, const xs_dict *msg);
+int timeline_emoji_react(const char *atto, const char *id, const xs_dict *o_msg);
 
 xs_list *timeline_top_level(snac *snac, const xs_list *list);
 void timeline_add_mark(snac *user);
@@ -200,6 +207,8 @@ void mute(snac *snac, const char *actor);
 void unmute(snac *snac, const char *actor);
 int is_muted(snac *snac, const char *actor);
 xs_list *muted_list(snac *user);
+
+xs_str *emoji_reacted(snac *user, const char *id);
 
 int is_bookmarked(snac *user, const char *id);
 int bookmark(snac *user, const char *id);
@@ -358,6 +367,8 @@ xs_list *get_attachments(const xs_dict *msg);
 
 xs_dict *msg_admiration(snac *snac, const char *object, const char *type);
 xs_dict *msg_repulsion(snac *user, const char *id, const char *type);
+xs_dict *msg_emoji_init(snac *user, const char *mid, const char *eid);
+xs_dict *msg_emoji_unreact(snac *user, const char *id, const char *type);
 xs_dict *msg_create(snac *snac, const xs_dict *object);
 xs_dict *msg_follow(snac *snac, const char *actor);
 
@@ -388,6 +399,7 @@ int send_to_inbox(snac *snac, const xs_str *inbox, const xs_dict *msg,
 xs_str *get_actor_inbox(const char *actor, int shared);
 int send_to_actor(snac *snac, const char *actor, const xs_dict *msg,
                   xs_val **payload, int *p_size, int timeout);
+int is_msg_mine(snac *user, const char *id);
 int is_msg_public(const xs_dict *msg);
 int is_msg_from_private_user(const xs_dict *msg);
 int is_msg_for_me(snac *snac, const xs_dict *msg);
@@ -403,6 +415,7 @@ int activitypub_post_handler(const xs_dict *req, const char *q_path,
                              char **body, int *b_size, char **ctype);
 
 xs_dict *emojis(void);
+xs_dict *emojis_rm_categories(void);
 xs_str *format_text_with_emoji(snac *user, const char *text, int ems, const char *proxy);
 xs_str *not_really_markdown(const char *content, xs_list **attach, xs_list **tag);
 xs_str *sanitize(const char *content);
@@ -410,7 +423,7 @@ xs_str *encode_html(const char *str);
 
 xs_str *html_timeline(snac *user, const xs_list *list, int read_only,
                       int skip, int show, int show_more,
-                      const char *title, const char *page, int utl, const char *error);
+                      const char *title, const char *page, int utl, const char *error, int terse);
 
 int html_get_handler(const xs_dict *req, const char *q_path,
                      char **body, int *b_size, char **ctype,
@@ -485,3 +498,5 @@ void rss_to_timeline(snac *user, const char *url);
 void rss_poll_hashtags(void);
 
 void data_fsck(void);
+
+xs_list *user_top_ten(snac *user, int count);

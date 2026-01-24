@@ -1,12 +1,62 @@
 # Release Notes
 
-## UNRELEASED
+## 2.89
+
+Fixed crash in pronouns processing (contributed by byte).
+
+Added counters in the people page (contributed by byte).
+
+New command-line option `refresh`, to refresh all follower and following `Actor` objects, marking them as broken if they are.
+
+## 2.88
+
+If `disable_emojireact` is set to `true` in `server.json`, EmojiReacts (incoming and outgoing) are totally disabled.
+
+New command-line option `top_ten`, that returns the top ten most popular posts by a user (ordered by the sum of likes and boosts) (contributed by aov).
+
+Added a new set of per-user muted words; if a post contains any of them, it's hidden behind a dropdown (contributed by byte).
+
+If an account has a metadata named `pronouns`, it's shown by the name (contributed by violette).
+
+Mastodon API: children of a post are returned recursively, not just the first level (contributed by violette).
+
+Implemented optional metadata stripping for images and videos using external tools (contributed by Stefano Marinelli).
+
+## 2.87
+
+Hide EmojiReacts from muted actors and blocked instances.
+
+## 2.86
+
+Truncate RSS titles at UTF-8 character boundaries (contributed by lxo).
+
+Link contacts to single-user people pages. Also, user's posts are shown (contributed by lxo).
+
+Added emoji reactions (contributed by violette).
+
+Mastodon API: Fix for some client notifications (contributed by violette), fix for a status visibility error (contributed by fruye).
+
+If the query variable `terse` of a public post page is set to anything, no header is shown.
+
+Fixed search failures when the query string has any leading blank.
+
+## 2.85
 
 Quoted posts are now shown.
 
+Added metadata to remote users in the people page (contributed by dandelions).
+
 Fixed memory leak (contributed by dandelions).
 
+Fixed user matching (contributed by rakoo).
+
+Rendering visibility conditionally, with lesser reach if needed (contributed by byte).
+
+Added a button next to a follow notification to follow back.
+
 Fixed typo in man page (contributed by spky).
+
+Updated Czech and German translations (contributed by pmjv and zen).
 
 ## 2.84
 

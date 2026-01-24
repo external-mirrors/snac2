@@ -1,9 +1,10 @@
 /* snac - A simple, minimalistic ActivityPub instance */
-/* copyright (c) 2022 - 2025 grunfink et al. / MIT license */
+/* copyright (c) 2022 - 2026 grunfink et al. / MIT license */
 
 #include "xs.h"
 #include "xs_json.h"
 #include "xs_curl.h"
+#include "xs_url.h"
 #include "xs_mime.h"
 #include "xs_openssl.h"
 #include "xs_regex.h"
@@ -779,7 +780,7 @@ int is_msg_for_me(snac *snac, const xs_dict *c_msg)
             object_get(object, &obj);
 
         /* if it's about one of our posts, accept it */
-        if (xs_startswith(object, snac->actor))
+        if (is_msg_mine(snac, object))
             return 2;
 
         /* blocked by hashtag? */
@@ -1242,7 +1243,7 @@ void notify(snac *snac, const char *type, const char *utype, const char *actor, 
 
     if (xs_match(type, "Like|Announce|EmojiReact")) {
         /* if it's not an admiration about something by us, done */
-        if (xs_is_null(objid) || !xs_startswith(objid, snac->actor))
+        if (xs_is_null(objid) || !is_msg_mine(snac, objid))
             return;
 
         /* if it's an announce by our own relay, done */
@@ -1267,7 +1268,7 @@ void notify(snac *snac, const char *type, const char *utype, const char *actor, 
             return;
 
         /* if it's not ours and we didn't vote, discard */
-        if (!xs_startswith(poll_id, snac->actor) && !was_question_voted(snac, poll_id))
+        if (!is_msg_mine(snac, poll_id) && !was_question_voted(snac, poll_id))
             return;
     }
 
@@ -1530,11 +1531,24 @@ xs_dict *msg_update(snac *snac, const xs_dict *object)
 
 
 xs_dict *msg_admiration(snac *snac, const char *object, const char *type)
-/* creates a Like or Announce message */
+/* creates a Like, Announce or EmojiReact message */
 {
     xs *a_msg    = NULL;
     xs_dict *msg = NULL;
     xs *wrk      = NULL;
+    char t       = 0;
+
+    switch (*type) {
+        case 'L':
+            t = 'l';
+            break;
+        case 'A':
+            t = 'a';
+            break;
+        case 'E':
+            t = 'e';
+            break;
+    }
 
     /* call the object */
     timeline_request(snac, &object, &wrk, 0);
@@ -1542,7 +1556,7 @@ xs_dict *msg_admiration(snac *snac, const char *object, const char *type)
     if (valid_status(object_get(object, &a_msg))) {
         xs *rcpts = xs_list_new();
         xs *o_md5 = xs_md5_hex(object, strlen(object));
-        xs *id    = xs_fmt("%s/%s/%s", snac->actor, *type == 'L' ? "l" : "a", o_md5);
+        xs *id    = xs_fmt("%s/%c/%s", snac->actor, t, o_md5);
 
         msg = msg_base(snac, type, id, snac->actor, "@now", object);
 
@@ -1584,6 +1598,138 @@ xs_dict *msg_repulsion(snac *user, const char *id, const char *type)
     object_unadmire(id, user->actor, *type == 'L' ? 1 : 0);
 
     return msg;
+}
+
+xs_dict *msg_emoji_init(snac *snac, const char *mid, const char *eid_o)
+/* creates an emoji reaction from a local user */
+{
+    xs_dict *n_msg = msg_admiration(snac, mid, "EmojiReact");
+
+    xs *eid = xs_strip_chars_i(xs_dup(eid_o), ":");
+    xs *content = NULL;
+    xs *tag = xs_list_new();
+    xs *dict = xs_dict_new();
+    xs *icon = xs_dict_new();
+    xs *accounts = xs_list_new();
+    xs *emjs = emojis_rm_categories();
+
+    /* may be a default emoji */
+    xs *eidd = xs_dup(eid);
+    const char *eidda = eid;
+
+    if (xs_is_emoji(xs_utf8_dec(&eidda)))
+        content = xs_dup(eid);
+
+    else if (*eid == '%') {
+        content = xs_url_dec_emoji(xs_dup(eid));
+        if (content == NULL) {
+            return NULL;
+        }
+    }
+    else {
+        content = xs_fmt(":%s:", eid);
+        const char *emo = xs_dict_get(emjs, content);
+
+        if (emo == NULL)
+            return NULL;
+
+        if (xs_match(emo, "https://*|http://*")) { /* emoji is an URL to an image */
+            icon = xs_dict_set(icon, "type", "Image");
+            icon = xs_dict_set(icon, "url", emo);
+            dict = xs_dict_set(dict, "icon", icon);
+
+            dict = xs_dict_set(dict, "id", emo);
+            dict = xs_dict_set(dict, "name", content);
+            dict = xs_dict_set(dict, "type", "Emoji");
+            tag = xs_list_append(tag, dict);
+        }
+        else
+        if (xs_startswith(emo, "&#")) {
+            /* snac default emoji as an HTML entity: decode */
+            content = xs_free(content);
+
+            xs *s1 = xs_strip_chars_i(xs_dup(emo), "&#");
+            unsigned int cpoint = 0;
+            sscanf(s1, "%u;", &cpoint);
+
+            if (cpoint)
+                content = xs_utf8_cat(xs_str_new(NULL), cpoint);
+            else
+                content = xs_dup(emo);
+        }
+        else {
+            /* use as it is and hope for the best */
+            xs_free(content);
+            content = xs_dup(emo);
+        }
+    }
+
+    accounts = xs_list_append(accounts, snac->actor);
+
+    n_msg = xs_dict_set(n_msg, "content", content);
+    n_msg = xs_dict_set(n_msg, "accounts", accounts);
+    n_msg = xs_dict_set(n_msg, "attributedTo", xs_list_get(xs_dict_get(n_msg, "to"), 1));
+    n_msg = xs_dict_set(n_msg, "accountId", snac->uid);
+    n_msg = xs_dict_set(n_msg, "tag", tag);
+
+    int ret = timeline_admire(snac, xs_dict_get(n_msg, "object"), snac->actor, 1, n_msg);
+    if (ret == 200 || ret == 201) {
+        enqueue_message(snac, n_msg);
+        return n_msg;
+    }
+
+    return NULL;
+}
+
+xs_dict *msg_emoji_unreact(snac *user, const char *mid, const char *eid)
+/* creates an Undo + emoji reaction message */
+{
+    xs *a_msg    = NULL;
+    xs_dict *msg = NULL;
+
+    if (valid_status(object_get(mid, &a_msg))) {
+        /* create a clone of the original admiration message */
+        xs *object = msg_admiration(user, mid, "EmojiReact");
+
+        /* delete the published date */
+        object = xs_dict_del(object, "published");
+
+        /* create an undo message for this object */
+        msg = msg_undo(user, object);
+
+        /* copy the 'to' field */
+        msg = xs_dict_set(msg, "to", xs_dict_get(object, "to"));
+    }
+
+    xs *emotes = object_get_emoji_reacts(mid);
+    const char *v;
+    int c = 0;
+
+    /* may be a default emoji */
+    if (strlen(eid) == 12 && *eid == '%') {
+        eid = xs_url_dec(eid);
+        if (eid == NULL) {
+            return NULL;
+        }
+    }
+
+    /* lets get all emotes for this msg, and compare it to our content */
+    while (xs_list_next(emotes, &v, &c)) {
+        xs_dict *e = NULL;
+        if (valid_status(object_get_by_md5(v, &e))) {
+            const char *content = xs_dict_get(e, "content");
+            const char *id = xs_dict_get(e, "id");
+            const char *actor = xs_dict_get(e, "actor");
+            /* maybe formated as :{emoteName}: too */
+            if (xs_str_in(eid, content) != -1)
+                if (strcmp(user->actor, actor) == 0) {
+                    object_rm_emoji_react(mid, id);
+                    return msg;
+                }
+        }
+    }
+
+    return NULL;
 }
 
 
@@ -2432,6 +2578,11 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
         return -1;
     }
 
+    if (strcmp(type, "EmojiReact") == 0 && xs_is_true(xs_dict_get(srv_config, "disable_emojireact"))) {
+        srv_log(xs_fmt("Dropping EmojiReact from %s due to admin configuration", actor));
+        return -1;
+    }
+
     const char *object, *utype;
 
     object = xs_dict_get(msg, "object");
@@ -2605,6 +2756,16 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
     else
     if (strcmp(type, "Undo") == 0) { /** **/
         const char *id = xs_dict_get(object, "object");
+        const char *content = xs_dict_get(object, "content");
+        /* misskey sends emojis as like + tag */
+        xs *cd = xs_dup(content);
+        const char *sna = cd;
+        const xs_dict *tag = xs_dict_get(object, "tag");
+        unsigned int utf = xs_utf8_dec((const char **)&sna);
+
+        int isEmoji = 0;
+        if (xs_is_emoji(utf) || (tag && xs_list_len(tag) > 0))
+            isEmoji = 1;
 
         if (xs_type(object) != XSTYPE_DICT) {
             snac_debug(snac, 1, xs_fmt("undo: overriding utype %s | %s | %s",
@@ -2633,8 +2794,19 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
             else
                 snac_log(snac, xs_fmt("error deleting follower %s", actor));
         }
+        /* *key emojis are like w/ Emoji tag */
         else
-        if (strcmp(utype, "Like") == 0 || strcmp(utype, "EmojiReact") == 0) { /** **/
+        if ((isEmoji || strcmp(utype, "EmojiReact") == 0) &&
+                (content && strcmp(content, "♥") != 0)) {
+            const xs_val *mid = xs_dict_get(object, "id");
+            int status = object_rm_emoji_react((char *)id, mid);
+            /* ensure *key notifications type */
+            utype = "EmojiReact";
+
+            snac_log(snac, xs_fmt("Undo 'EmojiReact' for %s %d", id, status));
+        }
+        else
+        if (strcmp(utype, "Like") == 0) { /** **/
             int status = object_unadmire(id, actor, 1);
 
             snac_log(snac, xs_fmt("Undo '%s' for %s %d", utype, id, status));
@@ -2771,13 +2943,22 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
     }
     else
     if (strcmp(type, "Like") == 0 || strcmp(type, "EmojiReact") == 0) { /** **/
+        /* misskey sends emojis as Like + tag.
+         * It is easier to handle them both at the same time. */
+        const char *sna = xs_dict_get(msg, "content");
+        const xs_dict *tag = xs_dict_get(msg, "tag");
+        unsigned int utf = xs_utf8_dec((const char **)&sna);
+
+        if (xs_is_emoji(utf) || (tag && xs_list_len(tag) > 0))
+            type = "EmojiReact";
+
         if (xs_type(object) == XSTYPE_DICT)
             object = xs_dict_get(object, "id");
 
         if (xs_is_null(object))
             snac_log(snac, xs_fmt("malformed message: no 'id' field"));
         else
-        if (timeline_admire(snac, object, actor, 1) == HTTP_STATUS_CREATED)
+        if (timeline_admire(snac, object, actor, 1, msg) == HTTP_STATUS_CREATED)
             snac_log(snac, xs_fmt("new '%s' %s %s", type, actor, object));
         else
             snac_log(snac, xs_fmt("repeated '%s' from %s to %s", type, actor, object));
@@ -2792,10 +2973,10 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
         if (xs_is_null(object))
             snac_log(snac, xs_fmt("malformed message: no 'id' field"));
         else
-        if (is_muted(snac, actor) && !xs_startswith(object, snac->actor))
+        if (is_muted(snac, actor) && !is_msg_mine(snac, object))
             snac_log(snac, xs_fmt("dropped 'Announce' from muted actor %s", actor));
         else
-        if (is_limited(snac, actor) && !xs_startswith(object, snac->actor))
+        if (is_limited(snac, actor) && !is_msg_mine(snac, object))
             snac_log(snac, xs_fmt("dropped 'Announce' from limited actor %s", actor));
         else {
             xs *a_msg = NULL;
@@ -2818,7 +2999,7 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
                         xs *this_relay = xs_fmt("%s/relay", srv_baseurl);
 
                         if (strcmp(actor, this_relay) != 0) {
-                            if (valid_status(timeline_admire(snac, object, actor, 0)))
+                            if (valid_status(timeline_admire(snac, object, actor, 0, a_msg)))
                                 snac_log(snac, xs_fmt("new 'Announce' %s %s", actor, object));
                             else
                                 snac_log(snac, xs_fmt("repeated 'Announce' from %s to %s",
@@ -2903,7 +3084,7 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
             snac_log(snac, xs_fmt("malformed message: no 'id' field"));
         else
         if (object_here(object)) {
-            if (xs_startswith(object, srv_baseurl) && !xs_startswith(object, actor))
+            if (xs_startswith(object, srv_baseurl) && !is_msg_mine(snac, object))
                 snac_log(snac, xs_fmt("ignored incorrect 'Delete' %s %s", actor, object));
             else {
                 timeline_del(snac, object);
@@ -3214,7 +3395,7 @@ void process_user_queue_item(snac *user, xs_dict *q_item)
                 actor_add(actor, actor_o);
             }
             else {
-                if (status == HTTP_STATUS_GONE) {
+                if (status == HTTP_STATUS_GONE || status == HTTP_STATUS_NOT_FOUND) {
                     actor_failure(actor, 1);
                     snac_log(user, xs_fmt("actor_refresh marking actor %s as broken %d", actor, status));
                 }
@@ -3716,7 +3897,7 @@ int activitypub_get_handler(const xs_dict *req, const char *q_path,
                 const char *type = xs_dict_get(i, "type");
                 const char *id   = xs_dict_get(i, "id");
 
-                if (type && id && strcmp(type, "Note") == 0 && xs_startswith(id, snac.actor)) {
+                if (type && id && strcmp(type, "Note") == 0 && is_msg_mine(&snac, id)) {
                     if (is_msg_public(i)) {
                         xs *c_msg = msg_create(&snac, i);
                         list = xs_list_append(list, c_msg);

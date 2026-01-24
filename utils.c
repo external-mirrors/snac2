@@ -1,5 +1,5 @@
 /* snac - A simple, minimalistic ActivityPub instance */
-/* copyright (c) 2022 - 2025 grunfink et al. / MIT license */
+/* copyright (c) 2022 - 2026 grunfink et al. / MIT license */
 
 #include "xs.h"
 #include "xs_io.h"
@@ -11,6 +11,8 @@
 #include "xs_curl.h"
 #include "xs_regex.h"
 #include "xs_http.h"
+#include "xs_list_tools.h"
+#include "xs_set.h"
 
 #include "snac.h"
 
@@ -78,11 +80,15 @@ static const char * const default_css =
     ".snac-list-of-lists li { display: inline; border: 1px solid #a0a0a0; border-radius: 25px;\n"
     "  margin-right: 0.5em; padding-left: 0.5em; padding-right: 0.5em; }\n"
     ".snac-no-more-unseen-posts { border-top: 1px solid #a0a0a0; border-bottom: 1px solid #a0a0a0; padding: 0.5em 0; margin: 1em 0; }\n"
+    ".snac-reaction { padding:5px; padding-left: 10px; padding-right: 10px; display: inline-flex; margin-right: 5px; font-family: inherit; font-size: medium; height: 2.5rem; vertical-align:middle; align-items:center;}\n"
+    ".snac-reaction-image { max-width: 100%; max-height: 100%; }\n"
+    ".snac-reaction-div { border-left: darkgray; border-left-style: solid; margin-bottom: .3em; padding-left: .3em; border-left-width: 2px; }\n"
     "@media (prefers-color-scheme: dark) { \n"
     "  body, input, textarea { background-color: #000; color: #fff; }\n"
     "  a { color: #7799dd }\n"
     "  a:visited { color: #aa99dd }\n"
     "}\n"
+    "select { max-width: 40%; }\n"
 ;
 
 const char *snac_blurb =
@@ -998,6 +1004,76 @@ void import_csv(snac *user)
     else
         snac_log(user, xs_fmt("Cannot open file %s", fn));
 }
+
+
+static int top_ten_sort(const void *v1, const void *v2)
+{
+    const xs_list *l1 = *(const xs_list **)v1;
+    const xs_list *l2 = *(const xs_list **)v2;
+
+    const char *c1 = xs_list_get(l1, 3);
+    const char *c2 = xs_list_get(l2, 3);
+
+    return xs_cmp(c2, c1);
+}
+
+
+xs_list *user_top_ten(snac *user, int count)
+/* returns the top ten more popular posts by a user */
+{
+    xs *idx  = xs_fmt("%s/private.idx", user->basedir);
+    xs *list = index_list(idx, XS_ALL);
+    xs *u_list = xs_list_new();
+    xs_set u;
+
+    xs_set_init(&u);
+
+    const char *md5;
+
+    xs_list_foreach(list, md5) {
+        xs *obj = NULL;
+
+        if (!valid_status(object_get_by_md5(md5, &obj)))
+            continue;
+
+        const char *id = xs_dict_get_def(obj, "id", "-");
+
+        if (!is_msg_mine(user, id))
+            continue;
+
+        if (xs_set_add(&u, id) != 1)
+            continue;
+
+        /* get metrics */
+        int ls = object_likes_len(id);
+        int as = object_announces_len(id);
+
+        /* build the entry and convert to list */
+        xs *s = xs_fmt("%s\t%d\t%d\t%010d", id, ls, as, ls + as);
+        xs *l = xs_split(s, "\t");
+
+        u_list = xs_list_append(u_list, l);
+    }
+
+    /* sort by the sum of likes and boosts */
+    xs *s_list = xs_list_sort(u_list, top_ten_sort);
+
+    xs_list *r = xs_list_new();
+    const xs_list *i;
+
+    xs_list_foreach(s_list, i) {
+        r = xs_list_append(r, i);
+
+        if (--count <= 0)
+            break;
+    }
+
+    xs_set_free(&u);
+
+    return r;
+}
+
+
 
 static const struct {
     const char *proto;

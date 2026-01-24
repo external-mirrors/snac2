@@ -1,5 +1,5 @@
 /* snac - A simple, minimalistic ActivityPub instance */
-/* copyright (c) 2022 - 2025 grunfink et al. / MIT license */
+/* copyright (c) 2022 - 2026 grunfink et al. / MIT license */
 
 #include "xs.h"
 #include "xs_io.h"
@@ -18,7 +18,7 @@
 int usage(const char *cmd)
 {
     printf("snac " VERSION " - A simple, minimalistic ActivityPub instance\n");
-    printf("Copyright (c) 2022 - 2025 grunfink et al. / MIT license\n");
+    printf("Copyright (c) 2022 - 2026 grunfink et al. / MIT license\n");
     printf("\n");
 
     if (cmd == NULL) {
@@ -76,7 +76,9 @@ int usage(const char *cmd)
         "list_create {basedir} {uid} {name}   Creates a new list\n"
         "list_remove {basedir} {uid} {name}   Removes an existing list\n"
         "list_add {basedir} {uid} {name} {acct} Adds an account (@user@host or actor url) to a list\n"
-        "list_del {basedir} {uid} {name} {actor} Deletes an actor URL from a list\n";
+        "list_del {basedir} {uid} {name} {actor} Deletes an actor URL from a list\n"
+        "top_ten {basedir} {uid} [{N}]        Prints the most popular posts\n"
+        "refresh {basedir} {uid}              Refreshes all actors\n";
 
     if (cmd == NULL)
         printf("%s", cmds);
@@ -350,6 +352,38 @@ int main(int argc, char *argv[])
         return 0;
     }
 
+    if (strcmp(cmd, "top_ten") == 0) { /** **/
+        int count = 10;
+        const char *n = GET_ARGV();
+        if (xs_is_string(n))
+            count = atoi(n);
+
+        xs *l = user_top_ten(&snac, count);
+        const xs_list *i;
+
+        xs_list_foreach(l, i) {
+            printf("%s %ld★ %ld↺\n", xs_list_get(i, 0),
+                xs_number_get_l(xs_list_get(i, 1)),
+                xs_number_get_l(xs_list_get(i, 2)));
+        }
+
+        return 0;
+    }
+
+    if (strcmp(cmd, "refresh") == 0) { /** **/
+        xs *fwers = follower_list(&snac);
+        xs *fwing = following_list(&snac);
+        const char *id;
+
+        xs_list_foreach(fwers, id)
+            enqueue_actor_refresh(&snac, id, 0);
+
+        xs_list_foreach(fwing, id)
+            enqueue_actor_refresh(&snac, id, 0);
+
+        return 0;
+    }
+
     if ((url = GET_ARGV()) == NULL)
         return usage(cmd);
 
@@ -498,7 +532,7 @@ int main(int argc, char *argv[])
 
         if (msg != NULL) {
             enqueue_message(&snac, msg);
-            timeline_admire(&snac, xs_dict_get(msg, "object"), snac.actor, 0);
+            timeline_admire(&snac, xs_dict_get(msg, "object"), snac.actor, 0, "");
 
             if (dbglevel) {
                 xs_json_dump(msg, 4, stdout);

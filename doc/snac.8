@@ -294,6 +294,22 @@ The URL to a favicon. If it's not set, the default one is used instead.
 The maximum number of days an instance is considered down after continuous failed
 outgoing messages (default: 15). Anyway, whenever any incoming activity from a
 failed instance is detected, this counter is reset for it.
+.It Ic vkey
+Public vapid key. Used for notification on some client.
+.It Ic disable_emojireact
+If set to true, all EmojiReact support (for input and output) is disabled.
+.It Ic strip_exif
+If set to true, EXIF and other metadata will be stripped from uploaded images (jpg, png, webp, heic, avif, tiff, gif, bmp) and videos (mp4, m4v, mov, webm, mkv, avi). This requires the
+.Nm mogrify
+(from ImageMagick) and
+.Nm ffmpeg
+tools to be installed. If
+.Nm snac
+cannot find or execute these tools at startup, it will refuse to run.
+.It Ic mogrify_path
+Overrides the default "mogrify" command name or path. Use this if the tool is not in the system PATH or has a different name.
+.It Ic ffmpeg_path
+Overrides the default "ffmpeg" command name or path. Use this if the tool is not in the system PATH or has a different name.
 .El
 .Pp
 You must restart the server to make effective these changes.
@@ -405,7 +421,7 @@ objects, on input and output.
 .It Vt EmojiReact
 For
 .Vt Note
-objects, on input.
+objects, on input and output.
 .It Vt Announce
 For
 .Vt Note
