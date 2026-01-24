@@ -3213,7 +3213,6 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
         xs_html *add_hashtags = xs_html_tag("ul",
             xs_html_attr("class", "snac-more-hashtags"));
 
-        // todo: wafrn hashtags
         xs_list_foreach(tags, tag) {
             const char *type = xs_dict_get(tag, "type");
 
@@ -3863,8 +3862,6 @@ xs_html *html_people_list(snac *user, xs_list *list, const char *header, const c
                 /* free the html, by rendering it... */
                 xs_free(xs_html_render(snac_metadata));
             }
-
-            // todo: add metadata from "attachemnt"->"PropertyValue"
 
             /* buttons */
             xs *btn_form_action = xs_fmt("%s/admin/action", user->actor);
