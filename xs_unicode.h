@@ -232,7 +232,7 @@ unsigned int *_xs_unicode_upper_search(unsigned int cpoint)
 /* searches for an uppercase codepoint in the case fold table */
 {
     int b = 0;
-    int t = xs_countof(xs_unicode_case_fold_table) / 2 + 1;
+    int t = xs_countof(xs_unicode_case_fold_table) / 2 - 1;
 
     while (t >= b) {
         int n = (b + t) / 2;
