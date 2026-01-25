@@ -2375,9 +2375,9 @@ void tag_index(const char *id, const xs_dict *obj)
                 if (*name == '\0')
                     continue;
 
-                name = xs_utf8_to_lower((xs_str *)name);
+                xs* name_cased = xs_utf8_to_lower((xs_str *)name);
 
-                xs *md5_tag   = xs_md5_hex(name, strlen(name));
+                xs *md5_tag   = xs_md5_hex(name_cased, strlen(name_cased));
                 xs *tag_dir   = xs_fmt("%s/%c%c", g_tag_dir, md5_tag[0], md5_tag[1]);
                 mkdirx(tag_dir);
 
@@ -2389,7 +2389,7 @@ void tag_index(const char *id, const xs_dict *obj)
                 FILE *f;
                 xs *g_tag_name = xs_replace(g_tag_idx, ".idx", ".tag");
                 if ((f = fopen(g_tag_name, "w")) != NULL) {
-                    fprintf(f, "%s\n", name);
+                    fprintf(f, "%s\n", name_cased);
                     fclose(f);
                 }
 
