@@ -4244,17 +4244,14 @@ xs_str *html_notifications(snac *user, int skip, int show)
         xs *label_sanitized = sanitize(type);
         const char *label = label_sanitized;
 
-        if (strcmp(type, "Create") == 0) {
+        if (strcmp(type, "Create") == 0)
             label = L("Mention");
-        }
         else
-        if (strcmp(type, "Update") == 0 && strcmp(utype, "Question") == 0) {
+        if (strcmp(type, "Update") == 0 && strcmp(utype, "Question") == 0)
             label = L("Finished poll");
-        }
         else
-        if (strcmp(type, "Undo") == 0 && strcmp(utype, "Follow") == 0) {
+        if (strcmp(type, "Undo") == 0 && strcmp(utype, "Follow") == 0)
             label = L("Unfollow");
-        }
         else
         if (strcmp(type, "EmojiReact") == 0 || strcmp(type, "Like") == 0) {
             const char *content = xs_dict_get_path(noti, "msg.content");
@@ -4277,11 +4274,8 @@ xs_str *html_notifications(snac *user, int skip, int show)
             }
         }
         else
-        if (strcmp(type, "Follow") == 0) {
-            if (pending_check(user, actor_id)) {
-                label = L("Follow Request");
-            }
-        }
+        if (strcmp(type, "Follow") == 0 && pending_check(user, actor_id))
+            label = L("Follow Request");
 
         xs *s_date = html_date_label(user, date);
 
