@@ -5359,6 +5359,7 @@ int html_post_handler(const xs_dict *req, const char *q_path,
                 if (valid_status(object_get(edit_id, &p_msg))) {
                     /* copy relevant fields from previous version */
                     char *fields[] = { "id", "context", "url",
+                                       "cc", "attributedTo",
                                        "to", "inReplyTo", NULL };
                     int n;
 
