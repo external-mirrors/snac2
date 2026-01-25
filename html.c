@@ -210,6 +210,28 @@ xs_str *format_text_with_emoji(snac *user, const char *text, int ems, const char
 }
 
 
+xs_str *html_date_label(snac *user, const char *date)
+{
+    time_t t;
+
+    /* check if a user has actually set a timezone */
+    if (user != NULL && xs_dict_get(user->config, "tz") != NULL &&
+        (t = xs_parse_iso_date(date, 0)) != 0) {
+        t += xs_tz_offset(user->tz);
+
+        time_t today = time(NULL);
+        if (today - t >= 3600 * 24 * 30 * 6) {
+            /* more than half a year ago */
+            return xs_str_utctime(t, "%Y-%m-%d %H:%M");
+        }
+
+        return xs_str_utctime(t, "%b%d %H:%M");
+    }
+
+    return xs_crop_i(xs_dup(date), 0, 10);
+}
+
+
 xs_html *html_actor_icon(snac *user, xs_dict *actor, const char *date,
                         const char *udate, const char *url, int scope,
                         int in_people, const char *proxy, const char *lang,
@@ -361,11 +383,11 @@ xs_html *html_actor_icon(snac *user, xs_dict *actor, const char *date,
             xs_html_raw("&nbsp;"));
     }
     else {
-        xs *date_label = xs_crop_i(xs_dup(date), 0, 10);
+        xs *date_label = html_date_label(user, date);
         xs *date_title = xs_dup(date);
 
         if (!xs_is_null(udate)) {
-            xs *sd = xs_crop_i(xs_dup(udate), 0, 10);
+            xs *sd = html_date_label(user, udate);
 
             date_label = xs_str_cat(date_label, " / ", sd);
 
@@ -4214,7 +4236,7 @@ xs_str *html_notifications(snac *user, int skip, int show)
         if (strcmp(type, "Follow") == 0 && pending_check(user, actor_id))
             label = L("Follow Request");
 
-        xs *s_date = xs_crop_i(xs_dup(date), 0, 10);
+        xs *s_date = html_date_label(user, date);
 
         xs_html *this_html_label = xs_html_container(
                 xs_html_tag("b",
