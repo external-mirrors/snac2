@@ -17,6 +17,7 @@
 
 #include "snac.h"
 
+#include <stddef.h>
 #include <sys/wait.h>
 
 const char * const public_address = "https:/" "/www.w3.org/ns/activitystreams#Public";
@@ -2321,8 +2322,16 @@ xs_dict *msg_question(snac *user, const char *content, xs_list *attach,
 /* creates a Question message */
 {
     xs_dict *msg = msg_note(user, content, NULL, NULL, attach, 0, NULL, NULL);
-    int max      = 8;
+    const xs_number *max_options = xs_dict_get(srv_config, "max_poll_options");
+    const xs_number *max_length = xs_dict_get(srv_config, "max_poll_option_length");
     xs_set seen;
+
+    size_t max_line = 60;
+    int max = 8;
+    if (xs_type(max_options) == XSTYPE_NUMBER)
+        max = xs_number_get(max_options);
+    if (xs_type(max_length) == XSTYPE_NUMBER)
+        max_line = xs_number_get(max_length);
 
     msg = xs_dict_set(msg, "type", "Question");
 
@@ -2341,8 +2350,8 @@ xs_dict *msg_question(snac *user, const char *content, xs_list *attach,
             xs *v2 = xs_dup(v);
             xs *d  = xs_dict_new();
 
-            if (strlen(v2) > 60) {
-                v2[60] = '\0';
+            if (strlen(v2) > max_line) {
+                v2[max_line] = '\0';
                 v2 = xs_str_cat(v2, "...");
             }
 

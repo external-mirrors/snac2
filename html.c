@@ -778,13 +778,18 @@ xs_html *html_note(snac *user, const char *summary,
 
     /* add poll controls */
     if (poll) {
+        const xs_number *max_options = xs_dict_get(srv_config, "max_poll_options");
+        xs *poll_limit_str = xs_dup(L("Poll options (one per line, up to 8):"));
+        if (max_options != NULL)
+            poll_limit_str = xs_replace_i(poll_limit_str, "8", xs_number_str(max_options));
+
         xs_html_add(form,
             xs_html_tag("p", NULL),
             xs_html_tag("details",
                 xs_html_tag("summary",
                     xs_html_text(L("Poll..."))),
                 xs_html_tag("p",
-                    xs_html_text(L("Poll options (one per line, up to 8):")),
+                    xs_html_text(poll_limit_str),
                     xs_html_sctag("br", NULL),
                     xs_html_tag("textarea",
                         xs_html_attr("class",    "snac-textarea"),
@@ -812,7 +817,13 @@ xs_html *html_note(snac *user, const char *summary,
                         xs_html_text(L("End in 1 hour"))),
                     xs_html_tag("option",
                         xs_html_attr("value", "86400"),
-                        xs_html_text(L("End in 1 day"))))));
+                        xs_html_text(L("End in 1 day"))),
+                    xs_html_tag("option",
+                        xs_html_attr("value", "259200"),
+                        xs_html_text(L("End in 3 days"))),
+                    xs_html_tag("option",
+                        xs_html_attr("value", "31536000"),
+                        xs_html_text(L("End in 1 year"))))));
     }
 
     xs_html_add(form,
