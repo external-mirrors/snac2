@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: snac\n"
-"PO-Revision-Date: 2025-12-22 07:55-0300\n"
+"PO-Revision-Date: 2026-01-25 22:38-0300\n"
 "Last-Translator: Daltux <@daltux@snac.daltux.net>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -799,45 +799,46 @@ msgstr "Seguidores apenas"
 msgid "Direct Message"
 msgstr "Mensagem direta"
 
-msgid "Desfazer EmojiReação"
-msgstr ""
+#: html.c:531 html.c:2648 html.c:2673 html.c:5449
+msgid "EmojiUnreact"
+msgstr "Desfazer reação"
 
 #: html.c:531 html.c:1483 html.c:2648 html.c:2673 html.c:5460
 msgid "EmojiReact"
-msgstr "EmojiReação"
+msgstr "Reagir com emoji"
 
 #: html.c:2190
 msgid "Emoji react..."
-msgstr "EmojiReagir..."
+msgstr "Reagir com emoji..."
 
 #: html.c:2723
 msgid "Emoji reactions: "
-msgstr "EmojiReações: "
+msgstr "Reações com emoji: "
 
 #: html.c:531 html.c:2648 html.c:2673 html.c:5449
 msgid "EmojiUnreact"
-msgstr ""
+msgstr "Desfazer reação"
 
 #: html.c:1917
 msgid "Muted words..."
-msgstr ""
+msgstr "Palavras silenciadas..."
 
 #: html.c:1919
 msgid "One word per line, partial matches count"
-msgstr ""
+msgstr "Uma palavra por linha. Coincidências parciais contam."
 
 #: html.c:1940
 msgid "Update muted words"
-msgstr ""
+msgstr "Atualizar palavras silenciadas"
 
 #: html.c:2548
 msgid "Muted: "
-msgstr ""
+msgstr "Silenciadas: "
 
 #: html.c:3999
 msgid "Contact's posts"
-msgstr ""
+msgstr "Publicações da pessoa"
 
 #: html.c:4068
 msgid "More (x 10)..."
-msgstr ""
+msgstr "Mais (x 10)..."
