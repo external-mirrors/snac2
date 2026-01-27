@@ -3503,11 +3503,75 @@ xs_list *notify_list(snac *snac, int skip, int show)
 }
 
 
+xs_list *notify_filter_list(snac *snac, xs_list *notifs)
+/* apply user-defined notification filter to IDs */
+{
+    const xs_dict *n_filter = xs_dict_get(snac->config, "notify_filter");
+    if (!n_filter) {
+        return xs_dup(notifs);
+    }
+    const xs_val *n_def = xs_stock( XSTYPE_TRUE );
+    int n_likes_on  = xs_is_true(xs_dict_get_def(n_filter, "likes", n_def));
+    int n_reacts_on = xs_is_true(xs_dict_get_def(n_filter, "reacts", n_def));
+    int n_ments_on  = xs_is_true(xs_dict_get_def(n_filter, "mentions", n_def));
+    int n_ann_on    = xs_is_true(xs_dict_get_def(n_filter, "announces", n_def));
+    int n_fol_on    = xs_is_true(xs_dict_get_def(n_filter, "follows", n_def));
+    int n_unfol_on  = xs_is_true(xs_dict_get_def(n_filter, "unfollows", n_def));
+    int n_folreq_on = xs_is_true(xs_dict_get_def(n_filter, "folreqs", n_def));
+    int n_blocks_on = xs_is_true(xs_dict_get_def(n_filter, "blocks", n_def));
+    int n_polls_on  = xs_is_true(xs_dict_get_def(n_filter, "polls", n_def));
+
+    const xs_str *v;
+    xs_list *flt = xs_list_new();
+
+    xs_list_foreach(notifs, v) {
+        xs *noti = notify_get(snac, v);
+
+        if (noti == NULL)
+            continue;
+
+        const char *type  = xs_dict_get(noti, "type");
+        const char *utype = xs_dict_get(noti, "utype");
+        const char *actor_id = xs_dict_get(noti, "actor");
+        if (strcmp(type, "EmojiReact") == 0 && xs_is_true(xs_dict_get(srv_config, "disable_emojireact")))
+            continue;
+        if (strcmp(type, "Create") == 0 && !n_ments_on)
+            continue;
+        if (strcmp(type, "Update") == 0 && strcmp(utype, "Question") == 0 && !n_polls_on)
+            continue;
+        if (strcmp(type, "Undo") == 0 && strcmp(utype, "Follow") == 0 && !n_unfol_on)
+            continue;
+        if (strcmp(type, "EmojiReact") == 0 || strcmp(type, "Like") == 0) {
+            if (strcmp(type, "Like") == 0 && !n_likes_on)
+                continue;
+            if (strcmp(type, "EmojiReact") == 0 && !n_reacts_on)
+                continue;
+        }
+        if (strcmp(type, "Follow") == 0) {
+            if (pending_check(snac, actor_id)) {
+                if (!n_folreq_on)
+                    continue;
+            }
+            else
+            if (!n_fol_on)
+                continue;
+        }
+        if (strcmp(type, "Block") == 0 && !n_blocks_on)
+            continue;
+        if (strcmp(type, "Announce") == 0 && !n_ann_on)
+            continue;
+        flt = xs_list_append(flt, v);
+    }
+    return flt;
+}
+
+
 int notify_new_num(snac *snac)
 /* counts the number of new notifications */
 {
     xs *t = notify_check_time(snac, 0);
-    xs *lst = notify_list(snac, 0, XS_ALL);
+    xs *lst_unfilt = notify_list(snac, 0, XS_ALL);
+    xs *lst = notify_filter_list(snac, lst_unfilt);
     int cnt = 0;
 
     xs_list *p = lst;

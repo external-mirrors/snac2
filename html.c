@@ -492,7 +492,7 @@ void html_note_render_visibility(snac* user, xs_html *form, const int scope)
 
     xs_html *paragraph = xs_html_tag("p", xs_html_text(L("Visibility: ")));
     const int* to_render = scopes[scope];
-    for( int i = 0; to_render[i] != -1; i++ ){
+    for( int i = 0; to_render[i] != -1; i++ ) {
         const int scope_i = to_render[i];
         const char* value = scopes_tags[scope_i];
         const char* name = scopes_names[scope_i];
@@ -1422,6 +1422,20 @@ static xs_html *html_user_body(snac *user, int read_only)
 }
 
 
+xs_html *html_checkbox(const char *form_name, const char *label, int flag)
+/* helper for checkbox rendering */
+{
+    return xs_html_tag("p",
+        xs_html_sctag("input",
+            xs_html_attr("type",     "checkbox"),
+            xs_html_attr("name",     form_name),
+            xs_html_attr(flag ? "checked" : "", NULL)),
+        xs_html_tag("label",
+            xs_html_attr("for", form_name),
+            xs_html_text(label)));
+}
+
+
 xs_html *html_top_controls(snac *user)
 /* generates the top controls */
 {
@@ -1745,70 +1759,21 @@ xs_html *html_top_controls(snac *user)
                         xs_html_attr("type", "number"),
                         xs_html_attr("name", "purge_days"),
                         xs_html_attr("value", purge_days))),
-                xs_html_tag("p",
-                    xs_html_sctag("input",
-                        xs_html_attr("type", "checkbox"),
-                        xs_html_attr("name", "drop_dm_from_unknown"),
-                        xs_html_attr("id", "drop_dm_from_unknown"),
-                        xs_html_attr(xs_type(d_dm_f_u) == XSTYPE_TRUE ? "checked" : "", NULL)),
-                    xs_html_tag("label",
-                        xs_html_attr("for", "drop_dm_from_unknown"),
-                        xs_html_text(L("Drop direct messages from people you don't follow")))),
-                xs_html_tag("p",
-                    xs_html_sctag("input",
-                        xs_html_attr("type", "checkbox"),
-                        xs_html_attr("name", "bot"),
-                        xs_html_attr("id", "bot"),
-                        xs_html_attr(xs_type(bot) == XSTYPE_TRUE ? "checked" : "", NULL)),
-                    xs_html_tag("label",
-                        xs_html_attr("for", "bot"),
-                        xs_html_text(L("This account is a bot")))),
-                xs_html_tag("p",
-                    xs_html_sctag("input",
-                        xs_html_attr("type", "checkbox"),
-                        xs_html_attr("name", "auto_boost"),
-                        xs_html_attr("id", "auto_boost"),
-                        xs_html_attr(xs_is_true(auto_boost) ? "checked" : "", NULL)),
-                    xs_html_tag("label",
-                        xs_html_attr("for", "auto_boost"),
-                        xs_html_text(L("Auto-boost all mentions to this account")))),
-                xs_html_tag("p",
-                    xs_html_sctag("input",
-                        xs_html_attr("type", "checkbox"),
-                        xs_html_attr("name", "private"),
-                        xs_html_attr("id", "private"),
-                        xs_html_attr(xs_type(a_private) == XSTYPE_TRUE ? "checked" : "", NULL)),
-                    xs_html_tag("label",
-                        xs_html_attr("for", "private"),
-                        xs_html_text(L("This account is private "
-                            "(posts are not shown through the web)")))),
-                xs_html_tag("p",
-                    xs_html_sctag("input",
-                        xs_html_attr("type", "checkbox"),
-                        xs_html_attr("name", "collapse_threads"),
-                        xs_html_attr("id",   "collapse_threads"),
-                        xs_html_attr(xs_is_true(coll_thrds) ? "checked" : "", NULL)),
-                    xs_html_tag("label",
-                        xs_html_attr("for", "collapse_threads"),
-                        xs_html_text(L("Collapse top threads by default")))),
-                xs_html_tag("p",
-                    xs_html_sctag("input",
-                        xs_html_attr("type", "checkbox"),
-                        xs_html_attr("name", "approve_followers"),
-                        xs_html_attr("id",   "approve_followers"),
-                        xs_html_attr(xs_is_true(pending) ? "checked" : "", NULL)),
-                    xs_html_tag("label",
-                        xs_html_attr("for", "approve_followers"),
-                        xs_html_text(L("Follow requests must be approved")))),
-                xs_html_tag("p",
-                    xs_html_sctag("input",
-                        xs_html_attr("type", "checkbox"),
-                        xs_html_attr("name", "show_contact_metrics"),
-                        xs_html_attr("id",   "show_contact_metrics"),
-                        xs_html_attr(xs_is_true(show_foll) ? "checked" : "", NULL)),
-                    xs_html_tag("label",
-                        xs_html_attr("for", "show_contact_metrics"),
-                        xs_html_text(L("Publish follower and following metrics")))),
+                html_checkbox("drop_dm_from_unknown", L("Drop direct messages from people you don't follow"),
+                        xs_is_true(d_dm_f_u)),
+                html_checkbox("bot", L("This account is a bot"),
+                        xs_is_true(bot)),
+                html_checkbox("auto_boost", L("Auto-boost all mentions to this account"),
+                        xs_is_true(auto_boost)),
+                html_checkbox("private", L("This account is private "
+                        "(posts are not shown through the web)"),
+                        xs_is_true(a_private)),
+                html_checkbox("collapse_threads", L("Collapse top threads by default"),
+                        xs_is_true(coll_thrds)),
+                html_checkbox("approve_followers", L("Follow requests must be approved"),
+                        xs_is_true(pending)),
+                html_checkbox("show_contact_metrics", L("Publish follower and following metrics"),
+                        xs_is_true(show_foll)),
                 xs_html_tag("p",
                     xs_html_text(L("Current location:")),
                     xs_html_sctag("br", NULL),
@@ -2256,7 +2221,7 @@ static const xs_str* words_in_content(const xs_list *words, const xs_val *conten
 /* returns a word that matches any of the words in content */
 {
     if (!xs_is_list(words) || !xs_is_string(content)) {
-	    return NULL;
+        return NULL;
     }
     xs *c = xs_split(content, " ");
     xs *sc = xs_list_sort(c, NULL);
@@ -2266,9 +2231,8 @@ static const xs_str* words_in_content(const xs_list *words, const xs_val *conten
     xs_list_foreach(words, wv) {
         xs_list_foreach(sc, cv) {
             xs_tolower_i((xs_str*)cv);
-            if(xs_str_in(cv, wv) != -1){
+            if(xs_str_in(cv, wv) != -1)
                 return wv;
-            }
         }
     }
 
@@ -3634,7 +3598,7 @@ xs_str *html_timeline(snac *user, const xs_list *list, int read_only,
             continue;
 
         const int scope = get_msg_visibility(msg);
-        if (user != NULL && scope != SCOPE_PUBLIC){
+        if (user != NULL && scope != SCOPE_PUBLIC) {
             /* is this message a non-public reply? */
             const char *irt = get_in_reply_to(msg);
 
@@ -3651,13 +3615,11 @@ xs_str *html_timeline(snac *user, const xs_list *list, int read_only,
             }
         }
         /* hide non-public posts from /instance view */
-        if (page != NULL && strcmp(page, "/instance") == 0 && scope != SCOPE_PUBLIC){
+        if (page != NULL && strcmp(page, "/instance") == 0 && scope != SCOPE_PUBLIC)
             continue;
-        }
         /* hide non-public posts viewed from outside */
-        if (read_only && (scope != SCOPE_PUBLIC && scope != SCOPE_UNLISTED)) {
+        if (read_only && (scope != SCOPE_PUBLIC && scope != SCOPE_UNLISTED))
             continue;
-        }
 
         xs_html *entry = html_entry(user, msg, read_only, 0, v, (user && !hide_children) ? 0 : 1);
 
@@ -4112,6 +4074,32 @@ xs_str *html_people_one(snac *user, const char *actor, const xs_list *list,
     return xs_html_render_s(html, "<!DOCTYPE html>\n");
 }
 
+void notify_filter(snac *user, const xs_dict *p_vars)
+/* sets filter for notifications */
+{
+    const char *v;
+    int likes_on  = (v = xs_dict_get(p_vars, "likes_on")) ? strcmp(v, "on") == 0 : 0;
+    int reacts_on = (v = xs_dict_get(p_vars, "reacts_on")) ? strcmp(v, "on") == 0 : 0;
+    int ments_on  = (v = xs_dict_get(p_vars, "mentions_on")) ? strcmp(v, "on") == 0 : 0;
+    int ann_on    = (v = xs_dict_get(p_vars, "announces_on")) ? strcmp(v, "on") == 0 : 0;
+    int foll_on   = (v = xs_dict_get(p_vars, "follows_on")) ? strcmp(v, "on") == 0 : 0;
+    int unfoll_on = (v = xs_dict_get(p_vars, "unfollows_on")) ? strcmp(v, "on") == 0 : 0;
+    int folreq_on = (v = xs_dict_get(p_vars, "folreqs_on")) ? strcmp(v, "on") == 0 : 0;
+    int blocks_on = (v = xs_dict_get(p_vars, "blocks_on")) ? strcmp(v, "on") == 0 : 0;
+    int polls_on  = (v = xs_dict_get(p_vars, "polls_on")) ? strcmp(v, "on") == 0 : 0;
+    xs_dict *filter = xs_dict_new();
+    filter = xs_dict_set(filter, "likes", xs_stock(likes_on ? XSTYPE_TRUE : XSTYPE_FALSE));
+    filter = xs_dict_set(filter, "reacts", xs_stock(reacts_on ? XSTYPE_TRUE : XSTYPE_FALSE));
+    filter = xs_dict_set(filter, "mentions", xs_stock(ments_on ? XSTYPE_TRUE : XSTYPE_FALSE));
+    filter = xs_dict_set(filter, "announces", xs_stock(ann_on ? XSTYPE_TRUE : XSTYPE_FALSE));
+    filter = xs_dict_set(filter, "follows", xs_stock(foll_on ? XSTYPE_TRUE : XSTYPE_FALSE));
+    filter = xs_dict_set(filter, "unfollows", xs_stock(unfoll_on ? XSTYPE_TRUE : XSTYPE_FALSE));
+    filter = xs_dict_set(filter, "folreqs", xs_stock(folreq_on ? XSTYPE_TRUE : XSTYPE_FALSE));
+    filter = xs_dict_set(filter, "blocks", xs_stock(blocks_on ? XSTYPE_TRUE : XSTYPE_FALSE));
+    filter = xs_dict_set(filter, "polls", xs_stock(polls_on ? XSTYPE_TRUE : XSTYPE_FALSE));
+    user->config = xs_dict_set(user->config, "notify_filter", filter);
+}
+
 xs_str *html_notifications(snac *user, int skip, int show)
 {
     const char *proxy = NULL;
@@ -4119,14 +4107,65 @@ xs_str *html_notifications(snac *user, int skip, int show)
     if (xs_is_true(xs_dict_get(srv_config, "proxy_media")))
         proxy = user->actor;
 
-    xs *n_list = notify_list(user, skip, show);
+    xs *n_list_unfilt = notify_list(user, skip, show);
     xs *n_time = notify_check_time(user, 0);
 
     xs_html *body = html_user_body(user, 0);
+    const xs_dict *n_filter = xs_dict_get(user->config, "notify_filter");
+    if (!n_filter) {
+        user->config = xs_dict_set(user->config, "notify_filter", xs_dict_new());
+        n_filter = xs_dict_get(user->config, "notify_filter");
+    }
+    xs *n_list = notify_filter_list(user, n_list_unfilt);
+    /* all filters are true by default */
+    const xs_val *n_def = xs_stock( XSTYPE_TRUE );
+    int n_likes_on  = xs_is_true(xs_dict_get_def(n_filter, "likes", n_def));
+    int n_reacts_on = xs_is_true(xs_dict_get_def(n_filter, "reacts", n_def));
+    int n_ments_on  = xs_is_true(xs_dict_get_def(n_filter, "mentions", n_def));
+    int n_ann_on    = xs_is_true(xs_dict_get_def(n_filter, "announces", n_def));
+    int n_fol_on    = xs_is_true(xs_dict_get_def(n_filter, "follows", n_def));
+    int n_unfol_on  = xs_is_true(xs_dict_get_def(n_filter, "unfollows", n_def));
+    int n_folreq_on = xs_is_true(xs_dict_get_def(n_filter, "folreqs", n_def));
+    int n_blocks_on = xs_is_true(xs_dict_get_def(n_filter, "blocks", n_def));
+    int n_polls_on  = xs_is_true(xs_dict_get_def(n_filter, "polls", n_def));
 
     xs_html *html = xs_html_tag("html",
         html_user_head(user, NULL, NULL),
         body);
+
+    xs *filter_notifs_action = xs_fmt("%s/admin/filter-notifications", user->actor);
+    xs_html *notifs_form = xs_html_tag("form",
+        xs_html_attr("autocomplete", "off"),
+        xs_html_attr("method",       "post"),
+        xs_html_attr("action",       filter_notifs_action),
+        xs_html_attr("enctype",      "multipart/form-data"),
+        xs_html_attr("id",           "filter"),
+        xs_html_sctag("input",
+            xs_html_attr("type",    "hidden"),
+            xs_html_attr("name",    "hard-redir"),
+            xs_html_attr("value",   xs_fmt("%s/notifications", user->actor))),
+        html_checkbox("likes_on", L("Likes"), n_likes_on),
+        html_checkbox("reacts_on", L("Emoji reacts"), n_reacts_on),
+        html_checkbox("mentions_on", L("Mentions"), n_ments_on),
+        html_checkbox("announces_on", L("Announces"), n_ann_on),
+        html_checkbox("follows_on", L("Follows"), n_fol_on),
+        html_checkbox("unfollows_on", L("Unollows"), n_unfol_on),
+        html_checkbox("folreqs_on", L("Follow requests"), n_folreq_on),
+        html_checkbox("blocks_on", L("Blocks"), n_blocks_on),
+        html_checkbox("polls_on", L("Polls"), n_polls_on),
+        xs_html_sctag("input",
+            xs_html_attr("type",     "submit"),
+            xs_html_attr("class",    "button"),
+            xs_html_attr("value",    L("Save"))));
+
+    xs_html_add(body,
+        xs_html_tag("p",
+            xs_html_tag("div",
+                xs_html_attr("class", "snac-notify-filter"),
+                xs_html_tag("details",
+                    xs_html_tag("summary",
+                        xs_html_text(L("Notifications filter"))),
+                    notifs_form))));
 
     xs *clear_all_action = xs_fmt("%s/admin/clear-notifications", user->actor);
 
@@ -4227,6 +4266,8 @@ xs_str *html_notifications(snac *user, int skip, int show)
                 isEmoji = 1;
 
             if (xs_type(content) == XSTYPE_STRING) {
+                if (!isEmoji && !n_likes_on)
+                    continue;
                 xs *emoji = replace_shortnames(xs_dup(content), xs_dict_get_path(noti, "msg.tag"), 1, proxy);
                 wrk = xs_fmt("%s (%s&#xFE0F;)", isEmoji ? "EmojiReact" : "Like", emoji);
                 label = wrk;
@@ -5832,6 +5873,12 @@ int html_post_handler(const xs_dict *req, const char *q_path,
 
         user_persist(&snac, 1);
 
+        status = HTTP_STATUS_SEE_OTHER;
+    }
+    else
+    if (p_path && strcmp(p_path, "admin/filter-notifications") == 0) { /** **/
+        notify_filter(&snac, p_vars);
+        user_persist(&snac, 0);
         status = HTTP_STATUS_SEE_OTHER;
     }
     else
