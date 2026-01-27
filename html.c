@@ -4149,7 +4149,7 @@ xs_str *html_notifications(snac *user, int skip, int show)
         html_checkbox("mentions_on", L("Mentions"), n_ments_on),
         html_checkbox("announces_on", L("Announces"), n_ann_on),
         html_checkbox("follows_on", L("Follows"), n_fol_on),
-        html_checkbox("unfollows_on", L("Ufnollows"), n_unfol_on),
+        html_checkbox("unfollows_on", L("Unfollows"), n_unfol_on),
         html_checkbox("folreqs_on", L("Follow requests"), n_folreq_on),
         html_checkbox("blocks_on", L("Blocks"), n_blocks_on),
         html_checkbox("polls_on", L("Polls"), n_polls_on),
