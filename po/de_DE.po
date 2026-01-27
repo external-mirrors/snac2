@@ -814,24 +814,24 @@ msgstr "Emoji-Reaktionen:"
 
 #: html.c:1917
 msgid "Muted words..."
-msgstr ""
+msgstr "Ausgeblendete Wörter..."
 
 #: html.c:1919
 msgid "One word per line, partial matches count"
-msgstr ""
+msgstr "Ein Wort pro Zeile, auch Teilübereinstimmungen passen"
 
 #: html.c:1940
 msgid "Update muted words"
-msgstr ""
+msgstr "Ausgeblendete Wörter aktualisieren"
 
 #: html.c:2548
 msgid "Muted: "
-msgstr ""
+msgstr "Ausgeblendet:"
 
 #: html.c:3999
 msgid "Contact's posts"
-msgstr ""
+msgstr "Beiträge von Kontakten"
 
 #: html.c:4068
 msgid "More (x 10)..."
-msgstr ""
+msgstr "Mehr (x 10)..."
