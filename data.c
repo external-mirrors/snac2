@@ -2691,7 +2691,7 @@ static int _load_raw_file(const char *fn, xs_val **data, int *size,
 xs_str *_static_fn(snac *snac, const char *id)
 /* gets the filename for a static file */
 {
-    if (strchr(id, '/'))
+    if (strstr(id, ".."))
         return NULL;
     else
         return xs_fmt("%s/static/%s", snac->basedir, id);
