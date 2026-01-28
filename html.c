@@ -4164,7 +4164,7 @@ xs_str *html_notifications(snac *user, int skip, int show)
                 xs_html_attr("class", "snac-notify-filter"),
                 xs_html_tag("details",
                     xs_html_tag("summary",
-                        xs_html_text(L("Notifications filter"))),
+                        xs_html_text(L("Notifications filter..."))),
                     notifs_form))));
 
     xs *clear_all_action = xs_fmt("%s/admin/clear-notifications", user->actor);
