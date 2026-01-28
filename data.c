@@ -2668,7 +2668,7 @@ static int _load_raw_file(const char *fn, xs_val **data, int *size,
                 struct stat sb;
                 FILE *f;
 
-                if (stat(fn, &sb) == 0 && sb.st_mode & S_IFMT == S_IFREG) {
+                if (stat(fn, &sb) == 0 && (sb.st_mode&S_IFMT) == S_IFREG) {
                     if ((f = fopen(fn, "rb")) != NULL) {
                         *size = XS_ALL;
                         *data = xs_read(f, size);
