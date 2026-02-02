@@ -41,6 +41,7 @@ int srv_open(const char *basedir, int auto_upgrade)
     FILE *f;
     xs_str *error = NULL;
 
+    /* MUST be three letters */
     months[0] = LL("Jan");
     months[1] = LL("Feb");
     months[2] = LL("Mar");
