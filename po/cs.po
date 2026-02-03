@@ -813,124 +813,124 @@ msgstr "Emoji reakce: "
 
 #: html.c:1928
 msgid "Muted words..."
-msgstr ""
+msgstr "Ztlumená slova..."
 
 #: html.c:1930
 msgid "One word per line, partial matches count"
-msgstr ""
+msgstr "Co řádek, to slovo"
 
 #: html.c:1951
 msgid "Update muted words"
-msgstr ""
+msgstr "Aktualizovat ztlumená slova"
 
 #: html.c:2558
 msgid "Muted: "
-msgstr ""
+msgstr "Ztlumené: "
 
 #: html.c:4007
 msgid "Contact's posts"
-msgstr ""
+msgstr "Příspěvky uživatele"
 
 #: html.c:4076
 msgid "More (x 10)..."
-msgstr ""
+msgstr "Více (x 10)..."
 
 #: html.c:858
 msgid "End in 3 days"
-msgstr ""
+msgstr "Skončí za 3 dny"
 
 #: html.c:861
 msgid "End in 1 year"
-msgstr ""
+msgstr "Skončí za 1 rok"
 
 #: html.c:4160
 msgid "Likes"
-msgstr ""
+msgstr "Oblíbení"
 
 #: html.c:4161
 msgid "Emoji reacts"
-msgstr ""
+msgstr "Emoji reakce"
 
 #: html.c:4162
 msgid "Mentions"
-msgstr ""
+msgstr "Zmíňky"
 
 #: html.c:4163
 msgid "Announces"
-msgstr ""
+msgstr "Boosty"
 
 #: html.c:4164
 msgid "Follows"
-msgstr ""
+msgstr "Sledování"
 
 #: html.c:4165
 msgid "Unfollows"
-msgstr ""
+msgstr "Odsledování"
 
 #: html.c:4166
 msgid "Follow requests"
-msgstr ""
+msgstr "Žádosti o sledování"
 
 #: html.c:4167
 msgid "Blocks"
-msgstr ""
+msgstr "Blokace"
 
 #: html.c:4168
 msgid "Polls"
-msgstr ""
+msgstr "Ankety"
 
 #: html.c:4172
 msgid "Save"
-msgstr ""
+msgstr "Uložit"
 
 #: html.c:4180
 msgid "Notifications filter..."
-msgstr ""
+msgstr "Filtr notifikací..."
 
 #: data.c:45
 msgid "Jan"
-msgstr ""
+msgstr "Leden"
 
 #: data.c:46
 msgid "Feb"
-msgstr ""
+msgstr "Únor"
 
 #: data.c:47
 msgid "Mar"
-msgstr ""
+msgstr "Červen"
 
 #: data.c:48
 msgid "Apr"
-msgstr ""
+msgstr "Duben"
 
 #: data.c:49
 msgid "May"
-msgstr ""
+msgstr "Květen"
 
 #: data.c:50
 msgid "Jun"
-msgstr ""
+msgstr "Červen"
 
 #: data.c:51
 msgid "Jul"
-msgstr ""
+msgstr "Červenec"
 
 #: data.c:52
 msgid "Aug"
-msgstr ""
+msgstr "Srpen"
 
 #: data.c:53
 msgid "Sep"
-msgstr ""
+msgstr "Září"
 
 #: data.c:54
 msgid "Oct"
-msgstr ""
+msgstr Říjen"
 
 #: data.c:55
 msgid "Nov"
-msgstr ""
+msgstr "Listopad"
 
 #: data.c:56
 msgid "Dec"
-msgstr ""
+msgstr "Prosinec"
