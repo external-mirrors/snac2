@@ -897,7 +897,7 @@ msgstr "Únor"
 
 #: data.c:47
 msgid "Mar"
-msgstr "Červen"
+msgstr "Březen"
 
 #: data.c:48
 msgid "Apr"
