@@ -3685,7 +3685,12 @@ int mastoapi_post_handler(const xs_dict *req, const char *q_path,
                 /* skip the 'fake' part of the id */
                 mid = MID_TO_MD5(mid);
 
-                if (valid_status(timeline_get_by_md5(&snac, mid, &msg))) {
+                /* try timeline first, then global object store for remote posts */
+                int found = valid_status(timeline_get_by_md5(&snac, mid, &msg));
+                if (!found)
+                    found = valid_status(object_get_by_md5(mid, &msg));
+
+                if (found) {
                     const char *id   = xs_dict_get(msg, "id");
                     const char *atto = get_atto(msg);
 
