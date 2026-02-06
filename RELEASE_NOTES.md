@@ -10,6 +10,8 @@ Configurable limit for poll items (contributed by dandelions).
 
 Fixed incorrect scope when editing a post (contributed by dandelions).
 
+Minor tweak to improve signature key retrieving for some Wordpress configurations.
+
 Updated Czech, German, Brazilian Portuguese, Spanish translations (contributed by pmjv, zen, daltux).
 
 ## 2.89
