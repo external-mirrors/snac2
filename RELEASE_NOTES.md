@@ -14,7 +14,7 @@ Minor tweak to improve signature key retrieving for some Wordpress configuration
 
 Change the strip_exif logic to work with the already existing OpenBSD sandbox (contributed by oxzi).
 
-Mastodon API: Add poll creation (contributed by davidrv00).
+Mastodon API: Add poll creation (contributed by davidrv00), fixed a voting bug (contributed by davidrv00).
 
 Updated Czech, German, Brazilian Portuguese, Spanish translations (contributed by pmjv, zen, daltux).
 
