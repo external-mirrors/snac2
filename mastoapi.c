@@ -3713,44 +3713,65 @@ int mastoapi_post_handler(const xs_dict *req, const char *q_path,
                 /* skip the 'fake' part of the id */
                 mid = MID_TO_MD5(mid);
 
-                if (valid_status(timeline_get_by_md5(&snac, mid, &msg))) {
+                /* try timeline first, then global object store for remote posts */
+                int found = valid_status(timeline_get_by_md5(&snac, mid, &msg));
+                if (!found)
+                    found = valid_status(object_get_by_md5(mid, &msg));
+
+                if (found) {
                     const char *id   = xs_dict_get(msg, "id");
                     const char *atto = get_atto(msg);
+                    int closed = 0;
+                    const char *f_closed = NULL;
 
-                    const xs_list *opts = xs_dict_get(msg, "oneOf");
-                    if (opts == NULL)
-                        opts = xs_dict_get(msg, "anyOf");
+                    if ((f_closed = xs_dict_get(msg, "closed")) != NULL) {
+                        /* it has a closed date... but is it in the past? */
+                        time_t t0 = time(NULL);
+                        time_t t1 = xs_parse_iso_date(f_closed, 0);
 
-                    if (op == NULL) {
+                        if (t1 < t0)
+                            closed = 1;
                     }
-                    else
-                    if (strcmp(op, "votes") == 0) {
-                        const xs_list *choices = xs_dict_get(args, "choices[]");
 
-                        if (xs_is_null(choices))
-                            choices = xs_dict_get(args, "choices");
+                    if (closed || was_question_voted(&snac, id))
+                        status = HTTP_STATUS_UNPROCESSABLE_CONTENT;
+                    else {
+                        const xs_list *opts = xs_dict_get(msg, "oneOf");
+                        if (opts == NULL)
+                            opts = xs_dict_get(msg, "anyOf");
 
-                        if (xs_type(choices) == XSTYPE_LIST) {
-                            const xs_str *v;
+                        if (op == NULL) {
+                        }
+                        else {
+                            if (strcmp(op, "votes") == 0) {
+                                const xs_list *choices = xs_dict_get(args, "choices[]");
 
-                            int c = 0;
-                            while (xs_list_next(choices, &v, &c)) {
-                                int io           = atoi(v);
-                                const xs_dict *o = xs_list_get(opts, io);
+                                if (xs_is_null(choices))
+                                    choices = xs_dict_get(args, "choices");
 
-                                if (o) {
-                                    const char *name = xs_dict_get(o, "name");
+                                if (xs_type(choices) == XSTYPE_LIST) {
+                                    const xs_str *v;
 
-                                    xs *msg = msg_note(&snac, "", atto, (char *)id, NULL, 1, NULL, NULL);
-                                    msg = xs_dict_append(msg, "name", name);
+                                    int c = 0;
+                                    while (xs_list_next(choices, &v, &c)) {
+                                        int io           = atoi(v);
+                                        const xs_dict *o = xs_list_get(opts, io);
 
-                                    xs *c_msg = msg_create(&snac, msg);
-                                    enqueue_message(&snac, c_msg);
-                                    timeline_add(&snac, xs_dict_get(msg, "id"), msg);
+                                        if (o) {
+                                            const char *name = xs_dict_get(o, "name");
+
+                                            xs *msg = msg_note(&snac, "", atto, (char *)id, NULL, 1, NULL, NULL);
+                                            msg = xs_dict_append(msg, "name", name);
+
+                                            xs *c_msg = msg_create(&snac, msg);
+                                            enqueue_message(&snac, c_msg);
+                                            timeline_add(&snac, xs_dict_get(msg, "id"), msg);
+                                        }
+                                    }
+
+                                    out = mastoapi_poll(&snac, msg);
                                 }
                             }
-
-                            out = mastoapi_poll(&snac, msg);
                         }
                     }
                 }
