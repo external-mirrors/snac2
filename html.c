@@ -4260,6 +4260,12 @@ xs_str *html_notifications(snac *user, int skip, int show)
 
         const char *html_url = xs_dict_get_def(actor, "url", actor_id);
 
+        if (xs_is_list(html_url))
+            html_url = xs_list_get(html_url, 0);
+
+        if (!xs_is_string(html_url))
+            html_url = actor_id;
+
         xs *label_sanitized = sanitize(type);
         const char *label = label_sanitized;
 
