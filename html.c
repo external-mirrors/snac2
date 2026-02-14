@@ -4251,6 +4251,8 @@ xs_str *html_notifications(snac *user, int skip, int show)
             enqueue_actor_refresh(user, actor_id, 0);
         }
 
+        const char *html_url = xs_dict_get_def(actor, "url", actor_id);
+
         xs *label_sanitized = sanitize(type);
         const char *label = label_sanitized;
 
@@ -4294,7 +4296,7 @@ xs_str *html_notifications(snac *user, int skip, int show)
                     xs_html_raw(label),
                     xs_html_text(" by "),
                     xs_html_tag("a",
-                        xs_html_attr("href", actor_id),
+                        xs_html_attr("href", html_url),
                         xs_html_raw(a_name))), /* a_name is already sanitized */
                 xs_html_text(" "),
                 xs_html_tag("time",
