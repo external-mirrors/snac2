@@ -3712,12 +3712,12 @@ xs_str *html_timeline(snac *user, const xs_list *list, int read_only,
 }
 
 
-xs_html *html_people_list(snac *user, xs_list *list, const char *header, const char *t, const char *proxy, int do_count)
+xs_html *html_people_list(snac *user, xs_list *list, const char *header, const char *t, const char *proxy, int count)
 {
     xs_html *snac_posts;
     xs *header_cnt;
-    if (do_count)
-        header_cnt = xs_fmt("%s - %d\n", header, xs_list_len(list));
+    if (count > -1)
+        header_cnt = xs_fmt("%s - %d\n", header, count);
     else
         header_cnt = xs_fmt("%s\n", header);
 
@@ -3965,12 +3965,12 @@ xs_str *html_people(snac *user)
 
     if (xs_list_len(pending) || xs_is_true(xs_dict_get(user->config, "approve_followers"))) {
         xs_html_add(lists,
-            html_people_list(user, pending, L("Pending follow confirmations"), "p", proxy, 1));
+            html_people_list(user, pending, L("Pending follow confirmations"), "p", proxy, xs_list_len(pending)));
     }
 
     xs_html_add(lists,
-        html_people_list(user, wing, L("People you follow"), "i", proxy, 1),
-        html_people_list(user, wers, L("People that follow you"), "e", proxy, 1));
+        html_people_list(user, wing, L("People you follow"), "i", proxy, following_list_len(user)),
+        html_people_list(user, wers, L("People that follow you"), "e", proxy, xs_list_len(wers)));
 
     xs_html *html = xs_html_tag("html",
         html_user_head(user, NULL, NULL),
@@ -4001,7 +4001,7 @@ xs_str *html_people_one(snac *user, const char *actor, const xs_list *list,
     xs *foll = xs_list_append(xs_list_new(), actor);
 
     xs_html_add(lists,
-        html_people_list(user, foll, L("Contact's posts"), "p", proxy, 0));
+        html_people_list(user, foll, L("Contact's posts"), "p", proxy, -1));
 
     xs_html_add(body, lists);
 
