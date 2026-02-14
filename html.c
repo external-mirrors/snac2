@@ -275,6 +275,13 @@ xs_html *html_actor_icon(snac *user, xs_dict *actor, const char *date,
 
     const char *actor_id = xs_dict_get(actor, "id");
     const char *html_url = xs_dict_get_def(actor, "url", actor_id);
+
+    if (xs_is_list(html_url))
+        html_url = xs_list_get(html_url, 0);
+
+    if (!xs_is_string(html_url))
+        html_url = actor_id;
+
     xs *href = NULL;
 
     if (user) {
