@@ -274,6 +274,7 @@ xs_html *html_actor_icon(snac *user, xs_dict *actor, const char *date,
         avatar = xs_fmt("data:image/png;base64, %s", default_avatar_base64());
 
     const char *actor_id = xs_dict_get(actor, "id");
+    const char *html_url = xs_dict_get_def(actor, "url", actor_id);
     xs *href = NULL;
 
     if (user) {
@@ -287,7 +288,7 @@ xs_html *html_actor_icon(snac *user, xs_dict *actor, const char *date,
     }
 
     if (href == NULL)
-        href = xs_dup(actor_id);
+        href = xs_dup(html_url);
 
     xs_html *name_link = xs_html_tag("a",
             xs_html_attr("href",    href),
@@ -453,7 +454,7 @@ xs_html *html_actor_icon(snac *user, xs_dict *actor, const char *date,
         xs_html_add(actor_icon,
             xs_html_sctag("br", NULL),
             xs_html_tag("a",
-                xs_html_attr("href",  xs_dict_get(actor, "id")),
+                xs_html_attr("href",  html_url),
                 xs_html_attr("class", "p-author-tag h-card snac-author-tag"),
                 xs_html_text(user)));
     }
