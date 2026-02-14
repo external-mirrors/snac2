@@ -12,6 +12,8 @@ Fixed incorrect scope when editing a post (contributed by dandelions).
 
 Minor tweak to improve signature key retrieving for some Wordpress configurations.
 
+Fixed web UI incorrect links to actor public pages for some configurations.
+
 Change the strip_exif logic to work with the already existing OpenBSD sandbox (contributed by oxzi).
 
 Mastodon API: Add poll creation (contributed by davidrv00), fixed a voting bug (contributed by davidrv00), added a fix to verify_credentials (contributed by ag-eitilt).
