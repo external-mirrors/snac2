@@ -1116,9 +1116,10 @@ void httpd(void)
                 FILE *f = fdopen(cs, "r+");
                 xs *job = xs_data_new(&f, sizeof(FILE *));
                 job_post(job, 1);
-            }
-            else
+            } else {
+                srv_log(xs_fmt("error: xs_socket_accept failed: %s", strerror(errno)));
                 break;
+            }
         }
     }
 
