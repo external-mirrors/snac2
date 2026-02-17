@@ -1,0 +1,7 @@
+# OpenBSD login.conf(5) entry to increase the openfiles for the snac login
+# class. Further documented under "Number of open files on OpenBSD and login
+# classes" in snac(8).
+
+snac:\
+	:openfiles=4096:\
+	:tc=daemon:
