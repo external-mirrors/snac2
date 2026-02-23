@@ -294,8 +294,13 @@ static xs_val *_xs_json_load_lexer(FILE *f, js_type *t)
                 v = xs_utf8_insert(v, cp, &offset);
             }
             else {
-                char cc = c;
-                v = xs_insert_m(v, offset, &cc, 1);
+                if (c >= 0 && c < ' ') {
+                    v = xs_utf8_insert(v, c + 0x2400, &offset);
+                }
+                else {
+                    char cc = c;
+                    v = xs_insert_m(v, offset, &cc, 1);
+                }
 
                 if (!xs_is_string(v)) {
                     *t = JS_ERROR;
