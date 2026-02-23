@@ -289,6 +289,9 @@ xs_dict *xs_multipart_form_data(const char *payload, int p_size, const char *hea
         po = p - payload;
         ps = q - p - 2;     /* - 2 because the final \r\n */
 
+        if (ps <= 0)
+            break;
+
         /* is it a filename? */
         if (fn != NULL) {
             /* p_var value is a list */
