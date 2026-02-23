@@ -289,9 +289,6 @@ xs_dict *xs_multipart_form_data(const char *payload, int p_size, const char *hea
         po = p - payload;
         ps = q - p - 2;     /* - 2 because the final \r\n */
 
-        if (ps <= 0)
-            break;
-
         /* is it a filename? */
         if (fn != NULL) {
             /* p_var value is a list */
@@ -315,12 +312,14 @@ xs_dict *xs_multipart_form_data(const char *payload, int p_size, const char *hea
         }
         else {
             /* regular variable; just copy */
-            xs *vc = xs_realloc(NULL, ps + 1);
-            memcpy(vc, payload + po, ps);
-            vc[ps] = '\0';
+            if (ps > 0) {
+                xs *vc = xs_realloc(NULL, ps + 1);
+                memcpy(vc, payload + po, ps);
+                vc[ps] = '\0';
 
-            if (xs_is_string(vn) && xs_is_string(vc))
-                p_vars = xs_dict_append(p_vars, vn, vc);
+                if (xs_is_string(vn) && xs_is_string(vc))
+                    p_vars = xs_dict_append(p_vars, vn, vc);
+            }
         }
 
         /* move on */
