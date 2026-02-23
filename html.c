@@ -2799,7 +2799,7 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
                 xs_html_add(snac_content,
                     xs_html_tag("blockquote",
                         xs_html_attr("class", "snac-quoted-post"),
-                        html_entry(user, quoted_post, 1, 1, NULL, 1)));
+                        html_entry(user, quoted_post, 1, level + 1, NULL, 1)));
             }
             else
             if (user)
