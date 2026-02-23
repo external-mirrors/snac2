@@ -282,6 +282,10 @@ static xs_val *_xs_json_load_lexer(FILE *f, js_type *t)
                         cp += 0x2400;
 
                     break;
+
+                default:
+                    *t = JS_ERROR;
+                    break;
                 }
 
                 v = xs_utf8_insert(v, cp, &offset);
