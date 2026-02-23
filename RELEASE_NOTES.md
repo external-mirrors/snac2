@@ -6,6 +6,8 @@ Added some OpenBSD-specific documentation (contributed by oxzi).
 
 Fixed some timezones (contributed by matoken).
 
+Fixed some crashes (special thanks to Louis Merlin for helping me with this).
+
 ## 2.90
 
 Minor tweak to improve signature key retrieving for some Wordpress configurations.
