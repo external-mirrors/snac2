@@ -1,5 +1,9 @@
 # Release Notes
 
+## UNRELEASED
+
+Added some OpenBSD-specific documentation (contributed by oxzi).
+
 ## 2.90
 
 Minor tweak to improve signature key retrieving for some Wordpress configurations.
