@@ -257,6 +257,7 @@ static xs_val *_xs_json_load_lexer(FILE *f, js_type *t)
                 case 't': cp = '\t'; break;
                 case '"': cp = '"'; break;
                 case '\\': cp = '\\'; break;
+                case '/': cp = '/'; break;
                 case 'u': /* Unicode codepoint as an hex char */
                     if (fscanf(f, "%04x", &cp) != 1) {
                         *t = JS_ERROR;
