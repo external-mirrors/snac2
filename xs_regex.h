@@ -58,7 +58,7 @@ xs_list *xs_regex_split_n(const char *str, const char *rx, int count)
     }
 
     /* add the rest of the string */
-    list = xs_list_append(list, p);
+    list = xs_list_append(list, xs_is_string(p) ? p : "");
 
     regfree(&re);
 
