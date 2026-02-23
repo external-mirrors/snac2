@@ -704,6 +704,41 @@ out there. If you want your language file to be included in the standard
 .Nm
 distribution, please send me a link to it via the Fediverse to @grunfink@comam.es
 or make a PR via the Git repository.
+.Ss Number of open files on OpenBSD and login classes
+Being a file intensive application, even a small
+.Nm
+instance might open lots of files, especially when forwarding a new post to
+other instances.
+.Pp
+OpenBSD's daemon login class comes with a very low
+.Pa openfiles
+value, usually restricting the amount of open files to 128 (cur), 1024 (max).
+This can result in
+.Nm
+to stop working due to too many open files.
+.Pp
+To continue operation, a new
+.Pa snac
+login class can be created. Please consult
+.Xr login.conf 5
+and afterwards create a new login class as follows.
+.Bd -literal -offset indent
+snac:\\
+    :openfiles=4096:\\
+    :tc=daemon:
+.Ed
+.Pp
+After rebuilding the
+.Pa /etc/login.conf.db ,
+ensure that your snac user's login class is set to
+.Pa snac :
+.Bd -literal -offset indent
+# cap_mkdb /etc/login.conf
+# usermod -L snac SNACUSER
+.Ed
+.Pp
+One restart later, the daemon should run with increased
+.Pa openfiles .
 .Sh ENVIRONMENT
 .Bl -tag -width Ds
 .It Ev DEBUG
