@@ -1,4 +1,4 @@
-![susie](https://comam.es/snac-doc/susie64.png)
+![](https://comam.es/snac-doc/susie64.png)
 
 # snac
 
