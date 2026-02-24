@@ -2,6 +2,8 @@
 
 ## UNRELEASED
 
+Fixed some local posts not being shown if the replied post is deleted.
+
 Added some OpenBSD-specific documentation (contributed by oxzi).
 
 Fixed some timezones (contributed by matoken).
