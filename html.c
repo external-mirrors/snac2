@@ -483,9 +483,14 @@ xs_html *html_msg_icon(snac *user, const char *actor_id, const xs_dict *msg,
         const char *type = xs_dict_get(msg, "type");
         const int scope = get_msg_visibility(msg);
 
-        if (xs_match(type, POSTLIKE_OBJECT_TYPE))
-            url = xs_dict_get(msg, "id");
+        if (xs_match(type, POSTLIKE_OBJECT_TYPE)) {
+            url = xs_dict_get(msg, "url");
+            if (xs_is_list(url))
+                url = xs_list_get(url, 0);
 
+            if (!xs_is_string(url))
+                url = xs_dict_get(msg, "id");
+        }
 
         date  = xs_dict_get(msg, "published");
         udate = xs_dict_get(msg, "updated");
