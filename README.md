@@ -1,3 +1,5 @@
+![susie](https://comam.es/snac-doc/susie64.png)
+
 # snac
 
 A simple, minimalistic ActivityPub instance
