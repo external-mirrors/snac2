@@ -4002,6 +4002,8 @@ xs_str *html_people_one(snac *user, const char *actor, const xs_list *list,
     xs_list *p = (xs_list *)list;
     const char *v;
 
+    enqueue_actor_refresh(user, actor, 0);
+
     if (xs_is_true(xs_dict_get(srv_config, "proxy_media")))
         proxy = user->actor;
 
