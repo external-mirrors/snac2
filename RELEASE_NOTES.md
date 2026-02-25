@@ -12,6 +12,8 @@ Fixed some timezones (contributed by matoken).
 
 Fixed some crashes (special thanks to Louis Merlin for helping me with this).
 
+Updated Docker scripts to avoid generating a useless log file.
+
 ## 2.90
 
 Minor tweak to improve signature key retrieving for some Wordpress configurations.
