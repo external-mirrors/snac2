@@ -225,7 +225,7 @@ xs_str *html_date_label(snac *user, const char *date)
             return xs_str_utctime(t, "%Y-%m-%d %H:%M");
         }
 
-        xs_str *date = xs_str_utctime(t, "%b%d %H:%M");
+        xs_str *date = xs_str_utctime(t, "%b %d %H:%M");
 
         struct tm tm;
         localtime_r(&t, &tm);
