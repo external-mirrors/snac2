@@ -889,48 +889,48 @@ msgstr "Filtr notifikací..."
 
 #: data.c:45
 msgid "Jan"
-msgstr "Leden"
+msgstr "led"
 
 #: data.c:46
 msgid "Feb"
-msgstr "Únor"
+msgstr "úno"
 
 #: data.c:47
 msgid "Mar"
-msgstr "Březen"
+msgstr "bře"
 
 #: data.c:48
 msgid "Apr"
-msgstr "Duben"
+msgstr "dub"
 
 #: data.c:49
 msgid "May"
-msgstr "Květen"
+msgstr "kvě"
 
 #: data.c:50
 msgid "Jun"
-msgstr "Červen"
+msgstr "čer"
 
 #: data.c:51
 msgid "Jul"
-msgstr "Červenec"
+msgstr "čvc"
 
 #: data.c:52
 msgid "Aug"
-msgstr "Srpen"
+msgstr "srp"
 
 #: data.c:53
 msgid "Sep"
-msgstr "Září"
+msgstr "zář"
 
 #: data.c:54
 msgid "Oct"
-msgstr "Říjen"
+msgstr "říj"
 
 #: data.c:55
 msgid "Nov"
-msgstr "Listopad"
+msgstr "lis"
 
 #: data.c:56
 msgid "Dec"
-msgstr "Prosinec"
+msgstr "pro"
