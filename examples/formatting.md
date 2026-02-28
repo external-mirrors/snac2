@@ -1,3 +1,5 @@
+## Your snac posts can be fancy
+
 Messages in `snac` allow a special subset of Markdown, that includes *emphasized*, **strong**, `monospaced`, ~~strikethrough~~ and __underlined__ styles by surrounding text with one asterisk, two asterisks, backquotes, two tildes and two underlines, respectively.
 
 Line breaks are respected and output as you write them.
@@ -25,7 +27,7 @@ It also allows preformatted text using three backquotes in a single line:
 - are also supported,
 - by starting a line with a hyphen or asterisk followed by a space.
 
-URLs like https://en.wikipedia.org/wiki/Main_Page are made clickable, https://comam.es/what-is-snac.
+URLs like https://en.wikipedia.org/wiki/Main_Page are made clickable.
 
 Links can also be written in [standard Markdown style](https://comam.es/what-is-snac).
 
@@ -45,4 +47,6 @@ Headings can be defined using one, two, or three hash symbols in the beginning o
 
 But please take note that every ActivityPub implementation out there have its own rules for filtering out these formatting styles, so you can only guess what other people will really see.
 
-These acrobatics are better documented in the `snac(5)` man page.
+These acrobatics are better documented in the [snac(5)](https://comam.es/snac-doc/snac.5.html) man page.
+
+[WHAT IS THIS SNAC THING?](https://comam.es/what-is-snac)
