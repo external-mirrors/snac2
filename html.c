@@ -3758,7 +3758,7 @@ xs_html *html_people_list(snac *user, xs_list *list, const char *header, const c
                 xs_html_tag("div",
                     xs_html_attr("class", "snac-post-header"),
                     html_actor_icon(user, actor, xs_dict_get(actor, "published"),
-                                    NULL, NULL, -1, 1, proxy, NULL, NULL)));
+                                    NULL, NULL, -1, 0, proxy, NULL, NULL)));
 
             /* content (user bio) */
             const char *c = xs_dict_get(actor, "summary");
