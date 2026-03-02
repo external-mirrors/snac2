@@ -583,7 +583,7 @@ msgstr "Zablokovat všechno od tohoto uživatele"
 
 #: html.c:3936
 msgid "Direct Message..."
-msgstr "Soukomá zpráva..."
+msgstr "Soukromá zpráva..."
 
 #: html.c:3971
 msgid "Pending follow confirmations"
