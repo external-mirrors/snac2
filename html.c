@@ -4542,7 +4542,6 @@ int html_get_handler(const xs_dict *req, const char *q_path,
 
         if (xs_type(login) == XSTYPE_STRING && xs_type(content) == XSTYPE_STRING) {
             xs *b64 = xs_base64_enc(content, strlen(content));
-
             srv_log(xs_fmt("share-bridge for user '%s'", login));
 
             *body = xs_fmt("%s/%s/share?content=%s", srv_baseurl, login, b64);
@@ -5191,8 +5190,9 @@ int html_get_handler(const xs_dict *req, const char *q_path,
         }
         else {
             const char *b64 = xs_dict_get(q_vars, "content");
+            xs *b64_2 = xs_replace(b64, " ", "+");
             int sz;
-            xs *content = xs_base64_dec(b64, &sz);
+            xs *content = xs_base64_dec(b64_2, &sz);
             xs *msg = msg_note(&snac, content, NULL, NULL, NULL, 0, NULL, NULL);
             xs *c_msg = msg_create(&snac, msg);
 
