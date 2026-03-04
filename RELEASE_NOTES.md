@@ -6,6 +6,8 @@ Fixed some local posts not being shown if the replied post is deleted.
 
 Fixed web UI incorrect links to public posts for some configurations.
 
+Fixed encoding bug in Mastodon-style share links.
+
 Added some OpenBSD-specific documentation (contributed by oxzi).
 
 Fixed some timezones (contributed by matoken).
