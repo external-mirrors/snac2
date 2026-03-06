@@ -1,9 +1,9 @@
 #!/bin/ksh
 
-daemon_args="httpd /PATH/TO/SNAC/BASEDIR"
+daemon="/usr/local/bin/snac"
+daemon_flags="httpd /PATH/TO/SNAC/BASEDIR"
 daemon_logger="daemon.info"
 daemon_user="SNACUSER"
-daemon="/usr/local/bin/snac ${daemon_args}"
 
 . /etc/rc.d/rc.subr
 
