@@ -16,6 +16,8 @@ Fixed some crashes (special thanks to Louis Merlin for helping me with this).
 
 Updated Docker scripts to avoid generating a useless log file.
 
+Added a line in the README file saying that no AI has been used in creating this software.
+
 ## 2.90
 
 Minor tweak to improve signature key retrieving for some Wordpress configurations.
