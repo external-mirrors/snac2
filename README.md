@@ -128,6 +128,8 @@ See the LICENSE file for details.
 
 grunfink [@grunfink@comam.es](https://comam.es/snac/grunfink) with the help of others.
 
+No IA has been used to create this software.
+
 Buy grunfink a coffee: https://ko-fi.com/grunfink/
 
 Contribute via LiberaPay: https://liberapay.com/grunfink/
