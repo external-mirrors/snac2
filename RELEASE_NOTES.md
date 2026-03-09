@@ -16,7 +16,7 @@ Fixed some crashes (special thanks to Louis Merlin for helping me with this).
 
 Updated Docker scripts to avoid generating a useless log file.
 
-Added a line in the README file saying that no AI has been used in creating this software.
+Added a new CONTRIBUTING.md file.
 
 ## 2.90
 
