@@ -18,6 +18,8 @@ Updated Docker scripts to avoid generating a useless log file.
 
 Added a new CONTRIBUTING.md file.
 
+snac is now available as a Yunohost [app](https://apps.yunohost.org/app/snac). Thank you very much to Bruno Cesar Rocha for this.
+
 ## 2.90
 
 Minor tweak to improve signature key retrieving for some Wordpress configurations.
