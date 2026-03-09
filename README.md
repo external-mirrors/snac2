@@ -124,11 +124,13 @@ This will:
 
 See the LICENSE file for details.
 
+## Contributing
+
+See the CONTRIBUTING.md file for details.
+
 ## Author
 
 grunfink [@grunfink@comam.es](https://comam.es/snac/grunfink) with the help of others.
-
-No IA has been used to create this software.
 
 Buy grunfink a coffee: https://ko-fi.com/grunfink/
 
