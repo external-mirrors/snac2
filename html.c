@@ -5981,6 +5981,9 @@ int html_post_handler(const xs_dict *req, const char *q_path,
     if (p_path && strcmp(p_path, "admin/followed-hashtags") == 0) { /** **/
         const char *followed_hashtags = xs_dict_get(p_vars, "followed_hashtags");
 
+        if (xs_is_null(followed_hashtags))
+            followed_hashtags = "";
+
         if (xs_is_string(followed_hashtags)) {
             xs *new_hashtags = xs_list_new();
             xs *l = xs_split(followed_hashtags, "\n");
@@ -6016,6 +6019,9 @@ int html_post_handler(const xs_dict *req, const char *q_path,
     else
     if (p_path && strcmp(p_path, "admin/blocked-hashtags") == 0) { /** **/
         const char *hashtags = xs_dict_get(p_vars, "blocked_hashtags");
+
+        if (xs_is_null(hashtags))
+            hashtags = "";
 
         if (xs_is_string(hashtags)) {
             xs *new_hashtags = xs_list_new();
