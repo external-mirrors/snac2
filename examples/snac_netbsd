@@ -31,4 +31,8 @@ snac_precmd() {
 }
 
 load_rc_config $name
+
+# increase the number of file descriptors
+ulimit -n 1024
+
 run_rc_command "$1"
