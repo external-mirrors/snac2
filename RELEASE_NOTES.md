@@ -18,6 +18,8 @@ Fixed some crashes (special thanks to Louis Merlin for helping me with this).
 
 Updated Docker scripts to avoid generating a useless log file.
 
+Fixed some memory leaks, key generation errors and HTML inconsistencies (contributed by dandelions).
+
 Added a new CONTRIBUTING.md file. Among other guidelines, I explicitly say there that AI contributions are **not** accepted.
 
 snac is now available as a Yunohost [app](https://apps.yunohost.org/app/snac). Thank you very much to Bruno Cesar Rocha for this.
