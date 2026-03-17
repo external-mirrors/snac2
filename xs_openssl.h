@@ -122,12 +122,12 @@ xs_dict *xs_evp_genkey(int bits)
     EVP_PKEY *pkey = NULL;
 
     if ((ctx = EVP_PKEY_CTX_new_id(EVP_PKEY_RSA, NULL)) == NULL)
-        goto end;
+        return NULL;
 
     if (EVP_PKEY_keygen_init(ctx) <= 0 ||
         EVP_PKEY_CTX_set_rsa_keygen_bits(ctx, bits) <= 0 ||
         EVP_PKEY_keygen(ctx, &pkey) <= 0)
-        goto end;
+        return NULL;
 
     BIO *bs = BIO_new(BIO_s_mem());
     BIO *bp = BIO_new(BIO_s_mem());
