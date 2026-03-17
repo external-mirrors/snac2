@@ -645,12 +645,13 @@ xs_list *recipient_list(snac *snac, const xs_dict *msg, int expand_public)
 
         while (xs_list_iter(&l, &v)) {
             if (expand_public) {
+                xs *followers_url = xs_fmt("%s/followers", snac->actor);
                 if (strcmp(v, public_address) == 0 ||
                     /* check if it's a followers collection URL */
                     (xs_type(v) == XSTYPE_STRING &&
-                        strcmp(v, xs_fmt("%s/followers", snac->actor)) == 0) ||
+                        strcmp(v, followers_url) == 0) ||
                     (xs_type(v) == XSTYPE_LIST &&
-                        xs_list_in(v, xs_fmt("%s/followers", snac->actor)) != -1)) {
+                        xs_list_in(v, followers_url) != -1)) {
                     /* iterate the followers and add them */
                     xs *fwers = follower_list(snac);
                     const char *actor;
@@ -1624,6 +1625,7 @@ xs_dict *msg_emoji_init(snac *snac, const char *mid, const char *eid_o)
     else if (*eid == '%') {
         content = xs_url_dec_emoji(xs_dup(eid));
         if (content == NULL) {
+            xs_free(n_msg);
             return NULL;
         }
     }
@@ -1631,8 +1633,10 @@ xs_dict *msg_emoji_init(snac *snac, const char *mid, const char *eid_o)
         content = xs_fmt(":%s:", eid);
         const char *emo = xs_dict_get(emjs, content);
 
-        if (emo == NULL)
+        if (emo == NULL) {
+            xs_free(n_msg);
             return NULL;
+        }
 
         if (xs_match(emo, "https://*|http://*")) { /* emoji is an URL to an image */
             icon = xs_dict_set(icon, "type", "Image");
@@ -1667,9 +1671,10 @@ xs_dict *msg_emoji_init(snac *snac, const char *mid, const char *eid_o)
 
     accounts = xs_list_append(accounts, snac->actor);
 
+    xs *to_duplicate = xs_dup(xs_list_get(xs_dict_get(n_msg, "to"), 1));
     n_msg = xs_dict_set(n_msg, "content", content);
     n_msg = xs_dict_set(n_msg, "accounts", accounts);
-    n_msg = xs_dict_set(n_msg, "attributedTo", xs_list_get(xs_dict_get(n_msg, "to"), 1));
+    n_msg = xs_dict_set(n_msg, "attributedTo", to_duplicate);
     n_msg = xs_dict_set(n_msg, "accountId", snac->uid);
     n_msg = xs_dict_set(n_msg, "tag", tag);
 
@@ -1679,6 +1684,7 @@ xs_dict *msg_emoji_init(snac *snac, const char *mid, const char *eid_o)
         return n_msg;
     }
 
+    xs_free(n_msg);
     return NULL;
 }
 
@@ -1710,13 +1716,14 @@ xs_dict *msg_emoji_unreact(snac *user, const char *mid, const char *eid)
     if (strlen(eid) == 12 && *eid == '%') {
         eid = xs_url_dec(eid);
         if (eid == NULL) {
+            xs_free(msg);
             return NULL;
         }
     }
 
     /* lets get all emotes for this msg, and compare it to our content */
     while (xs_list_next(emotes, &v, &c)) {
-        xs_dict *e = NULL;
+        xs *e = NULL;
         if (valid_status(object_get_by_md5(v, &e))) {
             const char *content = xs_dict_get(e, "content");
             const char *id = xs_dict_get(e, "id");
@@ -1730,6 +1737,7 @@ xs_dict *msg_emoji_unreact(snac *user, const char *mid, const char *eid)
         }
     }
 
+    xs_free(msg);
     return NULL;
 }
 

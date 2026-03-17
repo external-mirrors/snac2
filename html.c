@@ -5572,7 +5572,7 @@ int html_post_handler(const xs_dict *req, const char *q_path,
 
             eid = xs_strip_chars_i(eid, ":");
 
-            const xs_dict *ret = msg_emoji_init(&snac, id, eid);
+            xs *ret = msg_emoji_init(&snac, id, eid);
             /* fails if either invalid or already reacted */
             if (!ret)
                 ret = msg_emoji_unreact(&snac, id, eid);
