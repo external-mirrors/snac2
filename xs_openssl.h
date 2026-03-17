@@ -153,7 +153,6 @@ xs_dict *xs_evp_genkey(int bits)
     EVP_PKEY_free(pkey);
     EVP_PKEY_CTX_free(ctx);
 
-end:
     return keypair;
 }
 
