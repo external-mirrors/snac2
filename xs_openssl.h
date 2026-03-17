@@ -38,7 +38,7 @@ xs_str *xs_base64_enc(const xs_val *data, int sz)
 {
     BIO *mem, *b64;
     BUF_MEM *bptr;
- 
+
     b64 = BIO_new(BIO_f_base64());
     mem = BIO_new(BIO_s_mem());
     b64 = BIO_push(b64, mem);
@@ -118,7 +118,7 @@ xs_dict *xs_evp_genkey(int bits)
 /* generates an RSA keypair using the EVP interface */
 {
     xs_dict *keypair = NULL;
-    EVP_PKEY_CTX *ctx;
+    EVP_PKEY_CTX *ctx = NULL;
     EVP_PKEY *pkey = NULL;
 
     if ((ctx = EVP_PKEY_CTX_new_id(EVP_PKEY_RSA, NULL)) == NULL)
@@ -142,11 +142,16 @@ xs_dict *xs_evp_genkey(int bits)
 
     keypair = xs_dict_new();
 
-    keypair = xs_dict_append(keypair, "secret", sptr->data);
-    keypair = xs_dict_append(keypair, "public", pptr->data);
+    xs *secret = xs_str_new_sz(sptr->data, sptr->length);
+    xs *public = xs_str_new_sz(pptr->data, pptr->length);
+    keypair = xs_dict_append(keypair, "secret", secret);
+    keypair = xs_dict_append(keypair, "public", public);
 
     BIO_free(bs);
     BIO_free(bp);
+
+    EVP_PKEY_free(pkey);
+    EVP_PKEY_CTX_free(ctx);
 
 end:
     return keypair;
