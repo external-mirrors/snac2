@@ -1451,6 +1451,7 @@ xs_html *html_checkbox(const char *form_name, const char *label, int flag)
         xs_html_sctag("input",
             xs_html_attr("type",     "checkbox"),
             xs_html_attr("name",     form_name),
+            xs_html_attr("id",       form_name),
             xs_html_attr(flag ? "checked" : "", NULL)),
         xs_html_tag("label",
             xs_html_attr("for", form_name),
