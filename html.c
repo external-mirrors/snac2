@@ -4112,7 +4112,7 @@ void notify_filter(snac *user, const xs_dict *p_vars)
     int folreq_on = (v = xs_dict_get(p_vars, "folreqs_on")) ? strcmp(v, "on") == 0 : 0;
     int blocks_on = (v = xs_dict_get(p_vars, "blocks_on")) ? strcmp(v, "on") == 0 : 0;
     int polls_on  = (v = xs_dict_get(p_vars, "polls_on")) ? strcmp(v, "on") == 0 : 0;
-    xs_dict *filter = xs_dict_new();
+    xs *filter = xs_dict_new();
     filter = xs_dict_set(filter, "likes", xs_stock(likes_on ? XSTYPE_TRUE : XSTYPE_FALSE));
     filter = xs_dict_set(filter, "reacts", xs_stock(reacts_on ? XSTYPE_TRUE : XSTYPE_FALSE));
     filter = xs_dict_set(filter, "mentions", xs_stock(ments_on ? XSTYPE_TRUE : XSTYPE_FALSE));
@@ -4123,6 +4123,7 @@ void notify_filter(snac *user, const xs_dict *p_vars)
     filter = xs_dict_set(filter, "blocks", xs_stock(blocks_on ? XSTYPE_TRUE : XSTYPE_FALSE));
     filter = xs_dict_set(filter, "polls", xs_stock(polls_on ? XSTYPE_TRUE : XSTYPE_FALSE));
     user->config = xs_dict_set(user->config, "notify_filter", filter);
+    user->tz = xs_dict_get_def(user->config, "tz", "UTC"); // previous line invalidates user->tz
 }
 
 xs_str *html_notifications(snac *user, int skip, int show)
@@ -4138,7 +4139,9 @@ xs_str *html_notifications(snac *user, int skip, int show)
     xs_html *body = html_user_body(user, 0);
     const xs_dict *n_filter = xs_dict_get(user->config, "notify_filter");
     if (!n_filter) {
-        user->config = xs_dict_set(user->config, "notify_filter", xs_dict_new());
+        xs *filter = xs_dict_new();
+        user->config = xs_dict_set(user->config, "notify_filter", filter);
+        user->tz = xs_dict_get_def(user->config, "tz", "UTC"); // previous line invalidates user->tz
         n_filter = xs_dict_get(user->config, "notify_filter");
     }
     xs *n_list = notify_filter_list(user, n_list_unfilt);
@@ -4159,6 +4162,7 @@ xs_str *html_notifications(snac *user, int skip, int show)
         body);
 
     xs *filter_notifs_action = xs_fmt("%s/admin/filter-notifications", user->actor);
+    xs *notifs_action = xs_fmt("%s/notifications", user->actor);
     xs_html *notifs_form = xs_html_tag("form",
         xs_html_attr("autocomplete", "off"),
         xs_html_attr("method",       "post"),
@@ -4168,7 +4172,7 @@ xs_str *html_notifications(snac *user, int skip, int show)
         xs_html_sctag("input",
             xs_html_attr("type",    "hidden"),
             xs_html_attr("name",    "hard-redir"),
-            xs_html_attr("value",   xs_fmt("%s/notifications", user->actor))),
+            xs_html_attr("value",   notifs_action)),
         html_checkbox("likes_on", L("Likes"), n_likes_on),
         html_checkbox("reacts_on", L("Emoji reacts"), n_reacts_on),
         html_checkbox("mentions_on", L("Mentions"), n_ments_on),
@@ -5569,7 +5573,7 @@ int html_post_handler(const xs_dict *req, const char *q_path,
 
             eid = xs_strip_chars_i(eid, ":");
 
-            const xs_dict *ret = msg_emoji_init(&snac, id, eid);
+            xs *ret = msg_emoji_init(&snac, id, eid);
             /* fails if either invalid or already reacted */
             if (!ret)
                 ret = msg_emoji_unreact(&snac, id, eid);
