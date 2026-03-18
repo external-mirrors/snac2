@@ -1219,10 +1219,11 @@ xs_dict *mastoapi_status(snac *snac, const xs_dict *msg)
 
                 xs *accounts = xs_list_new();
                 if (actor) {
-                    xs *d2 = xs_dict_new();
-                    object_get(actor, &d2);
-                    xs *e_acct = mastoapi_account(snac, d2);
-                    accounts = xs_list_append(accounts, e_acct);
+                    xs *d2 = NULL;
+                    if (valid_status(object_get(actor, &d2))) {
+                        xs *e_acct = mastoapi_account(snac, d2);
+                        accounts = xs_list_append(accounts, e_acct);
+                    }
                 }
 
                 const xs_list *item = xs_dict_get(sfrl, nm);
