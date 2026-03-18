@@ -3152,7 +3152,7 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
             else
             if (!xs_is_null(latitude) && !xs_is_null(longitude)) {
                 xs *url = xs_fmt("https://openstreetmap.org/search/?query=%s,%s",
-                    xs_number_str(latitude), xs_number_str(longitude));
+                    xs_or(xs_number_str(latitude), latitude), xs_or(xs_number_str(longitude), longitude));
 
                 xs_html_add(snac_content_wrap,
                     xs_html_tag("p",
