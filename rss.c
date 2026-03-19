@@ -101,6 +101,46 @@ xs_str *rss_from_timeline(snac *user, const xs_list *timeline,
                 xs_html_tag("lastBuildDate",
                     xs_html_text(rss_date)));
 
+        xs *att_content = xs_dup(content);
+        xs *attach_list = get_attachments(msg);
+
+        /* add possible attachments */
+        if (xs_list_len(attach_list)) {
+            const xs_val *a;
+            xs_html *content_attachments = xs_html_tag("div",
+                xs_html_attr("class", "snac-content-attachments"));
+
+            xs_list_foreach(attach_list, a) {
+                const char *type = xs_dict_get(a, "type");
+                const char *o_href = xs_dict_get(a, "href");
+                const char *name = xs_dict_get_def(a, "name", "");
+
+                if (!xs_is_string(type) || !xs_is_string(o_href))
+                    continue;
+
+                if (xs_startswith(type, "image/")) {
+                    xs_html_add(content_attachments,
+                        xs_html_tag("figure",
+                            xs_html_sctag("img",
+                                xs_html_attr("src", o_href)),
+                            xs_html_tag("figcaption",
+                                xs_html_text(name))));
+                }
+                else {
+                    xs_html_add(content_attachments,
+                        xs_html_tag("a",
+                            xs_html_attr("href", o_href),
+                            xs_html_text(name),
+                            xs_html_text(" "),
+                            xs_html_text(o_href),
+                        xs_html_sctag("br", NULL)));
+                }
+            }
+
+            xs *s1 = xs_html_render(content_attachments);
+            att_content = xs_str_cat(att_content, s1);
+        }
+
         xs_html_add(channel,
             xs_html_tag("item",
                 xs_html_tag("title",
@@ -112,7 +152,7 @@ xs_str *rss_from_timeline(snac *user, const xs_list *timeline,
                 xs_html_tag("pubDate",
                     xs_html_text(rss_date)),
                 xs_html_tag("description",
-                    xs_html_text(content))));
+                    xs_html_text(att_content))));
 
         cnt++;
     }
