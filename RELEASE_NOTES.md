@@ -10,6 +10,8 @@ Fixed encoding bug in Mastodon-style share links.
 
 Fixed an error that made imposible to leave empty the following hashtags or blocked hashtags from the web UI.
 
+Include post attachments in the RSS feed entries.
+
 Added some OpenBSD-specific documentation (contributed by oxzi).
 
 Fixed some timezones (contributed by matoken).
