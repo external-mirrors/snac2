@@ -3205,6 +3205,7 @@ int mastoapi_post_handler(const xs_dict *req, const char *q_path,
 
         /* Ice Cubes sends these values as query parameters, so try these */
         if (name == NULL && ruri == NULL && scope == NULL) {
+            xs_free(args);
             args = xs_dup(xs_dict_get(req, "q_vars"));
             name  = xs_dict_get(args, "client_name");
             ruri  = xs_dict_get(args, "redirect_uris");
