@@ -502,6 +502,13 @@ void httpd_connection(FILE *f)
     if (xs_startswith(q_path, p))
         q_path = xs_crop_i(q_path, strlen(p), 0);
 
+    /* add users endpoint redirection mimic Mastodon behaviour */
+    const char *users_endpoint = "/users";
+    if (xs_startswith(q_path, users_endpoint)) {
+        q_path = xs_crop_i(q_path, strlen(users_endpoint), 0);
+        status = HTTP_STATUS_FOUND;
+    }
+
     if (strcmp(method, "GET") == 0 || strcmp(method, "HEAD") == 0) {
         /* cascade through */
         if (status == 0)
@@ -606,6 +613,9 @@ void httpd_connection(FILE *f)
 
     if (status == HTTP_STATUS_SEE_OTHER)
         headers = xs_dict_append(headers, "location", body);
+
+    if (status == HTTP_STATUS_FOUND)
+        headers = xs_dict_append(headers, "location", xs_fmt("%s%s", p, q_path));
 
     if (status == HTTP_STATUS_UNAUTHORIZED && body) {
         xs *www_auth = xs_fmt("Basic realm=\"@%s@%s snac login\"",
