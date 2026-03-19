@@ -10,8 +10,6 @@ Important: deleting a follower should do more that just delete the object, see h
 
 ## Wishlist
 
-Add attachments to the RSS.
-
 Add account flagging / reporting https://docs.joinmastodon.org/spec/activitypub/#Flag
 
 Add a list option to hide member posts from the main timeline, see https://codeberg.org/grunfink/snac2/issues/383
@@ -387,3 +385,5 @@ Take a look at crashes in the brittle Mastodon official app (crashes when hittin
 Editing / Updating a post does not index newly added hashtags (2025-12-19T15:29:38+0100).
 
 Fix the mismatch in the following accounts number from the actor / public page and the people page. Reason: following_list_len() just returns then number of _a.json files in the folder (for performance reasons), while the people page gives the *confirmed* followings (2026-02-14T16:27:17+0100).
+
+Add attachments to the RSS (2026-03-19T19:17:02+0100).
