@@ -247,6 +247,36 @@ int webfinger_get_handler(const xs_dict *req, const char *q_path,
             links = xs_list_append(links, d);
         }
 
+        {
+            xs *d = xs_dict_new();
+            xs *t = xs_fmt("https:/""/%s/authorize_interaction?uri={uri}", xs_dict_get(srv_config, "host"));
+
+            d = xs_dict_set(d, "rel", "http://ostatus.org/schema/1.0/subscribe");
+            d = xs_dict_set(d, "template", t);
+
+            links = xs_list_append(links, d);
+        }
+
+        {
+            xs *d = xs_dict_new();
+            xs *t = xs_fmt("https:/""/%s/share?text={content}", xs_dict_get(srv_config, "host"));
+
+            d = xs_dict_set(d, "rel", "https://w3id.org/fep/3b86/Create");
+            d = xs_dict_set(d, "template", t);
+
+            links = xs_list_append(links, d);
+        }
+
+        {
+            xs *d = xs_dict_new();
+            xs *t = xs_fmt("https:/""/%s/authorize_interaction?uri={object}", xs_dict_get(srv_config, "host"));
+
+            d = xs_dict_set(d, "rel", "https://w3id.org/fep/3b86/Object");
+            d = xs_dict_set(d, "template", t);
+
+            links = xs_list_append(links, d);
+        }
+
         aliases = xs_list_append(aliases, snac.actor);
         aliases = xs_list_append(aliases, snac.actor_alt);
 
