@@ -22,6 +22,8 @@ Updated Docker scripts to avoid generating a useless log file.
 
 Fixed several memory leaks, key generation errors and HTML inconsistencies (contributed by dandelions).
 
+Implemented tootfinder.ch compatibility mimic Mastodon behaviour (contributed by rgiuse).
+
 Added a new CONTRIBUTING.md file. Among other guidelines, I explicitly say there that AI contributions are **NOT** accepted.
 
 snac is now available as a [Yunohost app](https://apps.yunohost.org/app/snac). Thank you very much to Bruno Cesar Rocha for this.
