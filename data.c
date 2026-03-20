@@ -273,8 +273,9 @@ int user_open(snac *user, const char *uid)
                     fclose(f);
 
                     if (user->key != NULL) {
-                        user->actor = xs_fmt("%s/%s", srv_baseurl, user->uid);
-                        user->md5   = xs_md5_hex(user->actor, strlen(user->actor));
+                        user->actor     = xs_fmt("%s/%s", srv_baseurl, user->uid);
+                        user->actor_alt = xs_fmt("%s/users/%s", srv_baseurl ,user->uid);
+                        user->md5       = xs_md5_hex(user->actor, strlen(user->actor));
 
                         /* everything is ok right now */
                         ret = 1;

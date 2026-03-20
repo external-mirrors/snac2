@@ -182,10 +182,14 @@ int webfinger_get_handler(const xs_dict *req, const char *q_path,
             found = user_open(&snac, uid);
     }
     else
-    if (xs_startswith(resource, "acct:")) {
-        /* it's an account name */
-        xs *an = xs_replace_n(resource, "acct:", "", 1);
-        xs *l = NULL;
+    {
+	xs *an = xs_fmt("%s", resource);
+	xs *l = NULL;
+
+        if (xs_startswith(resource, "acct:")) {
+            /* it's an account name */
+            an = xs_replace_n(resource, "acct:", "", 1);
+        }
 
         /* strip a possible leading @ */
         if (xs_startswith(an, "@"))
@@ -205,17 +209,18 @@ int webfinger_get_handler(const xs_dict *req, const char *q_path,
     if (found) {
         /* build the object */
         xs *acct;
-        xs *aaj   = xs_dict_new();
-        xs *prof  = xs_dict_new();
-        xs *links = xs_list_new();
-        xs *obj   = xs_dict_new();
+        xs *aaj     = xs_dict_new();
+        xs *prof    = xs_dict_new();
+        xs *links   = xs_list_new();
+        xs *aliases = xs_list_new();
+        xs *obj     = xs_dict_new();
 
         acct = xs_fmt("acct:%s@%s",
             xs_dict_get(snac.config, "uid"), xs_dict_get(srv_config, "host"));
 
         aaj = xs_dict_append(aaj, "rel",  "self");
         aaj = xs_dict_append(aaj, "type", "application/activity+json");
-        aaj = xs_dict_append(aaj, "href", snac.actor);
+        aaj = xs_dict_append(aaj, "href", snac.actor_alt);
 
         links = xs_list_append(links, aaj);
 
@@ -242,7 +247,12 @@ int webfinger_get_handler(const xs_dict *req, const char *q_path,
             links = xs_list_append(links, d);
         }
 
+        aliases = xs_list_append(aliases, snac.actor);
+        aliases = xs_list_append(aliases, snac.actor_alt);
+
+
         obj = xs_dict_append(obj, "subject", acct);
+        obj = xs_dict_append(obj, "aliases", aliases);
         obj = xs_dict_append(obj, "links",   links);
 
         xs_str *j = xs_json_dumps(obj, 4);
