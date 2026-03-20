@@ -24,6 +24,8 @@ Fixed several memory leaks, key generation errors and HTML inconsistencies (cont
 
 Implemented tootfinder.ch compatibility mimic Mastodon behaviour (contributed by rgiuse).
 
+Added ostatus.org and FEP-3b86 data to Webfinger objects.
+
 Added a new CONTRIBUTING.md file. Among other guidelines, I explicitly say there that AI contributions are **NOT** accepted.
 
 snac is now available as a [Yunohost app](https://apps.yunohost.org/app/snac). Thank you very much to Bruno Cesar Rocha for this.
