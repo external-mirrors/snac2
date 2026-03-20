@@ -183,8 +183,8 @@ int webfinger_get_handler(const xs_dict *req, const char *q_path,
     }
     else
     {
-	xs *an = xs_fmt("%s", resource);
-	xs *l = NULL;
+        xs *an = xs_fmt("%s", resource);
+        xs *l = NULL;
 
         if (xs_startswith(resource, "acct:")) {
             /* it's an account name */
