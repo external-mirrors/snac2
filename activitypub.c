@@ -813,13 +813,13 @@ int is_msg_for_me(snac *snac, const xs_dict *c_msg)
     /* if it's a Follow, it must be explicitly for us */
     if (xs_match(type, "Follow")) {
         const char *object = xs_dict_get(c_msg, "object");
-        return !xs_is_null(object) && strcmp(snac->actor, object) == 0;
+        return !xs_is_null(object) && (strcmp(snac->actor, object) == 0 || strcmp(snac->actor_alt, object) == 0);
     }
 
     /* only accept Ping directed to us */
     if (xs_match(type, "Ping")) {
         const char *dest = xs_dict_get(c_msg, "to");
-        return !xs_is_null(dest) && strcmp(snac->actor, dest) == 0;
+        return !xs_is_null(dest) && (strcmp(snac->actor, dest) == 0 || strcmp(snac->actor_alt, dest) == 0);
     }
 
     /* if it's not a Create or Update, allow as is */
@@ -860,7 +860,7 @@ int is_msg_for_me(snac *snac, const xs_dict *c_msg)
 
     while(xs_list_iter(&p, &v)) {
         /* explicitly for me? accept */
-        if (strcmp(v, snac->actor) == 0)
+        if (strcmp(v, snac->actor) == 0 || strcmp(v, snac->actor_alt) == 0)
             return 2;
 
         if (pub_msg) {
