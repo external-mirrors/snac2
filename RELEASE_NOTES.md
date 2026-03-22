@@ -22,8 +22,6 @@ Updated Docker scripts to avoid generating a useless log file.
 
 Fixed several memory leaks, key generation errors and HTML inconsistencies (contributed by dandelions).
 
-Implemented tootfinder.ch compatibility mimic Mastodon behaviour (contributed by rgiuse).
-
 Added ostatus.org and FEP-3b86 data to Webfinger objects.
 
 Added a new CONTRIBUTING.md file. Among other guidelines, I explicitly say there that AI contributions are **NOT** accepted.
