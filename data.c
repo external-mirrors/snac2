@@ -4287,6 +4287,7 @@ void purge_user(snac *snac)
 
     _purge_user_subdir(snac, "hidden",  priv_days);
     _purge_user_subdir(snac, "private", priv_days);
+    _purge_user_subdir(snac, "pending",  priv_days);
 
     _purge_user_subdir(snac, "public",  pub_days);
 
