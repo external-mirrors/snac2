@@ -3557,9 +3557,9 @@ void process_queue_item(xs_dict *q_item)
         instance_failure(inbox, valid_status(status) ? 2 : 1);
 
         if (payload) {
-            if (p_size > 64) {
+            if (p_size > 1024) {
                 /* trim the message */
-                payload[64] = '\0';
+                payload[1024] = '\0';
                 payload = xs_str_cat(payload, "...");
             }
 
