@@ -220,7 +220,7 @@ int webfinger_get_handler(const xs_dict *req, const char *q_path,
 
         aaj = xs_dict_append(aaj, "rel",  "self");
         aaj = xs_dict_append(aaj, "type", "application/activity+json");
-        aaj = xs_dict_append(aaj, "href", snac.actor_alt);
+        aaj = xs_dict_append(aaj, "href", snac.actor);
 
         links = xs_list_append(links, aaj);
 
@@ -277,12 +277,10 @@ int webfinger_get_handler(const xs_dict *req, const char *q_path,
             links = xs_list_append(links, d);
         }
 
-#if 0
         aliases = xs_list_append(aliases, snac.actor);
         aliases = xs_list_append(aliases, snac.actor_alt);
 
         obj = xs_dict_append(obj, "aliases", aliases);
-#endif
 
         obj = xs_dict_append(obj, "subject", acct);
         obj = xs_dict_append(obj, "links",   links);
