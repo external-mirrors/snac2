@@ -277,12 +277,14 @@ int webfinger_get_handler(const xs_dict *req, const char *q_path,
             links = xs_list_append(links, d);
         }
 
+#if 0
         aliases = xs_list_append(aliases, snac.actor);
         aliases = xs_list_append(aliases, snac.actor_alt);
 
+        obj = xs_dict_append(obj, "aliases", aliases);
+#endif
 
         obj = xs_dict_append(obj, "subject", acct);
-        obj = xs_dict_append(obj, "aliases", aliases);
         obj = xs_dict_append(obj, "links",   links);
 
         xs_str *j = xs_json_dumps(obj, 4);

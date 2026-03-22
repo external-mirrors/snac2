@@ -2799,7 +2799,7 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
                       "handling follow: %s", actor));
                 return 1;
             }
-            if (strcmp(id, snac->actor) != 0)
+            if (strcmp(id, snac->actor) != 0 && strcmp(id, snac->actor_alt) != 0)
                 snac_debug(snac, 1, xs_fmt("Undo + Follow from %s not for us (%s)", actor, id));
             else
             if (valid_status(follower_del(snac, actor))) {
