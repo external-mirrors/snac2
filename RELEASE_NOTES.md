@@ -1,6 +1,6 @@
 # Release Notes
 
-## UNRELEASED
+## 2.91
 
 Fixed some local posts not being shown if the replied post is deleted.
 
