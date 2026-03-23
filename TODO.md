@@ -22,8 +22,6 @@ Track "BadgeFed - ActivityPub Badges" https://github.com/tryvocalcat/badgefed
 
 Track 'Event' data types standardization; how to add plan-to-attend and similar activities (more info: https://event-federation.eu/). Friendica interacts with events via activities `Accept` (will go), `TentativeAccept` (will try to go) or `Reject` (cannot go) (`object` field as id, not object). `Undo` for any of these activities cancel (`object` as an object, not id).
 
-Implement "FEP-3b86: Activity Intents" https://codeberg.org/fediverse/fep/src/branch/main/fep/3b86/fep-3b86.md
-
 Track "FEP-ef61: Portable Objects" https://codeberg.org/fediverse/fep/src/branch/main/fep/ef61/fep-ef61.md
 
 Track "Public Key Directory Server Specification" https://publickey.directory/
@@ -387,3 +385,5 @@ Editing / Updating a post does not index newly added hashtags (2025-12-19T15:29:
 Fix the mismatch in the following accounts number from the actor / public page and the people page. Reason: following_list_len() just returns then number of _a.json files in the folder (for performance reasons), while the people page gives the *confirmed* followings (2026-02-14T16:27:17+0100).
 
 Add attachments to the RSS (2026-03-19T19:17:02+0100).
+
+Implement "FEP-3b86: Activity Intents" https://codeberg.org/fediverse/fep/src/branch/main/fep/3b86/fep-3b86.md (2026-03-23T09:46:45+0100).
