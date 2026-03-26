@@ -316,7 +316,7 @@ int user_open(snac *user, const char *uid)
         }
     }
     else
-        srv_debug(1, xs_fmt("invalid user '%s'", uid));
+        srv_debug(2, xs_fmt("invalid user '%s'", uid));
 
     if (!ret)
         user_free(user);
