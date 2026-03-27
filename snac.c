@@ -182,8 +182,9 @@ int check_password(const char *uid, const char *passwd, const char *hash)
 char* findprog(const char *prog)
 /* find a prog in PATH and return the first match */
 {
-    char *path_env, *path, *dir, filename[PATH_MAX];
+    char *path_env, *path, *dir, *filename;
     int len;
+    size_t filename_sz;
     struct stat sbuf;
 
     path_env = getenv("PATH");
@@ -195,6 +196,9 @@ char* findprog(const char *prog)
         return NULL;
     path = path_env;
 
+    filename_sz = strlen(path) + strlen(prog) + 2;
+    filename = xs_realloc(NULL, filename_sz);
+
     while ((dir = strsep(&path, ":")) != NULL) {
         /* empty entries as ./ instead of / */
         if (*dir == '\0')
@@ -205,16 +209,17 @@ char* findprog(const char *prog)
         while (len > 0 && dir[len-1] == '/')
             dir[--len] = '\0';
 
-        len = snprintf(filename, sizeof(filename), "%s/%s", dir, prog);
-        if (len > 0 && len < (int) sizeof(filename) &&
+        len = snprintf(filename, filename_sz, "%s/%s", dir, prog);
+        if (len > 0 && len < (int) filename_sz &&
             (stat(filename, &sbuf) == 0) && S_ISREG(sbuf.st_mode) &&
             access(filename, X_OK) == 0) {
             free(path_env);
-            return strdup(filename);
+            return filename;
         }
     }
 
     free(path_env);
+    xs_free(filename);
     return NULL;
 }
 
