@@ -42,7 +42,9 @@ static const char * const default_srv_config = "{"
     "\"short_description\":    \"\","
     "\"short_description_raw\": false,"
     "\"protocol\":             \"https\","
-    "\"fastcgi\":              false"
+    "\"fastcgi\":              false,"
+    "\"disable_inbox_collection\": true,"
+    "\"disable_history\": true"
     "}";
 
 static const char * const default_css =
