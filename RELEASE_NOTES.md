@@ -1,5 +1,9 @@
 # Release Notes
 
+## UNRELEASED
+
+Changed defaults: for newly created instances, `disable_inbox_collection` and `disable_history` are set to `true` (see `snac(8)` for more information). The reason is because they seem to be used for harrasing people.
+
 ## 2.91
 
 Fixed some local posts not being shown if the replied post is deleted.
