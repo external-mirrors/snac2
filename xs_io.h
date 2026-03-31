@@ -53,7 +53,8 @@ xs_val *xs_read(FILE *f, int *sz)
         if ((n = sizeof(tmp)) > size)
             n = size;
 
-        r = fread(tmp, 1, n, f);
+        if ((r = fread(tmp, 1, n, f)) == 0)
+            break;
 
         /* open room */
         s = xs_realloc(s, rdsz + r);
