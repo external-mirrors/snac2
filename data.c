@@ -4259,6 +4259,101 @@ void delete_purged_posts(snac *user, int days)
 }
 
 
+void purge_static(snac *user)
+/* purges the static directory of a user */
+{
+    xs *spec = xs_fmt("%s/static/""*", user->basedir);
+    xs *fns = xs_glob(spec, 1, 0);
+    xs *files = xs_dict_new();
+    const char *v;
+    int cnt = 0;
+
+    /* fill a dict with the static resource urls */
+    xs_list_foreach(fns, v) {
+        xs *s = xs_fmt("%s/s/%s", user->actor, v);
+
+        xs *fn = xs_fmt("%s/static/%s", user->basedir, v);
+        struct stat st;
+
+        /* exclude non-files */
+        if (stat(fn, &st) == -1 || (st.st_mode & S_IFMT) != S_IFREG)
+            continue;
+
+        files = xs_dict_set(files, s, v);
+        cnt++;
+    }
+
+    /* don't purge avatars nor headers */
+    if (xs_is_string(v = xs_dict_get(user->config, "avatar")) && xs_dict_get(files, v)) {
+        files = xs_dict_del(files, v);
+        cnt--;
+
+        snac_debug(user, 2, xs_fmt("purge_static: excluding '%s'", v));
+    }
+    if (xs_is_string(v = xs_dict_get(user->config, "header")) && xs_dict_get(files, v)) {
+        files = xs_dict_del(files, v);
+        cnt--;
+
+        snac_debug(user, 2, xs_fmt("purge_static: excluding '%s'", v));
+    }
+
+    if (cnt <= 0)
+        return;
+
+    xs *tl = timeline_simple_list(user, "public", 0, XS_ALL, NULL);
+    const char *md5;
+
+    xs_list_foreach(tl, md5) {
+        if (cnt <= 0)
+            break;
+
+        xs *msg = NULL;
+
+        if (!valid_status(object_get_by_md5(md5, &msg)))
+            continue;
+
+        if (!is_msg_mine(user, xs_dict_get_def(msg, "id", "")))
+            continue;
+
+        const xs_list *atts = xs_dict_get(msg, "attachment");
+        if (!xs_is_list(atts))
+            continue;
+
+        const xs_dict *d;
+
+        xs_list_foreach(atts, d) {
+            const char *url;
+
+            if (xs_is_dict(d) && xs_is_string(url = xs_dict_get(d, "url"))) {
+                if (xs_dict_get(files, url)) {
+                    files = xs_dict_del(files, url);
+                    cnt--;
+
+                    snac_debug(user, 2, xs_fmt("purge_static: excluding '%s'", url));
+
+                    xs *alt_text = xs_fmt("%s.txt", url);
+
+                    if (xs_dict_get(files, alt_text)) {
+                        files = xs_dict_del(files, alt_text);
+                        cnt--;
+
+                        snac_debug(user, 2, xs_fmt("purge_static: excluding alt_text '%s'", alt_text));
+                    }
+                }
+            }
+        }
+    }
+
+    /* what is left in the files dict is not referenced anywhere */
+    const char *k;
+
+    xs_dict_foreach(files, k, v) {
+        xs *s = xs_fmt("%s/static/%s", user->basedir, v);
+        snac_debug(user, 1, xs_fmt("purge_static: %s", s));
+    }
+}
+
+
 void purge_user(snac *snac)
 /* do the purge for this user */
 {
@@ -4312,6 +4407,8 @@ void purge_user(snac *snac)
             srv_debug(1, xs_fmt("purge: %s %d", v, gc));
         }
     }
+
+    purge_static(snac);
 
     /* unrelated to purging, but it's a janitorial process, so what the hell */
     verify_links(snac);
