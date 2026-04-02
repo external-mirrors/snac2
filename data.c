@@ -4270,6 +4270,11 @@ void purge_static(snac *user)
 
     /* fill a dict with the static resource urls */
     xs_list_foreach(fns, v) {
+        if (strcmp(v, "style.css") == 0) {
+            snac_debug(user, 2, xs_fmt("purge_static: excluding '%s'", v));
+            continue;
+        }
+
         xs *s = xs_fmt("%s/s/%s", user->actor, v);
 
         xs *fn = xs_fmt("%s/static/%s", user->basedir, v);
