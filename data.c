@@ -4265,7 +4265,7 @@ void purge_static(snac *user)
     xs *spec = xs_fmt("%s/static/""*", user->basedir);
     xs *fns = xs_glob(spec, 1, 0);
     xs *files = xs_dict_new();
-    const char *v;
+    const char *k, *v;
     int cnt = 0;
 
     /* fill a dict with the static resource urls */
@@ -4300,6 +4300,17 @@ void purge_static(snac *user)
         cnt--;
 
         snac_debug(user, 2, xs_fmt("purge_static: excluding '%s'", v));
+    }
+
+    /* exclude emojis served from the static directory */
+    xs *emo = emojis();
+    xs_dict_foreach(emo, k, v) {
+        if (xs_dict_get(files, v)) {
+            files = xs_dict_del(files, v);
+            cnt--;
+
+            snac_debug(user, 2, xs_fmt("purge_static: excluding '%s'", v));
+        }
     }
 
     if (cnt <= 0)
@@ -4350,8 +4361,6 @@ void purge_static(snac *user)
     }
 
     /* what is left in the files dict is not referenced anywhere */
-    const char *k;
-
     xs_dict_foreach(files, k, v) {
         xs *s = xs_fmt("%s/static/%s", user->basedir, v);
         snac_debug(user, 1, xs_fmt("purge_static: %s", s));
