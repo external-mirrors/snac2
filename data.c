@@ -4422,7 +4422,9 @@ void purge_user(snac *snac)
         }
     }
 
-    purge_static(snac);
+    /* purge static directories, if so desired */
+    if (xs_is_true(xs_dict_get(srv_config, "purge_static")))
+        purge_static(snac);
 
     /* unrelated to purging, but it's a janitorial process, so what the hell */
     verify_links(snac);
