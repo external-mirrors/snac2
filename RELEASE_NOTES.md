@@ -4,6 +4,8 @@
 
 Changed defaults: for newly created instances, `disable_inbox_collection` and `disable_history` are set to `true` (see `snac(8)` for more information). The reason is because they seem to be used for harrasing people.
 
+New admin configuration option: if the `purge_static` value is set to `true` in `server.json`, each user's static directory is explored and those files there that are no longer attached to any post or referenced anywhere are deleted. See `snac(8)` for more information about those cases where you may not want to enable this option.
+
 ## 2.91
 
 Fixed some local posts not being shown if the replied post is deleted.
