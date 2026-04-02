@@ -4301,6 +4301,12 @@ void purge_static(snac *user)
 
         snac_debug(user, 2, xs_fmt("purge_static: excluding '%s'", v));
     }
+    if (xs_is_string(v = xs_dict_get(srv_config, "favicon_url")) && xs_dict_get(files, v)) {
+        files = xs_dict_del(files, v);
+        cnt--;
+
+        snac_debug(user, 2, xs_fmt("purge_static: excluding '%s'", v));
+    }
 
     /* exclude emojis served from the static directory */
     xs *emo = emojis();
