@@ -4281,8 +4281,10 @@ void purge_static(snac *user)
         struct stat st;
 
         /* exclude non-files */
-        if (stat(fn, &st) == -1 || (st.st_mode & S_IFMT) != S_IFREG)
+        if (stat(fn, &st) == -1 || (st.st_mode & S_IFMT) != S_IFREG) {
+            snac_debug(user, 2, xs_fmt("purge_static: excluding non-file '%s'", v));
             continue;
+        }
 
         files = xs_dict_set(files, s, v);
         cnt++;
@@ -4370,6 +4372,7 @@ void purge_static(snac *user)
     xs_dict_foreach(files, k, v) {
         xs *s = xs_fmt("%s/static/%s", user->basedir, v);
         snac_debug(user, 1, xs_fmt("purge_static: %s", s));
+        unlink(s);
     }
 }
 
