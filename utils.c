@@ -678,7 +678,9 @@ void export_csv(snac *user)
             xs *uid = NULL;
 
             webfinger_request_fake(actor, NULL, &uid);
-            fprintf(f, "%s\n", uid);
+
+            if (xs_is_string(uid))
+                fprintf(f, "%s\n", uid);
         }
 
         fclose(f);
@@ -709,7 +711,9 @@ void export_csv(snac *user)
                     xs *uid = NULL;
 
                     webfinger_request_fake(id, NULL, &uid);
-                    fprintf(f, "%s,%s\n", ltitle, uid);
+
+                    if (xs_is_string(uid))
+                        fprintf(f, "%s,%s\n", ltitle, uid);
                 }
             }
         }
@@ -733,7 +737,9 @@ void export_csv(snac *user)
             xs *uid = NULL;
 
             webfinger_request_fake(actor, NULL, &uid);
-            fprintf(f, "%s,%s,false,\n", uid, limited(user, actor, 0) ? "false" : "true");
+
+            if (xs_is_string(uid))
+                fprintf(f, "%s,%s,false,\n", uid, limited(user, actor, 0) ? "false" : "true");
         }
 
         fclose(f);
