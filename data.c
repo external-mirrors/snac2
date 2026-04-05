@@ -2673,14 +2673,17 @@ static int _load_raw_file(const char *fn, xs_val **data, int *size,
             }
             else {
                 /* newer or never downloaded; read the full file */
+                struct stat sb;
                 FILE *f;
 
-                if ((f = fopen(fn, "rb")) != NULL) {
-                    *size = XS_ALL;
-                    *data = xs_read(f, size);
-                    fclose(f);
+                if (lstat(fn, &sb) == 0 && (sb.st_mode&S_IFMT) == S_IFREG) {
+                    if ((f = fopen(fn, "rb")) != NULL) {
+                        *size = XS_ALL;
+                        *data = xs_read(f, size);
+                        fclose(f);
 
-                    status = HTTP_STATUS_OK;
+                        status = HTTP_STATUS_OK;
+                    }
                 }
             }
 
@@ -2699,7 +2702,7 @@ static int _load_raw_file(const char *fn, xs_val **data, int *size,
 xs_str *_static_fn(snac *snac, const char *id)
 /* gets the filename for a static file */
 {
-    if (strchr(id, '/'))
+    if (strstr(id, ".."))
         return NULL;
     else
         return xs_fmt("%s/static/%s", snac->basedir, id);

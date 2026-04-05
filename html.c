@@ -5073,7 +5073,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
     }
     else
     if (xs_startswith(p_path, "s/")) { /** a static file **/
-        xs *l    = xs_split(p_path, "/");
+        xs *l    = xs_split_n(p_path, "/", 1);
         const char *id = xs_list_get(l, 1);
         int sz;
 
