@@ -23,10 +23,12 @@
  int xs_unicode_is_alpha(unsigned int cpoint);
  int xs_unicode_is_right_to_left(unsigned int cpoint);
  int xs_is_emoji(unsigned int cpoint);
+ int xs_utf8_len(const char *str);
 
 #ifdef _XS_H
  xs_str *xs_utf8_insert(xs_str *str, unsigned int cpoint, int *offset);
  xs_str *xs_utf8_cat(xs_str *str, unsigned int cpoint);
+ xs_str *xs_utf8_crop_i(xs_str *str, int begin, int end);
  xs_str *xs_utf8_to_upper(const char *str);
  xs_str *xs_utf8_to_lower(const char *str);
  xs_str *xs_utf8_to_nfd(const char *str);
@@ -196,6 +198,18 @@ unsigned int xs_surrogate_enc(unsigned int cpoint)
 }
 
 
+int xs_utf8_len(const char *str)
+/* counts the number of characters (codepoints) in str */
+{
+    int len = 0;
+
+    while (xs_utf8_dec(&str))
+        len++;
+
+    return len;
+}
+
+
 #ifdef _XS_H
 
 xs_str *xs_utf8_insert(xs_str *str, unsigned int cpoint, int *offset)
@@ -220,6 +234,30 @@ xs_str *xs_utf8_cat(xs_str *str, unsigned int cpoint)
 
     return xs_utf8_insert(str, cpoint, &offset);
 }
+
+
+xs_str *xs_utf8_crop_i(xs_str *str, int begin, int end)
+/* crops str from begin to end by characters (codepoints) */
+{
+    const char *p = str;
+    int sz = xs_utf8_len(str);
+    unsigned int cpoint;
+
+    if (end <= 0)
+        end = sz + end;
+
+    xs_str *ns = xs_str_new(NULL);
+
+    for (int n = 0; n < end && (cpoint = xs_utf8_dec(&p)); n++) {
+        if (n >= begin)
+            ns = xs_utf8_cat(ns, cpoint);
+    }
+
+    xs_free(str);
+
+    return ns;
+}
+
 
 #endif /* _XS_H */
 
