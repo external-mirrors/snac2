@@ -2551,10 +2551,19 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
                 cw = "";
         }
 
+        /* summary can't contain HTML */
+        xs *s1 = xs_regex_replace(v, "<[^>]+>", "");
+
+        /* crop stupidly long summaries */
+        if (xs_utf8_len(s1) > 1024) {
+            s1 = xs_utf8_crop_i(s1, 0, 1024);
+            s1 = xs_str_cat(s1, "...");
+        }
+
         snac_content = xs_html_tag("details",
             xs_html_attr(cw, NULL),
             xs_html_tag("summary",
-                xs_html_text(v),
+                xs_html_text(s1),
                 xs_html_text(L(" [SENSITIVE CONTENT]"))));
     }
     else
