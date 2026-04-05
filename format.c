@@ -80,7 +80,7 @@ xs_dict *emojis(void)
 }
 
 
-xs_dict *emojis_rm_categories() {
+xs_dict *emojis_rm_categories(void) {
     xs *emjs = emojis();
     char *res = xs_dict_new();
     const char *k, *v;
