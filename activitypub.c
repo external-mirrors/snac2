@@ -3559,7 +3559,7 @@ void process_queue_item(xs_dict *q_item)
         if (payload) {
             if (p_size > 1024) {
                 /* trim the message */
-                payload[1024] = '\0';
+                payload = xs_utf8_crop_i(payload, 0, 1024);
                 payload = xs_str_cat(payload, "...");
             }
 
