@@ -99,7 +99,7 @@ int webfinger_request_signed(snac *snac, const char *qs, xs_str **actor, xs_str 
             else {
                 /* subject not an 'acct:': try in the aliases
                    (i.e. hubzilla does this) */
-                const char *aliases = xs_dict_get(obj, "aliases");
+                const xs_list *aliases = xs_dict_get(obj, "aliases");
 
                 if (xs_is_list(aliases)) {
                     const char *v;
