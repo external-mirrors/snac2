@@ -105,7 +105,7 @@ int webfinger_request_signed(snac *snac, const char *qs, xs_str **actor, xs_str 
                     const char *v;
 
                     xs_list_foreach(aliases, v) {
-                        if (xs_startswith(v, "acct:")) {
+                        if (xs_startswith(v, "acct:") && xs_endswith(v, host)) {
                             *user = xs_replace_n(v, "acct:", "", 1);
                             break;
                         }
