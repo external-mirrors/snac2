@@ -96,6 +96,22 @@ int webfinger_request_signed(snac *snac, const char *qs, xs_str **actor, xs_str 
 
             if (subject && xs_startswith(subject, "acct:"))
                 *user = xs_replace_n(subject, "acct:", "", 1);
+            else {
+                /* subject not an 'acct:': try in the aliases
+                   (i.e. hubzilla does this) */
+                const char *aliases = xs_dict_get(obj, "aliases");
+
+                if (xs_is_list(aliases)) {
+                    const char *v;
+
+                    xs_list_foreach(aliases, v) {
+                        if (xs_startswith(v, "acct:")) {
+                            *user = xs_replace_n(v, "acct:", "", 1);
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         if (actor != NULL) {
