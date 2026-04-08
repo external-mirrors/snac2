@@ -8,6 +8,8 @@ New admin configuration option: if the `purge_static` value is set to `true` in 
 
 Allow serving files from subdirectories of the `static/` subdirectory (contributed by la_ninpre).
 
+Minor tweak to webfinger code to handle Hubzilla's peculiarities.
+
 ## 2.91
 
 Fixed some local posts not being shown if the replied post is deleted.
