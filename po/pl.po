@@ -329,7 +329,7 @@ msgstr "Odboostuj"
 
 #: html.c:2094
 msgid "I regret I boosted this"
-msgstr "Żałuję i pluję sobie w brodę że to zbooswowałem"
+msgstr "Żałuję i pluję sobie w brodę że to zboostowałem"
 
 #: html.c:2100 html.c:5725
 msgid "Unbookmark"
