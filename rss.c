@@ -44,6 +44,8 @@ xs_str *rss_from_timeline(snac *user, const xs_list *timeline,
     int cnt = 0;
     const char *v;
 
+    int show_unlisted = xs_is_true(xs_dict_get(user->config, "show_unlisted"));
+
     xs_list_foreach(timeline, v) {
         xs *msg = NULL;
 
@@ -66,7 +68,12 @@ xs_str *rss_from_timeline(snac *user, const xs_list *timeline,
         if (!id || !content || !published)
             continue;
 
-        if (!is_msg_public(msg))
+        int scope = get_msg_visibility(msg);
+
+        if (scope == SCOPE_MENTIONED || scope == SCOPE_FOLLOWERS)
+            continue;
+
+        if (scope == SCOPE_UNLISTED && !show_unlisted)
             continue;
 
         /* create a title with the first line of the content */

@@ -3595,6 +3595,8 @@ xs_str *html_timeline(snac *user, const xs_list *list, int read_only,
 
     int mark_shown = 0;
 
+    int show_unlisted = xs_is_true(xs_dict_get(user->config, "show_unlisted"));
+
     while (xs_list_iter(&p, &v)) {
         xs *msg = NULL;
         int status;
@@ -3651,9 +3653,15 @@ xs_str *html_timeline(snac *user, const xs_list *list, int read_only,
         /* hide non-public posts from /instance view */
         if (page != NULL && strcmp(page, "/instance") == 0 && scope != SCOPE_PUBLIC)
             continue;
+
         /* hide non-public posts viewed from outside */
-        if (read_only && (scope != SCOPE_PUBLIC && scope != SCOPE_UNLISTED))
-            continue;
+        if (read_only) {
+            if (scope == SCOPE_MENTIONED || scope == SCOPE_FOLLOWERS)
+                continue;
+
+            if (scope == SCOPE_UNLISTED && !show_unlisted)
+                continue;
+        }
 
         xs_html *entry = html_entry(user, msg, read_only, 0, v, (user && !hide_children) ? 0 : 1);
 
