@@ -2,7 +2,9 @@
 
 ## UNRELEASED
 
-Changed defaults: for newly created instances, `disable_inbox_collection` and `disable_history` are set to `true` (see `snac(8)` for more information). The reason is because they seem to be used for harrasing people.
+Changed default: for newly created instances, `disable_inbox_collection` is set to `true` (see `snac(8)` for more information). The reason is because it seems to be used for harrasing people.
+
+Changed default: for newly created instances, `disable_history` is set to `true` (see `snac(8)` for more information). The reason is because archived history files don't change when posts are deleted or modified, and they always have been an ugly kludge.
 
 New admin configuration option: if the `purge_static` value is set to `true` in `server.json`, each user's static directory is explored and those files there that are no longer attached to any post or referenced anywhere are deleted. See `snac(8)` for more information about those cases where you may not want to enable this option.
 
