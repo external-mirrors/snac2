@@ -1602,6 +1602,7 @@ xs_html *html_top_controls(snac *user)
     const xs_val *coll_thrds = xs_dict_get(user->config, "collapse_threads");
     const xs_val *pending    = xs_dict_get(user->config, "approve_followers");
     const xs_val *show_foll  = xs_dict_get(user->config, "show_contact_metrics");
+    const xs_val *show_unlisted = xs_dict_get(user->config, "show_unlisted");
     const char *latitude     = xs_dict_get_def(user->config, "latitude", "");
     const char *longitude    = xs_dict_get_def(user->config, "longitude", "");
     const char *webhook      = xs_dict_get_def(user->config, "notify_webhook", "");
@@ -1797,6 +1798,8 @@ xs_html *html_top_controls(snac *user)
                         xs_is_true(pending)),
                 html_checkbox("show_contact_metrics", L("Publish follower and following metrics"),
                         xs_is_true(show_foll)),
+                html_checkbox("show_unlisted", L("Show unlisted posts in the public page and RSS feed"),
+                        xs_is_true(show_unlisted)),
                 xs_html_tag("p",
                     xs_html_text(L("Current location:")),
                     xs_html_sctag("br", NULL),
@@ -5878,6 +5881,10 @@ int html_post_handler(const xs_dict *req, const char *q_path,
             snac.config = xs_dict_set(snac.config, "show_contact_metrics", xs_stock(XSTYPE_TRUE));
         else
             snac.config = xs_dict_set(snac.config, "show_contact_metrics", xs_stock(XSTYPE_FALSE));
+        if ((v = xs_dict_get(p_vars, "show_unlisted")) != NULL && strcmp(v, "on") == 0)
+            snac.config = xs_dict_set(snac.config, "show_unlisted", xs_stock(XSTYPE_TRUE));
+        else
+            snac.config = xs_dict_set(snac.config, "show_unlisted", xs_stock(XSTYPE_FALSE));
         if ((v = xs_dict_get(p_vars, "web_ui_lang")) != NULL)
             snac.config = xs_dict_set(snac.config, "lang", v);
         if ((v = xs_dict_get(p_vars, "tz")) != NULL)
