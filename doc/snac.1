@@ -172,24 +172,29 @@ legitimate people trying to contact you.
 Set this checkbox if this account behaves like a bot (i.e.
 posts are automatically generated).
 .It Auto-boost all mentions to this account
-If this toggle is set, all mentions to this account are boosted
+If this toggle is on, all mentions to this account are boosted
 to all followers. This can be used to create groups.
 .It This account is private
-If this toggle is set, posts are not published via the public
+If this toggle is on, posts are not published via the public
 web interface, only via the ActivityPub protocol.
 .It Collapse top threads by default
-If this toggle is set, the private timeline will always show
+If this toggle is on, the private timeline will always show
 conversations collapsed by default. This allows easier navigation
 through long threads.
 .It Follow requests must be approved
-If this toggle is set, follow requests are not automatically
+If this toggle is on, follow requests are not automatically
 accepted, but notified and stored for later review. Pending
 follow requests will be shown in the people page to be
 approved or discarded.
 .It Publish follower and following metrics
-If this toggle is set, the number of followers and following
+If this toggle is on, the number of followers and following
 accounts are made public (this is only the number; the specific
 lists of accounts are never published).
+.It Show unlisted posts in the public page and RSS feed
+If this toggle is on, posts with a scope set as 'unlisted'
+are shown both in the public page and the RSS feed. Please take
+note that, previous to version 2.92, these posts were always
+shown in these channels.
 .It Web interface language
 If the administrator has installed any language file, it
 can be selected here.
