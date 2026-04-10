@@ -1932,6 +1932,14 @@ xs_dict *msg_actor(snac *snac)
     xs *webfinger = xs_fmt("%s@%s", snac->uid, xs_dict_get(srv_config, "host"));
     msg = xs_dict_set(msg, "webfinger", webfinger);
 
+    if (xs_is_true(xs_dict_get(snac->config, "show_contact_metrics"))) {
+        xs *fwing = xs_number_new_l(following_list_len(snac));
+        xs *fwers = xs_number_new_l(follower_list_len(snac));
+
+        msg = xs_dict_set(msg, "following_count", fwing);
+        msg = xs_dict_set(msg, "followers_count", fwers);
+    }
+
     /* cache it */
     snac_debug(snac, 1, xs_fmt("Caching actor %s", snac->actor));
     object_add_ow(snac->actor, msg);
