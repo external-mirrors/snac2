@@ -3598,7 +3598,7 @@ xs_str *html_timeline(snac *user, const xs_list *list, int read_only,
 
     int mark_shown = 0;
 
-    int show_unlisted = xs_is_true(xs_dict_get(user->config, "show_unlisted"));
+    int show_unlisted = user ? xs_is_true(xs_dict_get(user->config, "show_unlisted")) : 0;
 
     while (xs_list_iter(&p, &v)) {
         xs *msg = NULL;
