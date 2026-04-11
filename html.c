@@ -3810,13 +3810,17 @@ xs_html *html_people_list(snac *user, xs_list *list, const char *header, const c
             const xs_val *fwers = xs_dict_get(actor, "followers_count");
 
             if (!xs_is_null(fwing) && !xs_is_null(fwers)) {
-                xs *s = xs_fmt(L("%d following, %d followers"),
-                    (int) xs_number_get_l(fwing), (int) xs_number_get_l(fwers));
+                int i_fwing = (int) xs_number_get_l(fwing);
+                int i_fwers = (int) xs_number_get_l(fwers);
 
-                xs_html_add(snac_post,
-                    xs_html_tag("div",
-                        xs_html_tag("p",
-                            xs_html_text(s))));
+                if (i_fwing || i_fwers) {
+                    xs *s = xs_fmt(L("%d following, %d followers"), i_fwing, i_fwers);
+
+                    xs_html_add(snac_post,
+                        xs_html_tag("div",
+                            xs_html_tag("p",
+                                xs_html_text(s))));
+                }
             }
 
             /* add user metadata */
