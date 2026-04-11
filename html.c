@@ -3823,6 +3823,30 @@ xs_html *html_people_list(snac *user, xs_list *list, const char *header, const c
                 }
             }
 
+            /* does it have a location? */
+            const xs_dict *location = xs_dict_get(actor, "location");
+
+            if (xs_is_dict(location)) {
+                const xs_val *latitude = xs_dict_get_def(location, "latitude", xs_stock(0));
+                const xs_val *longitude = xs_dict_get_def(location, "longitude", xs_stock(0));
+                const char *name = xs_dict_get_def(location, "name", "Home");
+
+                if (*latitude && *longitude) {
+                    xs *label = xs_fmt("%s,%s", xs_number_str(latitude), xs_number_str(longitude));
+                    xs *url   = xs_fmt("https://openstreetmap.org/search?query=%s,%s",
+                                latitude, longitude);
+
+                    xs_html_add(snac_post,
+                        xs_html_tag("p",
+                            xs_html_text(name),
+                            xs_html_text(": "),
+                            xs_html_tag("a",
+                                xs_html_attr("href", url),
+                                xs_html_attr("target", "_blank"),
+                                xs_html_text(label))));
+                }
+            }
+
             /* add user metadata */
             xs_html *snac_metadata = xs_html_tag("div",
                 xs_html_attr("class", "snac-metadata"));
