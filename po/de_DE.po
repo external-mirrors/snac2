@@ -938,4 +938,4 @@ msgstr "Dez"
 
 #: html.c:1801
 msgid "Show unlisted posts in the public page and RSS feed"
-msgstr ""
+msgstr "Nicht gelistete Beiträge auf der öffentlichen Seite und im RSS-Feed anzeigen"
