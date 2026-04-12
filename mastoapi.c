@@ -412,6 +412,8 @@ int oauth_post_handler(const xs_dict *req, const char *q_path,
 
                 if (!xs_is_null(scope))
                     rsp = xs_dict_append(rsp, "scope", scope);
+                else
+                    rsp = xs_dict_append(rsp, "scope", "");
 
                 *body  = xs_json_dumps(rsp, 4);
                 *ctype = "application/json";
