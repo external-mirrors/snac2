@@ -44,7 +44,7 @@ xs_str *rss_from_timeline(snac *user, const xs_list *timeline,
     int cnt = 0;
     const char *v;
 
-    int show_unlisted = xs_is_true(xs_dict_get(user->config, "show_unlisted"));
+    int show_unlisted = user ? xs_is_true(xs_dict_get(user->config, "show_unlisted")) : 0;
 
     xs_list_foreach(timeline, v) {
         xs *msg = NULL;
