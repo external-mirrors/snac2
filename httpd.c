@@ -68,7 +68,8 @@ const char * const nodeinfo_2_0_template = ""
     "\"usage\":{\"users\":{\"total\":%d,\"activeMonth\":%d,\"activeHalfyear\":%d},"
     "\"localPosts\":%d},"
     "\"openRegistrations\":false,\"metadata\":{"
-    "\"nodeDescription\":\"%s\",\"nodeName\":\"%s\""
+    "\"nodeDescription\":\"%s\",\"nodeName\":\"%s\","
+    "\"baseURL\":\"%s\""
     "}}";
 
 xs_str *nodeinfo_2_0(void)
@@ -105,7 +106,7 @@ xs_str *nodeinfo_2_0(void)
     const char *name = xs_dict_get_def(srv_config, "title", "");
     const char *desc = xs_dict_get_def(srv_config, "short_description", "");
 
-    return xs_fmt(nodeinfo_2_0_template, n_utotal, n_umonth, n_uhyear, n_posts, desc, name);
+    return xs_fmt(nodeinfo_2_0_template, n_utotal, n_umonth, n_uhyear, n_posts, desc, name, srv_baseurl);
 }
 
 
