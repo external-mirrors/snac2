@@ -5358,7 +5358,7 @@ int html_post_handler(const xs_dict *req, const char *q_path,
     uid = xs_list_get(l, 1);
     if (!uid || !user_open(&snac, uid)) {
         /* invalid user */
-        srv_debug(1, xs_fmt("html_post_handler bad user %s", uid));
+        srv_debug(1, xs_fmt("html_post_handler bad user %s", xs_or(uid, "(null)")));
         return HTTP_STATUS_NOT_FOUND;
     }
 
