@@ -282,7 +282,7 @@ void rss_to_timeline(snac *user, const char *url)
                 continue;
 
             /* the instance is [back] online */
-            instance_failure(object, 2);
+            instance_failure(id, 2);
 
             if (timeline_here(user, id)) {
                 snac_debug(user, 1, xs_fmt("RSS entry already in timeline (id) %s", id));
