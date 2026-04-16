@@ -3421,6 +3421,10 @@ void process_user_queue_item(snac *user, xs_dict *q_item)
                 actor_o = actor_get_collections(user, actor_o, 1);
 
                 actor_add(actor, actor_o);
+
+                /* mark actor and instance as working */
+                actor_failure(actor, 2);
+                instance_failure(actor, 2);
             }
             else {
                 if (status == HTTP_STATUS_GONE || status == HTTP_STATUS_NOT_FOUND) {
