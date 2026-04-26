@@ -937,4 +937,4 @@ msgstr "pro"
 
 #: html.c:1801
 msgid "Show unlisted posts in the public page and RSS feed"
-msgstr ""
+msgstr "Zobrazit neveřejné příspěvky na profilu a v RSS"
