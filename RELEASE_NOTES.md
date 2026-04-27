@@ -14,6 +14,8 @@ Allow serving files from subdirectories of the `static/` subdirectory (contribut
 
 Minor tweak to webfinger code to handle Hubzilla's peculiarities.
 
+Fixed a search case where URLs to GotoSocial statuses were misidentified as accounts.
+
 New Polish translation (contributed by kpm).
 
 ## 2.91
