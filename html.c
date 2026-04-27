@@ -4761,47 +4761,45 @@ int html_get_handler(const xs_dict *req, const char *q_path,
 
             /* searching for an URL? */
             if (q && xs_match(q, "https://*|http://*")) {
-                /* may by an actor; try a webfinger */
+                /* bring it to the user's timeline */
                 xs *actor_obj = NULL;
+                xs *object = NULL;
+                int status;
 
+                status = activitypub_request(&snac, q, &object);
+                snac_debug(&snac, 1, xs_fmt("Request searched URL %s %d", q, status));
+
+                if (valid_status(status) && xs_is_dict(object)) {
+                    /* got it; also request the actor */
+                    const char *attr_to = get_atto(object);
+
+                    if (!xs_is_null(attr_to)) {
+                        status = actor_request(&snac, attr_to, &actor_obj);
+
+                        if (valid_status(status)) {
+                            /* reset the query string to be the real id */
+                            url_acct = xs_dup(xs_dict_get(object, "id"));
+                            q = url_acct;
+
+                            /* add the post to the timeline */
+                            if (!timeline_here(&snac, q))
+                                timeline_add(&snac, q, object);
+                        }
+                    }
+                    else {
+                        /* retry webfinger, this time with the 'official' id */
+                        const char *id = xs_dict_get(object, "id");
+
+                        if (xs_is_string(id) && valid_status(webfinger_request(id, &actor_obj, &url_acct)) &&
+                            xs_is_string(url_acct))
+                            q = url_acct;
+                    }
+                }
+                else
+                /* may by an actor; try a webfinger */
                 if (valid_status(webfinger_request(q, &actor_obj, &url_acct)) && xs_is_string(url_acct)) {
                     /* it's an actor; do the dirty trick of changing q to the account name */
                     q = url_acct;
-                }
-                else {
-                    /* bring it to the user's timeline */
-                    xs *object = NULL;
-                    int status;
-
-                    status = activitypub_request(&snac, q, &object);
-                    snac_debug(&snac, 1, xs_fmt("Request searched URL %s %d", q, status));
-
-                    if (valid_status(status)) {
-                        /* got it; also request the actor */
-                        const char *attr_to = get_atto(object);
-
-                        if (!xs_is_null(attr_to)) {
-                            status = actor_request(&snac, attr_to, &actor_obj);
-
-                            if (valid_status(status)) {
-                                /* reset the query string to be the real id */
-                                url_acct = xs_dup(xs_dict_get(object, "id"));
-                                q = url_acct;
-
-                                /* add the post to the timeline */
-                                if (!timeline_here(&snac, q))
-                                    timeline_add(&snac, q, object);
-                            }
-                        }
-                        else {
-                            /* retry webfinger, this time with the 'official' id */
-                            const char *id = xs_dict_get(object, "id");
-
-                            if (xs_is_string(id) && valid_status(webfinger_request(id, &actor_obj, &url_acct)) &&
-                                xs_is_string(url_acct))
-                                q = url_acct;
-                        }
-                    }
                 }
 
                 /* fall through */
