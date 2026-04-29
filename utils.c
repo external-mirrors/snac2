@@ -369,6 +369,9 @@ int adduser(const char *uid)
         fclose(f);
     }
 
+    /* remove the grave */
+    grave(uid, 2);
+
     printf("\nUser password is %s\n", pwd);
 
     printf("\nGo to %s/%s and continue configuring your user there.\n", srv_baseurl, uid);

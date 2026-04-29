@@ -3303,6 +3303,10 @@ int grave(const char *objid, int op)
         }
 
         break;
+
+    case 2: /** del **/
+        unlink(fn);
+        break;
     }
 
     return ret;
