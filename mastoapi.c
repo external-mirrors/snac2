@@ -4205,17 +4205,37 @@ int mastoapi_put_handler(const xs_dict *req, const char *q_path,
                 if (valid_status(timeline_get_by_md5(&snac, md5, &msg))) {
                     const char *content = xs_dict_get(args, "status");
                     xs *atls = xs_list_new();
-                    xs *f_content = not_really_markdown(content, &atls, NULL);
+                    xs *f_content0 = not_really_markdown(content, &atls, NULL);
+                    xs *tag = xs_list_new();
+                    xs *f_content = process_tags(&snac, f_content0, &tag);
 
                     /* replace fields with new content */
                     msg = xs_dict_set(msg, "sourceContent", content);
                     msg = xs_dict_set(msg, "content", f_content);
 
+                    xs *content_map = xs_dup(xs_dict_get(msg, "contentMap"));
+                    if (xs_is_dict(content_map)) {
+                        /* get the first pair */
+                        const char *k, *v;
+                        int c = 0;
+
+                        if (xs_dict_next(content_map, &k, &v, &c)) {
+                            content_map = xs_dict_set(content_map, k, f_content);
+                            msg = xs_dict_set(msg, "contentMap", content_map);
+                        }
+                    }
+
                     xs *updated = xs_str_utctime(0, ISO_DATE_SPEC);
                     msg = xs_dict_set(msg, "updated", updated);
 
+                    msg = xs_dict_set(msg, "tag", tag);
+
                     /* overwrite object, not updating the indexes */
-                    object_add_ow(xs_dict_get(msg, "id"), msg);
+                    const char *id = xs_dict_get(msg, "id");
+
+                    object_add_ow(id, msg);
+
+                    tag_index(id, msg);
 
                     /* update message */
                     xs *c_msg = msg_update(&snac, msg);
