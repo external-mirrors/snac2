@@ -16,6 +16,8 @@ Minor tweak to webfinger code to handle Hubzilla's peculiarities.
 
 Fixed a search case where URLs to GotoSocial statuses were misidentified as accounts.
 
+Mastodon API: Fixed hashtags loosing the link after editing a post.
+
 New Polish translation (contributed by kpm).
 
 ## 2.91
