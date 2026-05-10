@@ -16,6 +16,8 @@ Minor tweak to webfinger code to handle Hubzilla's peculiarities.
 
 Fixed a search case where URLs to GotoSocial statuses were misidentified as accounts.
 
+Accounts that follow you are now marked with a thumb-up emoji, because followers are cool people.
+
 Mastodon API: Fixed hashtags loosing the link after editing a post.
 
 New Polish translation (contributed by kpm).
