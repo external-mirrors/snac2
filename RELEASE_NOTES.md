@@ -1,6 +1,6 @@
 # Release Notes
 
-## UNRELEASED
+## 2.92
 
 Changed default: for newly created instances, `disable_inbox_collection` is set to `true` (see `snac(8)` for more information). The reason is because it seems to be used for harrasing people.
 
@@ -16,7 +16,7 @@ Minor tweak to webfinger code to handle Hubzilla's peculiarities.
 
 Fixed a search case where URLs to GotoSocial statuses were misidentified as accounts.
 
-Accounts that follow you are now marked with a thumb-up emoji, because followers are cool people.
+Accounts that follow you are now marked with a thumb-up emoji, because followers are adorable people.
 
 Fixed some account export errors.
 
