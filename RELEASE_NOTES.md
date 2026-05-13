@@ -18,9 +18,19 @@ Fixed a search case where URLs to GotoSocial statuses were misidentified as acco
 
 Accounts that follow you are now marked with a thumb-up emoji, because followers are cool people.
 
-Mastodon API: Fixed hashtags loosing the link after editing a post.
+Fixed some account export errors.
+
+Fixed an incorrect hash in post links.
+
+Show an account's location link in the people page, if they have one.
+
+Mastodon API: Fixed hashtags loosing the link after editing a post, minor tweak in access token processing (contributed by trondd555).
+
+Drop usage of PATH_MAX (contributed by sergiodj).
 
 New Polish translation (contributed by kpm).
+
+Updated German and Czech translations (contributed by zen and pmjv).
 
 ## 2.91
 
