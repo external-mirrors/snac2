@@ -1606,11 +1606,14 @@ int timeline_admire(snac *snac, const char *id,
     const char *content = xs_dict_get_path(msg, "content");
     const char *type = xs_dict_get_path(msg, "type");
 
-    /* if we are admiring this, add to both timelines */
+    /* if we are admiring this, add to both timelines, and store for later */
     if (!like && strcmp(admirer, snac->actor) == 0) {
         object_user_cache_add(snac, id, "public");
         object_user_cache_add(snac, id, "private");
     }
+
+    if (strcmp(admirer, snac->actor) == 0)
+        object_user_cache_add(snac, id, "admire");
 
     /* use utf <3 as a like, as it is ugly */
     if (type && xs_match(type, "Like|EmojiReact|Emoji") &&

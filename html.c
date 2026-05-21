@@ -3522,6 +3522,18 @@ xs_str *html_timeline(snac *user, const xs_list *list, int read_only,
 
         {
             /* show the list of bookmarked posts */
+            xs *url = xs_fmt("%s/admirations", user->actor);
+            xs_html_add(lol,
+                xs_html_tag("li",
+                    xs_html_tag("a",
+                        xs_html_attr("href", url),
+                        xs_html_attr("class", "snac-list-link"),
+                        xs_html_attr("title", L("Liked, boosted or reacted posts")),
+                        xs_html_text(L("admirations")))));
+        }
+
+        {
+            /* show the list of bookmarked posts */
             xs *url = xs_fmt("%s/bookmarks", user->actor);
             xs_html_add(lol,
                 xs_html_tag("li",
@@ -5037,6 +5049,22 @@ int html_get_handler(const xs_dict *req, const char *q_path,
 
             *body = html_timeline(&snac, list, 0, skip, show,
                 0, L("Pinned posts"), "", 0, error, terse);
+            *b_size = strlen(*body);
+            status  = HTTP_STATUS_OK;
+        }
+    }
+    else
+    if (strcmp(p_path, "admirations") == 0) { /** list of admired posts **/
+        if (!login(&snac, req)) {
+            *body  = xs_dup(uid);
+            status = HTTP_STATUS_UNAUTHORIZED;
+        }
+        else {
+            int more = 0;
+            xs *list = timeline_list(&snac, "admire", skip, show, &more);
+
+            *body = html_timeline(&snac, list, 0, skip, show,
+                more, L("Liked, boosted or reacted posts"), "/admirations", 0, error, terse);
             *b_size = strlen(*body);
             status  = HTTP_STATUS_OK;
         }
