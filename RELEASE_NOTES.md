@@ -1,5 +1,11 @@
 # Release Notes
 
+## UNRELEASED
+
+Nested quoted posts are limited up to 3 levels.
+
+Updated French translation (contributed by dragondaddy).
+
 ## 2.92
 
 Changed default: for newly created instances, `disable_inbox_collection` is set to `true` (see `snac(8)` for more information). The reason is because it seems to be used for harrasing people.
