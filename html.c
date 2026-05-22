@@ -5661,6 +5661,7 @@ int html_post_handler(const xs_dict *req, const char *q_path,
             const char *eid = xs_dict_get(p_vars, "eid");
 
             if (eid != NULL) {
+                object_user_cache_del(&snac, id, "admire");
                 xs *n_msg = msg_emoji_unreact(&snac, id, eid);
 
                 if (n_msg != NULL)
@@ -5675,8 +5676,10 @@ int html_post_handler(const xs_dict *req, const char *q_path,
 
             xs *ret = msg_emoji_init(&snac, id, eid);
             /* fails if either invalid or already reacted */
-            if (!ret)
+            if (!ret) {
+                object_user_cache_del(&snac, id, "admire");
                 ret = msg_emoji_unreact(&snac, id, eid);
+            }
             if (!ret)
                 status = HTTP_STATUS_NOT_FOUND;
         }
