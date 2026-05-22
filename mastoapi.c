@@ -3435,6 +3435,7 @@ int mastoapi_post_handler(const xs_dict *req, const char *q_path,
                         xs *n_msg = msg_repulsion(&snac, id, "Like");
 
                         if (n_msg != NULL) {
+                            object_user_cache_del(&snac, id, "admire");
                             enqueue_message(&snac, n_msg);
 
                             out = mastoapi_status(&snac, msg);
@@ -3456,6 +3457,7 @@ int mastoapi_post_handler(const xs_dict *req, const char *q_path,
                             xs *n_msg = msg_emoji_unreact(&snac, id, content);
 
                             if (n_msg != NULL) {
+                                object_user_cache_del(&snac, id, "admire");
                                 enqueue_message(&snac, n_msg);
 
                                 out = mastoapi_status(&snac, msg);
