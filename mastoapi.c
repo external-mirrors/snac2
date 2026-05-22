@@ -355,6 +355,7 @@ int oauth_post_handler(const xs_dict *req, const char *q_path,
     else
     if (strcmp(cmd, "/token") == 0) { /** **/
         xs *wrk = NULL;
+        xs *codewrk = NULL;
         const char *gtype = xs_dict_get(args, "grant_type");
         const char *code  = xs_dict_get(args, "code");
         const char *cid   = xs_dict_get(args, "client_id");
@@ -387,7 +388,7 @@ int oauth_post_handler(const xs_dict *req, const char *q_path,
            I'm not sure of the impacts of this right now, but Subway Tooter does not
            provide a code so one must be generated */
         if (xs_is_null(code)){
-            code = random_str();
+            code = codewrk = random_str();
         }
         if (gtype && code && cid && csec && ruri) {
             xs *app = app_get(cid);
