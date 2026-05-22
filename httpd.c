@@ -600,17 +600,19 @@ void httpd_connection(FILE *f)
         status = HTTP_STATUS_NOT_FOUND;
     }
 
-    if (status == HTTP_STATUS_FORBIDDEN)
-        body = xs_str_new("<h1>403 Forbidden (" USER_AGENT ")</h1>");
+    if (body == NULL) {
+        if (status == HTTP_STATUS_FORBIDDEN)
+            body = xs_str_new("<h1>403 Forbidden (" USER_AGENT ")</h1>");
 
-    if (status == HTTP_STATUS_NOT_FOUND)
-        body = xs_str_new("<h1>404 Not Found (" USER_AGENT ")</h1>");
+        if (status == HTTP_STATUS_NOT_FOUND)
+            body = xs_str_new("<h1>404 Not Found (" USER_AGENT ")</h1>");
 
-    if (status == HTTP_STATUS_GONE)
-        body = xs_str_new("<h1>410 Gone (" USER_AGENT ")</h1>");
+        if (status == HTTP_STATUS_GONE)
+            body = xs_str_new("<h1>410 Gone (" USER_AGENT ")</h1>");
 
-    if (status == HTTP_STATUS_BAD_REQUEST && body != NULL)
-        body = xs_str_new("<h1>400 Bad Request (" USER_AGENT ")</h1>");
+        if (status == HTTP_STATUS_BAD_REQUEST)
+            body = xs_str_new("<h1>400 Bad Request (" USER_AGENT ")</h1>");
+    }
 
     if (status == HTTP_STATUS_SEE_OTHER)
         headers = xs_dict_append(headers, "location", body);
