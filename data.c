@@ -217,6 +217,7 @@ void user_free(snac *snac)
     xs_free(snac->key);
     xs_free(snac->links);
     xs_free(snac->actor);
+    xs_free(snac->actor_alt);
     xs_free(snac->md5);
 }
 
