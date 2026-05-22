@@ -6,7 +6,7 @@ Added a new *admirations* entry point to the web UI, containing a timeline of li
 
 Nested quoted posts are limited up to 3 levels.
 
-Fixed small memory leak (contributed by inz).
+Fixed some memory leaks (contributed by inz).
 
 Updated French translation (contributed by dragondaddy).
 
