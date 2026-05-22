@@ -3885,8 +3885,10 @@ int activitypub_get_handler(const xs_dict *req, const char *q_path,
 
     xs *l = xs_split_n(q_path, "/", 2);
 
-    if (xs_list_len(l) <= 1)
+    if (xs_list_len(l) <= 1) {
+        srv_debug(1, xs_fmt("activitypub_get_handler bad path %s", q_path));
         return HTTP_STATUS_BAD_REQUEST;
+    }
 
     const char *uid;
     const char *p_path;
@@ -4075,8 +4077,10 @@ int activitypub_post_handler(const xs_dict *req, const char *q_path,
     /* get the user and path */
     xs *l = xs_split_n(q_path, "/", 2);
 
-    if (xs_list_len(l) <= 1)
+    if (xs_list_len(l) <= 1) {
+        srv_debug(1, xs_fmt("activitypub_post_handler bad path %s", q_path));
         return HTTP_STATUS_BAD_REQUEST;
+    }
 
     if (xs_list_len(l) == 2 && strcmp(xs_list_get(l, 1), "shared-inbox") == 0) {
         enqueue_shared_input(msg, req, 0);
