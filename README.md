@@ -17,6 +17,7 @@ A simple, minimalistic ActivityPub instance
 - Totally JavaScript-free
 - No cookies either
 - Not much bullshit
+- No AI accepted (already covered by previous point)
 
 ## About
 
