@@ -5703,6 +5703,7 @@ int html_post_handler(const xs_dict *req, const char *q_path,
             xs *msg = msg_repulsion(&snac, id, "Like");
 
             if (msg != NULL) {
+                object_user_cache_del(&snac, id, "admire");
                 enqueue_message(&snac, msg);
             }
         }
@@ -5711,6 +5712,7 @@ int html_post_handler(const xs_dict *req, const char *q_path,
             xs *msg = msg_repulsion(&snac, id, "Announce");
 
             if (msg != NULL) {
+                object_user_cache_del(&snac, id, "admire");
                 enqueue_message(&snac, msg);
             }
         }
