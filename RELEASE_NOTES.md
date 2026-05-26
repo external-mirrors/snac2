@@ -8,7 +8,7 @@ Nested quoted posts are limited up to 3 levels.
 
 Fixed some memory leaks (contributed by inz).
 
-Updated French translation (contributed by dragondaddy).
+Updated French, Brazilian Portuguese translations (contributed by dragondaddy, daltux).
 
 ## 2.92
 
