@@ -44,7 +44,9 @@ static const char * const default_srv_config = "{"
     "\"protocol\":             \"https\","
     "\"fastcgi\":              false,"
     "\"disable_inbox_collection\": true,"
-    "\"disable_history\": true"
+    "\"disable_history\": true,"
+    "\"keep_replied_posts\":     false,"
+    "\"keep_replied_me\":        false"
     "}";
 
 static const char * const default_css =

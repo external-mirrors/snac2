@@ -327,6 +327,11 @@ Overrides the default "mogrify" command name or path. Use this if the tool is no
 Overrides the default "ffmpeg" command name or path. Use this if the tool is not in the system PATH or has a different name.
 .It Ic purge_static
 If set to true, user static directories are purged; any file stored in these subdirectories (usually images or other media) that is not attached to any post, not used as avatar, header or favicon, and not served as an emoji, is deleted from the filesystem. Don't enable this option if any of your users are serving other files (like, e.g., CSS assets) this way.
+.It Ic keep_replied_posts
+If set to true, when you reply to a remote post, the parent remote post will be added to local public timeline.
+.It Ic keep_replied_me
+If set to true, when a remote user replies to one of local posts, the
+remote reply will be added to local public timeline.
 .El
 .Pp
 You must restart the server to make effective these changes.

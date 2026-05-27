@@ -2035,6 +2035,27 @@ xs_str *build_mentions(snac *user, const xs_dict *msg)
         }
     }
 
+    /* also add the author of this post as a mention */
+    const char *atto = get_atto(msg);
+
+    if (xs_is_string(atto) && *atto && strcmp(atto, user->actor) != 0) {
+        /* check if this author is already in the mentions string */
+        xs *l = xs_split(atto, "/");
+
+        if (xs_list_len(l) > 3) {
+            xs *actor_o = NULL;
+            if (valid_status(object_get(atto, &actor_o))) {
+                const char *uname = xs_dict_get(actor_o, "preferredUsername");
+                if (!xs_is_null(uname) && *uname) {
+                    xs *handle = xs_fmt("@%s@%s ", uname, xs_list_get(l, 2));
+                    if (xs_str_in(s, handle) == -1) {
+                        s = xs_str_cat(s, handle);
+                    }
+                }
+            }
+        }
+    }
+
     if (*s) {
         xs *s1 = s;
         s = xs_fmt("\n\n\nCC: %s", s1);
