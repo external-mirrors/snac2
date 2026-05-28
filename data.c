@@ -1562,6 +1562,37 @@ void timeline_update_indexes(snac *snac, const char *id)
             else
                 /* also add it to public, it will be discarded later */
                 object_user_cache_add(snac, id, "public");
+
+            /* if `keep_replied_posts` is `true` and a local post is a reply to a remote post, add the parent remote post to the public */
+            if (xs_is_true(xs_dict_get(srv_config, "keep_replied_posts"))) {
+                const char *in_reply_to = get_in_reply_to(msg);
+
+                if (xs_is_string(in_reply_to) && *in_reply_to &&
+                    !is_msg_mine(snac, in_reply_to)) {
+                    if (object_user_cache_add(snac, in_reply_to, "public") >= 0) {
+                        snac_debug(snac, 1,
+                            xs_fmt("keep_replied_posts: added parent %s to public", in_reply_to));
+                    }
+                }
+            }
+        }
+    }
+    else {
+        /* if `keep_replied_me` is `true` and a remote post is a reply to one of local posts, add it to public */
+        if (xs_is_true(xs_dict_get(srv_config, "keep_replied_me"))) {
+            xs *msg = NULL;
+
+            if (valid_status(object_get(id, &msg))) {
+                const char *in_reply_to = get_in_reply_to(msg);
+
+                if (xs_is_string(in_reply_to) && *in_reply_to &&
+                    is_msg_mine(snac, in_reply_to)) {
+                    if (object_user_cache_add(snac, id, "public") >= 0) {
+                        snac_debug(snac, 1,
+                            xs_fmt("keep_replied_me: added reply %s to public", id));
+                    }
+                }
+            }
         }
     }
 }
