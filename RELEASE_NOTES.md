@@ -6,6 +6,10 @@ Added a new *admirations* entry point to the web UI, containing a timeline of li
 
 Nested quoted posts are limited up to 3 levels.
 
+New configuration knob: by setting `keep_replies_posts` to true in `server.json`, remote posts that a local user has replied to are retained in the public timeline, preventing them from being purged (contributed by hanchan).
+
+New configuration knob: by setting `keep_replied_me` to true in `server.json`, remote replies to local posts are retained in the public timeline, preventing them from being purged (contributed by hanchan).
+
 Fixed some memory leaks (contributed by inz).
 
 Updated French, Brazilian Portuguese translations (contributed by dragondaddy, daltux).
