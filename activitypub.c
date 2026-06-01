@@ -1834,7 +1834,7 @@ xs_dict *msg_actor(snac *snac)
 
     if (xs_is_string(public_key_pem)) {
         /* crop any garbage after the PEM */
-        const char *pem_trailer = "END PUBLIC KEY-----\n";
+        const char *pem_trailer = "\n-----END PUBLIC KEY-----\n";
         int i = xs_str_in(public_key_pem, pem_trailer);
         if (i > 0)
             public_key_pem[i + strlen(pem_trailer)] = '\0';
