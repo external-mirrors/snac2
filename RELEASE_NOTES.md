@@ -10,6 +10,8 @@ New configuration knob: by setting `keep_replies_posts` to true in `server.json`
 
 New configuration knob: by setting `keep_replied_me` to true in `server.json`, remote replies to local posts are retained in the public timeline, preventing them from being purged (contributed by hanchan).
 
+Ensure actors' public key PEM never includes anything after the end marker.
+
 Fixed some memory leaks (contributed by inz).
 
 Updated French, Brazilian Portuguese translations (contributed by dragondaddy, daltux).
