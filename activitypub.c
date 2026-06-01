@@ -1829,7 +1829,18 @@ xs_dict *msg_actor(snac *snac)
 
     keys = xs_dict_append(keys, "id",           kid);
     keys = xs_dict_append(keys, "owner",        snac->actor);
-    keys = xs_dict_append(keys, "publicKeyPem", xs_dict_get(snac->key, "public"));
+
+    xs *public_key_pem = xs_dup(xs_dict_get(snac->key, "public"));
+
+    if (xs_is_string(public_key_pem)) {
+        /* crop any garbage after the PEM */
+        const char *pem_trailer = "END PUBLIC KEY-----\n";
+        int i = xs_str_in(public_key_pem, pem_trailer);
+        if (i > 0)
+            public_key_pem[i + strlen(pem_trailer)] = '\0';
+    }
+
+    keys = xs_dict_append(keys, "publicKeyPem", public_key_pem);
     msg = xs_dict_set(msg, "publicKey", keys);
 
     /* if the "bot" config field is set to true, change type to "Service" */
