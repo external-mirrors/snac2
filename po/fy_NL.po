@@ -8,119 +8,119 @@ msgstr ""
 "Language: fy_NL\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: html.c:621
+#: html.c:627
 msgid "Sensitive content: "
 msgstr "Gefoelige ynhâld: "
 
-#: html.c:629
+#: html.c:635
 msgid "Sensitive content description"
 msgstr "Beskriuwing fan gefoelige ynhâld"
 
 msgid "Only for mentioned people: "
 msgstr "Allinnich foar neamde personen: "
 
-#: html.c:657
+#: html.c:663
 msgid "Reply to (URL): "
 msgstr "Antwurd op (URL): "
 
-#: html.c:666
+#: html.c:672
 msgid "Don't send, but store as a draft"
 msgstr "Net ferstjoere, mar bewarje as konsept"
 
-#: html.c:667
+#: html.c:673
 msgid "Draft:"
 msgstr "Konsept:"
 
-#: html.c:757
+#: html.c:763
 msgid "Attachments..."
 msgstr "Bylagen..."
 
-#: html.c:780
+#: html.c:786
 msgid "File:"
 msgstr "Bestân:"
 
-#: html.c:784
+#: html.c:790
 msgid "Clear this field to delete the attachment"
 msgstr "Fjild leech meitsje om de bylage fuort te smiten"
 
-#: html.c:793 html.c:818
+#: html.c:799 html.c:824
 msgid "Attachment description"
 msgstr "Beskriuwing fan bylage"
 
-#: html.c:834
+#: html.c:840
 msgid "Poll..."
 msgstr "Peiling..."
 
-#: html.c:826
+#: html.c:832
 msgid "Poll options (one per line, up to 8):"
 msgstr "Peilingopsjes (ien per rigel, oant 8):"
 
-#: html.c:848
+#: html.c:854
 msgid "One choice"
 msgstr "Ien keuze"
 
-#: html.c:851
+#: html.c:857
 msgid "Multiple choices"
 msgstr "Mear keuzes"
 
-#: html.c:857
+#: html.c:863
 msgid "End in 5 minutes"
 msgstr "Einiget oer 5 minuten"
 
-#: html.c:861
+#: html.c:867
 msgid "End in 1 hour"
 msgstr "Einiget oer 1 oere"
 
-#: html.c:864
+#: html.c:870
 msgid "End in 1 day"
 msgstr "Einiget oer 1 dei"
 
-#: html.c:878
+#: html.c:884
 msgid "Post"
 msgstr "Berjocht"
 
-#: html.c:980 html.c:987
+#: html.c:986 html.c:993
 msgid "Site description"
 msgstr "Beskriuwing fan de side"
 
-#: html.c:998
+#: html.c:1004
 msgid "Admin email"
 msgstr "Admin e-mail"
 
-#: html.c:1011
+#: html.c:1017
 msgid "Admin account"
 msgstr "Admin akkount"
 
-#: html.c:1076 html.c:1432 html.c:3813
+#: html.c:1082 html.c:1438 html.c:3876
 #, c-format
 msgid "%d following, %d followers"
 msgstr "%d folgjend, %d folgers"
 
-#: html.c:1173
+#: html.c:1179
 msgid "RSS"
 msgstr "RSS"
 
-#: html.c:1178 html.c:1217
+#: html.c:1184 html.c:1223
 msgid "private"
 msgstr "privé"
 
-#: html.c:1213
+#: html.c:1219
 msgid "public"
 msgstr "publik"
 
-#: html.c:1221
+#: html.c:1227
 msgid "notifications"
 msgstr "notifikaasjes"
 
-#: html.c:1226
+#: html.c:1232
 msgid "people"
 msgstr "minsken"
 
-#: html.c:1231
+#: html.c:1237
 msgid "instance"
 msgstr "instantsje"
 
-#: html.c:1240
+#: html.c:1246
 msgid ""
 "Search posts by URL or content (regular expression), @user@host accounts, or "
 "#tag"
@@ -128,575 +128,575 @@ msgstr ""
 "Sykje berjochten op URL of ynh??ld (reguliere ekspresje), @brûker@host "
 "akkounts, of #tag"
 
-#: html.c:1241
+#: html.c:1247
 msgid "Content search"
 msgstr "Ynhâld sêkje"
 
-#: html.c:1367
+#: html.c:1373
 msgid "verified link"
 msgstr "ferifiearre keppeling"
 
-#: html.c:1424 html.c:3158 html.c:3171 html.c:3180 html.c:4467
+#: html.c:1430 html.c:3206 html.c:3219 html.c:3228 html.c:4558
 msgid "Location: "
 msgstr "Lokaasje: "
 
-#: html.c:1471
+#: html.c:1477
 msgid "New Post..."
 msgstr "Nij berjocht..."
 
-#: html.c:1473
+#: html.c:1479
 msgid "What's on your mind?"
 msgstr "Wat wolst diele?"
 
-#: html.c:1482
+#: html.c:1488
 msgid "Operations..."
 msgstr "Hannelens..."
 
-#: html.c:1497 html.c:2126 html.c:3950 html.c:4416 html.c:5680
+#: html.c:1503 html.c:2163 html.c:4041 html.c:4507 html.c:5790
 msgid "Follow"
 msgstr "Folgje"
 
-#: html.c:1499
+#: html.c:1505
 msgid "(by URL or user@host)"
 msgstr "(fia URL of brûker@host)"
 
-#: html.c:1514 html.c:2102 html.c:5629
+#: html.c:1520 html.c:2139 html.c:5737
 msgid "Boost"
 msgstr "Boost"
 
-#: html.c:1516 html.c:1533 html.c:1555
+#: html.c:1522 html.c:1539 html.c:1561
 msgid "(by URL)"
 msgstr "(fia URL)"
 
-#: html.c:1531 html.c:2081 html.c:5620
+#: html.c:1537 html.c:2118 html.c:5728
 msgid "Like"
 msgstr "Lyk"
 
-#: html.c:1682
+#: html.c:1689
 msgid "User Settings..."
 msgstr "Brûkersynstellings..."
 
-#: html.c:1691
+#: html.c:1698
 msgid "Display name:"
 msgstr "Werjeftenamme:"
 
-#: html.c:1697
+#: html.c:1704
 msgid "Your name"
 msgstr "Jo namme"
 
-#: html.c:1699
+#: html.c:1706
 msgid "Avatar: "
 msgstr "Profylplaatsje: "
 
-#: html.c:1707
+#: html.c:1714
 msgid "Delete current avatar"
 msgstr "Hjoeddeistige profylplaatsje fuortsmite"
 
-#: html.c:1709
+#: html.c:1716
 msgid "Header image (banner): "
 msgstr "Koptekstplaatsje (banner): "
 
-#: html.c:1717
+#: html.c:1724
 msgid "Delete current header image"
 msgstr "Hjoeddeistige koptekstplaatsje fuortsmite"
 
-#: html.c:1719
+#: html.c:1726
 msgid "Bio:"
 msgstr "Bio:"
 
-#: html.c:1725
+#: html.c:1732
 msgid "Write about yourself here..."
 msgstr "Skriuw hjir wat oer josels..."
 
-#: html.c:1734
+#: html.c:1741
 msgid "Always show sensitive content"
 msgstr "Altyd gefoelige ynhâld toanje"
 
-#: html.c:1736
+#: html.c:1743
 msgid "Email address for notifications:"
 msgstr "E-mailadres foar notifikaasjes:"
 
-#: html.c:1744
+#: html.c:1751
 msgid "Telegram notifications (bot key and chat id):"
 msgstr "Telegram notifikaasjes (bot kaai en chat id):"
 
-#: html.c:1758
+#: html.c:1765
 msgid "ntfy notifications (ntfy server and token):"
 msgstr "ntfy notifikaasjes (ntfy server en token):"
 
-#: html.c:1780
+#: html.c:1787
 msgid "Maximum days to keep posts (0: server settings):"
 msgstr ""
 "Maksimaal oantal dagen om berjochten te bewarjen (0: serverynstellings):"
 
-#: html.c:1786
+#: html.c:1793
 msgid "Drop direct messages from people you don't follow"
 msgstr "Direktte berjochten fan minsken dy't jo net folgje fuortsmite"
 
-#: html.c:1788
+#: html.c:1795
 msgid "This account is a bot"
 msgstr "Dit akkount is in bot"
 
-#: html.c:1790
+#: html.c:1797
 msgid "Auto-boost all mentions to this account"
 msgstr "Automatysk boostje fan alle fermeldingen fan dit akkount"
 
-#: html.c:1792
+#: html.c:1799
 msgid "This account is private (posts are not shown through the web)"
 msgstr "Dit akkount is privé (berjochten wurde net toand fia it web)"
 
-#: html.c:1795
+#: html.c:1802
 msgid "Collapse top threads by default"
 msgstr "Standert topthreads ynklappe"
 
-#: html.c:1797
+#: html.c:1804
 msgid "Follow requests must be approved"
 msgstr "Folchfersiken moatte goedkeard wurde"
 
-#: html.c:1799
+#: html.c:1806
 msgid "Publish follower and following metrics"
 msgstr "Folger- en folchstatistiken publisearje"
 
-#: html.c:1804
+#: html.c:1811
 msgid "Current location:"
 msgstr "Hjoeddeistige lokaasje:"
 
-#: html.c:1818
+#: html.c:1825
 msgid "Profile metadata (key=value pairs in each line):"
 msgstr "Profylmetadata (kaai=wearde pearen yn eltse rigel):"
 
-#: html.c:1829
+#: html.c:1836
 msgid "Web interface language:"
 msgstr "Webynterfacetaal:"
 
-#: html.c:1848
+#: html.c:1864
 msgid "New password:"
 msgstr "Nij wachtwurd:"
 
-#: html.c:1855
+#: html.c:1871
 msgid "Repeat new password:"
 msgstr "Nij wachtwurd werhelje:"
 
-#: html.c:1865
+#: html.c:1881
 msgid "Update user info"
 msgstr "Brûkerynformaasje bywurkje"
 
-#: html.c:1876
+#: html.c:1892
 msgid "Followed hashtags..."
 msgstr "Folge hashtags..."
 
-#: html.c:1878 html.c:1911
+#: html.c:1894 html.c:1927
 msgid "One hashtag per line"
 msgstr "Ien hashtag per rigel"
 
-#: html.c:1900 html.c:1932
+#: html.c:1916 html.c:1948
 msgid "Update hashtags"
 msgstr "Hashtags bywurkje"
 
-#: html.c:2081
+#: html.c:2118
 msgid "Say you like this post"
 msgstr "Sis dat jo dit berjocht mooi fine"
 
-#: html.c:2086 html.c:5638
+#: html.c:2123 html.c:5746
 msgid "Unlike"
 msgstr "Net mooi fine"
 
-#: html.c:2086
+#: html.c:2123
 msgid "Nah don't like it that much"
 msgstr "Nee, ik find it net sa mooi"
 
-#: html.c:2092 html.c:5775
+#: html.c:2129 html.c:5885
 msgid "Unpin"
 msgstr "Net fêstsette"
 
-#: html.c:2092
+#: html.c:2129
 msgid "Unpin this post from your timeline"
 msgstr "Dit berjocht net mear fêstsette op jo tiidline"
 
-#: html.c:2095 html.c:5770
+#: html.c:2132 html.c:5880
 msgid "Pin"
 msgstr "Fêstsette"
 
-#: html.c:2095
+#: html.c:2132
 msgid "Pin this post to the top of your timeline"
 msgstr "Dit berjocht fêstsette boppe-oan jo tiidline"
 
-#: html.c:2102
+#: html.c:2139
 msgid "Announce this post to your followers"
 msgstr "Dit berjocht oankondichje by jo folgers"
 
-#: html.c:2107 html.c:5646
+#: html.c:2144 html.c:5755
 msgid "Unboost"
 msgstr "Untboostje"
 
-#: html.c:2107
+#: html.c:2144
 msgid "I regret I boosted this"
 msgstr "Ik betreure dat ik dit boostet ha"
 
-#: html.c:2113 html.c:5785
+#: html.c:2150 html.c:5895
 msgid "Unbookmark"
 msgstr "Ut favorite fuortsmite"
 
-#: html.c:2113
+#: html.c:2150
 msgid "Delete this post from your bookmarks"
 msgstr "Dit berjocht ut jo favorite fuortsmite"
 
-#: html.c:2116 html.c:5780
+#: html.c:2153 html.c:5890
 msgid "Bookmark"
 msgstr "Favoryt"
 
-#: html.c:2116
+#: html.c:2153
 msgid "Add this post to your bookmarks"
 msgstr "Dit berjocht tafoegje oan jo favorite"
 
-#: html.c:2122 html.c:3936 html.c:4327 html.c:4414 html.c:5693
+#: html.c:2159 html.c:4027 html.c:4418 html.c:4505 html.c:5803
 msgid "Unfollow"
 msgstr "Untfolgje"
 
-#: html.c:2122 html.c:3937 html.c:4414
+#: html.c:2159 html.c:4028 html.c:4505
 msgid "Stop following this user's activity"
 msgstr "Stopje mei it folgjen fan de aktiviteit fan dizze brûker"
 
-#: html.c:2126 html.c:3951 html.c:4416
+#: html.c:2163 html.c:4042 html.c:4507
 msgid "Start following this user's activity"
 msgstr "Begjinne mei it folgjen fan de aktiviteit fan dizze brûker"
 
-#: html.c:2132 html.c:5723
+#: html.c:2169 html.c:5833
 msgid "Unfollow Group"
 msgstr "Untfolgje groep"
 
-#: html.c:2133
+#: html.c:2170
 msgid "Stop following this group or channel"
 msgstr "Stopje mei it folgjen fan dizze groep of kanaal"
 
-#: html.c:2137 html.c:5710
+#: html.c:2174 html.c:5820
 msgid "Follow Group"
 msgstr "Folgje groep"
 
-#: html.c:2138
+#: html.c:2175
 msgid "Start following this group or channel"
 msgstr "Begjinne mei it folgjen fan dizze groep of kanaal"
 
-#: html.c:2143 html.c:3973 html.c:5654
+#: html.c:2180 html.c:4064 html.c:5764
 msgid "MUTE"
 msgstr "STILJE"
 
-#: html.c:2144
+#: html.c:2181
 msgid "Block any activity from this user forever"
 msgstr "Alle aktiviteit fan dizze brûker foar altyd blokkearje"
 
-#: html.c:2149 html.c:3955 html.c:5740
+#: html.c:2186 html.c:4046 html.c:5850
 msgid "Delete"
 msgstr "Fuortsmite"
 
-#: html.c:2149
+#: html.c:2186
 msgid "Delete this post"
 msgstr "Dit berjocht fuortsmite"
 
-#: html.c:2152 html.c:5662
+#: html.c:2189 html.c:5772
 msgid "Hide"
 msgstr "Ferbergje"
 
-#: html.c:2152
+#: html.c:2189
 msgid "Hide this post and its children"
 msgstr "Dit berjocht en syn bern ferbergje"
 
-#: html.c:2194
+#: html.c:2231
 msgid "Edit..."
 msgstr "Bewurkje..."
 
-#: html.c:2232
+#: html.c:2269
 msgid "Reply..."
 msgstr "Antwurd..."
 
-#: html.c:2306
+#: html.c:2343
 msgid "Truncated (too deep)"
 msgstr "Ofkapte (te djip)"
 
-#: html.c:2324
+#: html.c:2372
 msgid "follows you"
 msgstr "folget jo"
 
-#: html.c:2398
+#: html.c:2446
 msgid "Pinned"
 msgstr "Fêstsetten"
 
-#: html.c:2406
+#: html.c:2454
 msgid "Bookmarked"
 msgstr "Favoryt"
 
-#: html.c:2414
+#: html.c:2462
 msgid "Poll"
 msgstr "Peiling"
 
-#: html.c:2421
+#: html.c:2469
 msgid "Voted"
 msgstr "Stimme"
 
-#: html.c:2430
+#: html.c:2478
 msgid "Event"
 msgstr "Barrens"
 
-#: html.c:2462 html.c:2491
+#: html.c:2510 html.c:2539
 msgid "boosted"
 msgstr "boostet"
 
-#: html.c:2505
+#: html.c:2553
 msgid "in reply to"
 msgstr "as antwurd op"
 
-#: html.c:2570
+#: html.c:2618
 msgid " [SENSITIVE CONTENT]"
 msgstr " [GEFOELIGE YNHÂLD]"
 
-#: html.c:2944
+#: html.c:2992
 msgid "Vote"
 msgstr "Stimme"
 
-#: html.c:2954
+#: html.c:3002
 msgid "Closed"
 msgstr "Sletten"
 
-#: html.c:2979
+#: html.c:3027
 msgid "Closes in"
 msgstr "Slut oer"
 
-#: html.c:3059
+#: html.c:3107
 msgid "Video"
 msgstr "Fideo"
 
-#: html.c:3074
+#: html.c:3122
 msgid "Audio"
 msgstr "Audio"
 
-#: html.c:3102
+#: html.c:3150
 msgid "Attachment"
 msgstr "Bylage"
 
-#: html.c:3116
+#: html.c:3164
 msgid "Alt..."
 msgstr "Alt..."
 
-#: html.c:3129
+#: html.c:3177
 msgid "Source channel or community"
 msgstr "Boarnekanaal of mienskip"
 
-#: html.c:3223
+#: html.c:3271
 msgid "Time: "
 msgstr "Tiid: "
 
-#: html.c:3304
+#: html.c:3352
 msgid "Older..."
 msgstr "Alder..."
 
-#: html.c:3406
+#: html.c:3454
 msgid "about this site"
 msgstr "oer dizze side"
 
-#: html.c:3408
+#: html.c:3456
 msgid "powered by "
 msgstr "oanjoegen troch "
 
-#: html.c:3477
+#: html.c:3524
 msgid "Dismiss"
 msgstr "Wegerje"
 
-#: html.c:3494
+#: html.c:3541
 #, c-format
 msgid "Timeline for list '%s'"
 msgstr "Tiidline foar list '%s'"
 
-#: html.c:3513 html.c:5003
+#: html.c:3560 html.c:5092
 msgid "Pinned posts"
 msgstr "Fêstsette berjochten"
 
-#: html.c:3525 html.c:5018
+#: html.c:3584 html.c:5123
 msgid "Bookmarked posts"
 msgstr "Favorite berjochten"
 
-#: html.c:3537 html.c:5033
+#: html.c:3596 html.c:5138
 msgid "Post drafts"
 msgstr "Berjochtkonsepten"
 
-#: html.c:3615
+#: html.c:3674
 msgid "No more unseen posts"
 msgstr "Gjin net-lêzene berjochten mear"
 
-#: html.c:3619 html.c:3732 html.c:4114
+#: html.c:3678 html.c:3791 html.c:4205
 msgid "Back to top"
 msgstr "Werom nei boppe"
 
-#: html.c:3685
+#: html.c:3744
 msgid "History"
 msgstr "Skiednis"
 
-#: html.c:3737 html.c:4119 html.c:4521
+#: html.c:3796 html.c:4210 html.c:4612
 msgid "More..."
 msgstr "Mear..."
 
-#: html.c:3941 html.c:5676
+#: html.c:4032 html.c:5786
 msgid "Unlimit"
 msgstr "Unbeheind"
 
-#: html.c:3942
+#: html.c:4033
 msgid "Allow announces (boosts) from this user"
 msgstr "Oankondichings (boosts) fan dizze brûker tasteane"
 
-#: html.c:3945 html.c:5672
+#: html.c:4036 html.c:5782
 msgid "Limit"
 msgstr "Beheine"
 
-#: html.c:3946
+#: html.c:4037
 msgid "Block announces (boosts) from this user"
 msgstr "Oankondichings (boosts) fan dizze brûker blokkearje"
 
-#: html.c:3955
+#: html.c:4046
 msgid "Delete this user"
 msgstr "Dizze brûker fuortsmite"
 
-#: html.c:3960 html.c:5790
+#: html.c:4051 html.c:5900
 msgid "Approve"
 msgstr "Goedkarre"
 
-#: html.c:3961
+#: html.c:4052
 msgid "Approve this follow request"
 msgstr "Dit folchfersk goedkarre"
 
-#: html.c:3964 html.c:5814
+#: html.c:4055 html.c:5924
 msgid "Discard"
 msgstr "Wegerje"
 
-#: html.c:3964
+#: html.c:4055
 msgid "Discard this follow request"
 msgstr "Dit folchfersk wegerje"
 
-#: html.c:3969 html.c:5658
+#: html.c:4060 html.c:5768
 msgid "Unmute"
 msgstr "Net mear stilje"
 
-#: html.c:3970
+#: html.c:4061
 msgid "Stop blocking activities from this user"
 msgstr "Stopje mei it blokkearjen fan aktiviteiten fan dizze brûker"
 
-#: html.c:3974
+#: html.c:4065
 msgid "Block any activity from this user"
 msgstr "Alle aktiviteit fan dizze brûker blokkearje"
 
-#: html.c:3982
+#: html.c:4073
 msgid "Direct Message..."
 msgstr "Persoanlik berjocht..."
 
-#: html.c:4017
+#: html.c:4108
 msgid "Pending follow confirmations"
 msgstr "Iepenstjitte folchbefestichings"
 
-#: html.c:4021
+#: html.c:4112
 msgid "People you follow"
 msgstr "Minsken dy't jo folge"
 
-#: html.c:4022
+#: html.c:4113
 msgid "People that follow you"
 msgstr "Minsken dy't jo folge"
 
-#: html.c:4246
+#: html.c:4337
 msgid "Clear all"
 msgstr "Alles wiskje"
 
-#: html.c:4321
+#: html.c:4412
 msgid "Mention"
 msgstr "Neame"
 
-#: html.c:4324
+#: html.c:4415
 msgid "Finished poll"
 msgstr "Ofêrunde peiling"
 
-#: html.c:4351
+#: html.c:4442
 msgid "Follow Request"
 msgstr "Folchfersk"
 
-#: html.c:4461
+#: html.c:4552
 msgid "Context"
 msgstr "Kontekst"
 
-#: html.c:4479
+#: html.c:4570
 msgid "New"
 msgstr "Nij"
 
-#: html.c:4494
+#: html.c:4585
 msgid "Already seen"
 msgstr "Al sjoen"
 
-#: html.c:4509
+#: html.c:4600
 msgid "None"
 msgstr "Gjin"
 
-#: html.c:4797
+#: html.c:4886
 #, c-format
 msgid "Search results for account %s"
 msgstr "Sêkresultaten foar akkount %s"
 
-#: html.c:4804
+#: html.c:4893
 #, c-format
 msgid "Account %s not found"
 msgstr "Akkount %s net foun"
 
-#: html.c:4835
+#: html.c:4924
 #, c-format
 msgid "Search results for tag %s"
 msgstr "Sêkresultaten foar tag %s"
 
-#: html.c:4835
+#: html.c:4924
 #, c-format
 msgid "Nothing found for tag %s"
 msgstr "Neat foun foar tag %s"
 
-#: html.c:4851
+#: html.c:4940
 #, c-format
 msgid "Search results for '%s' (may be more)"
 msgstr "Sêkresultaten foar '%s' (mooglik mear)"
 
-#: html.c:4854
+#: html.c:4943
 #, c-format
 msgid "Search results for '%s'"
 msgstr "Sêkresultaten foar '%s'"
 
-#: html.c:4857
+#: html.c:4946
 #, c-format
 msgid "No more matches for '%s'"
 msgstr "Gjin fjirder oerienkomsten foar '%s'"
 
-#: html.c:4859
+#: html.c:4948
 #, c-format
 msgid "Nothing found for '%s'"
 msgstr "Neat foun foar '%s'"
 
-#: html.c:4988
+#: html.c:5077
 msgid "Showing instance timeline"
 msgstr "Tiidline fan ynstallaasje toane"
 
-#: html.c:5071
+#: html.c:5176
 #, c-format
 msgid "Showing timeline for list '%s'"
 msgstr "Tiidline foar list '%s' toane"
 
-#: httpd.c:259
+#: httpd.c:260
 #, c-format
 msgid "Search results for tag #%s"
 msgstr "Sêkresultaten foar tag #%s"
 
-#: httpd.c:268
+#: httpd.c:269
 msgid "Recent posts by users in this instance"
 msgstr "Resinte berjochten fan brûkers yn dizze ynstallaasje"
 
-#: html.c:1909
+#: html.c:1925
 msgid "Blocked hashtags..."
 msgstr "Blokkearre hashtags..."
 
-#: html.c:661
+#: html.c:667
 msgid "Optional URL to reply to"
 msgstr "Opsjonele URL om op te antwurdjen"
 
-#: html.c:843
+#: html.c:849
 msgid ""
 "Option 1...\n"
 "Option 2...\n"
@@ -708,79 +708,79 @@ msgstr ""
 "Optie 3...\n"
 "..."
 
-#: html.c:1750
+#: html.c:1757
 msgid "Bot API key"
 msgstr "Bot API kaai"
 
-#: html.c:1756
+#: html.c:1763
 msgid "Chat id"
 msgstr "Chat id"
 
-#: html.c:1764
+#: html.c:1771
 msgid "ntfy server - full URL (example: https://ntfy.sh/YourTopic)"
 msgstr "ntfy server - folsleine URL (foarbyld: https://ntfy.sh/YourTopic)"
 
-#: html.c:1770
+#: html.c:1777
 msgid "ntfy token - if needed"
 msgstr "ntfy token - as nedich"
 
-#: html.c:3514
+#: html.c:3561
 msgid "pinned"
 msgstr "fêssetten"
 
-#: html.c:3526
+#: html.c:3585
 msgid "bookmarks"
 msgstr "favorite"
 
-#: html.c:3538
+#: html.c:3597
 msgid "drafts"
 msgstr "konsepten"
 
-#: html.c:727
+#: html.c:733
 msgid "Scheduled post..."
 msgstr "Planne berjocht..."
 
 msgid "Post date and time:"
 msgstr "Berjocht datum en tiid:"
 
-#: html.c:3549 html.c:5048
+#: html.c:3608 html.c:5153
 msgid "Scheduled posts"
 msgstr "Planne berjochten"
 
-#: html.c:3550
+#: html.c:3609
 msgid "scheduled posts"
 msgstr "planne berjochten"
 
-#: html.c:721
+#: html.c:727
 #, c-format
 msgid "Post date and time (timezone: %s):"
 msgstr "Berjocht datum en tiid (tiidsone: %s):"
 
-#: html.c:1834
+#: html.c:1841
 msgid "Time zone:"
 msgstr "Tiidsone:"
 
-#: html.c:702
+#: html.c:708
 msgid "Language:"
 msgstr ""
 
-#: html.c:1772
+#: html.c:1779
 msgid "Notify webhook:"
 msgstr ""
 
-#: html.c:1778
+#: html.c:1785
 msgid "http://example.com/webhook"
 msgstr ""
 
-#: html.c:1839
+#: html.c:1846
 msgid "Languages you usually post in:"
 msgstr ""
 
-#: html.c:1845
+#: html.c:1852 html.c:1861
 msgid "en fr es de_AT"
 msgstr ""
 
-#: html.c:515
+#: html.c:521
 msgid "Visibility: "
 msgstr ""
 
@@ -796,95 +796,95 @@ msgstr ""
 msgid "Direct Message"
 msgstr ""
 
-#: html.c:575 html.c:2680 html.c:2705 html.c:5596
+#: html.c:581 html.c:2728 html.c:2753 html.c:5701
 msgid "EmojiUnreact"
 msgstr ""
 
-#: html.c:575 html.c:1553 html.c:2680 html.c:2705 html.c:5607
+#: html.c:581 html.c:1559 html.c:2728 html.c:2753 html.c:5713
 msgid "EmojiReact"
 msgstr ""
 
-#: html.c:2214
+#: html.c:2251
 msgid "Emoji react..."
 msgstr ""
 
-#: html.c:2755
+#: html.c:2803
 msgid "Emoji reactions: "
 msgstr ""
 
-#: html.c:1941
+#: html.c:1957
 msgid "Muted words..."
 msgstr ""
 
-#: html.c:1943
+#: html.c:1959
 msgid "One word per line, partial matches count"
 msgstr ""
 
-#: html.c:1964
+#: html.c:1980
 msgid "Update muted words"
 msgstr ""
 
-#: html.c:2580
+#: html.c:2628
 msgid "Muted: "
 msgstr ""
 
-#: html.c:4055
+#: html.c:4146
 msgid "Contact's posts"
 msgstr ""
 
-#: html.c:4124
+#: html.c:4215
 msgid "More (x 10)..."
 msgstr ""
 
-#: html.c:867
+#: html.c:873
 msgid "End in 3 days"
 msgstr ""
 
-#: html.c:870
+#: html.c:876
 msgid "End in 1 year"
 msgstr ""
 
-#: html.c:4212
+#: html.c:4303
 msgid "Likes"
 msgstr ""
 
-#: html.c:4213
+#: html.c:4304
 msgid "Emoji reacts"
 msgstr ""
 
-#: html.c:4214
+#: html.c:4305
 msgid "Mentions"
 msgstr ""
 
-#: html.c:4215
+#: html.c:4306
 msgid "Announces"
 msgstr ""
 
-#: html.c:4216
+#: html.c:4307
 msgid "Follows"
 msgstr ""
 
-#: html.c:4217
+#: html.c:4308
 msgid "Unfollows"
 msgstr ""
 
-#: html.c:4218
+#: html.c:4309
 msgid "Follow requests"
 msgstr ""
 
-#: html.c:4219
+#: html.c:4310
 msgid "Blocks"
 msgstr ""
 
-#: html.c:4220
+#: html.c:4311
 msgid "Polls"
 msgstr ""
 
-#: html.c:4224
+#: html.c:4315
 msgid "Save"
 msgstr ""
 
-#: html.c:4232
+#: html.c:4323
 msgid "Notifications filter..."
 msgstr ""
 
@@ -936,6 +936,18 @@ msgstr ""
 msgid "Dec"
 msgstr ""
 
-#: html.c:1801
+#: html.c:1808
 msgid "Show unlisted posts in the public page and RSS feed"
+msgstr ""
+
+#: html.c:1855
+msgid "Don't show posts written in these languages:"
+msgstr ""
+
+#: html.c:3572 html.c:5108
+msgid "Liked, boosted or reacted posts"
+msgstr ""
+
+#: html.c:3573
+msgid "admirations"
 msgstr ""
