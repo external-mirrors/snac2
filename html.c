@@ -1613,6 +1613,7 @@ xs_html *html_top_controls(snac *user)
     const char *longitude    = xs_dict_get_def(user->config, "longitude", "");
     const char *webhook      = xs_dict_get_def(user->config, "notify_webhook", "");
     const char *post_langs   = xs_dict_get_def(user->config, "post_langs", "");
+    const char *excluded_langs = xs_dict_get_def(user->config, "excluded_langs", "");
 
     xs *metadata = NULL;
     const xs_dict *md = xs_dict_get(user->config, "metadata");
@@ -1848,6 +1849,15 @@ xs_html *html_top_controls(snac *user)
                         xs_html_attr("type", "text"),
                         xs_html_attr("name", "post_langs"),
                         xs_html_attr("value", post_langs),
+                        xs_html_attr("placeholder", L("en fr es de_AT")))),
+
+                xs_html_tag("p",
+                    xs_html_text(L("Exclude posts written in these languages:")),
+                    xs_html_sctag("br", NULL),
+                    xs_html_sctag("input",
+                        xs_html_attr("type", "text"),
+                        xs_html_attr("name", "excluded_langs"),
+                        xs_html_attr("value", excluded_langs),
                         xs_html_attr("placeholder", L("en fr es de_AT")))),
 
                 xs_html_tag("p",
@@ -5991,6 +6001,10 @@ int html_post_handler(const xs_dict *req, const char *q_path,
             snac.config = xs_dict_set(snac.config, "tz", v);
         if ((v = xs_dict_get(p_vars, "post_langs")) != NULL)
             snac.config = xs_dict_set(snac.config, "post_langs", v);
+        if ((v = xs_dict_get(p_vars, "excluded_langs")) != NULL)
+            snac.config = xs_dict_set(snac.config, "excluded_langs", v);
+        else
+            snac.config = xs_dict_del(snac.config, "excluded_langs");
 
         snac.config = xs_dict_set(snac.config, "latitude", xs_dict_get_def(p_vars, "latitude", ""));
         snac.config = xs_dict_set(snac.config, "longitude", xs_dict_get_def(p_vars, "longitude", ""));
