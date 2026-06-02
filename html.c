@@ -2339,6 +2339,17 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
         int c = 0;
 
         xs_dict_next(cmap, &lang, &dummy, &c);
+
+        if (user && xs_is_string(lang)) {
+            /* discard posts in excluded languages */
+            const char *excluded_langs = xs_dict_get(user->config, "excluded_langs");
+
+            if (xs_is_string(excluded_langs) &&
+                xs_str_in(excluded_langs, lang) != -1) {
+                snac_debug(user, 1, xs_fmt("excluded post in language '%s'", lang));
+                return NULL;
+            }
+        }
     }
 
     if (strcmp(type, "Follow") == 0) {
