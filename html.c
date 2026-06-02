@@ -3447,7 +3447,6 @@ xs_str *html_timeline(snac *user, const xs_list *list, int read_only,
                       int utl, const char *error, int terse)
 /* returns the HTML for the timeline */
 {
-    xs_list *p = (xs_list *)list;
     const char *v;
     double t = ftime();
     int hide_children = xs_is_true(xs_dict_get(srv_config, "strict_public_timelines")) && read_only;
@@ -3639,7 +3638,7 @@ xs_str *html_timeline(snac *user, const xs_list *list, int read_only,
 
     int show_unlisted = user ? xs_is_true(xs_dict_get(user->config, "show_unlisted")) : 0;
 
-    while (xs_list_iter(&p, &v)) {
+    xs_list_foreach(list, v) {
         xs *msg = NULL;
         int status;
 
