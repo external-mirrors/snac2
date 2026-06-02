@@ -4,6 +4,8 @@
 
 Added a new *admirations* entry point to the web UI, containing a timeline of liked, boosted and reacted posts. Please take note that, after installing the new version, it will start empty, and be filled with subsequent reactions (contributed by violette).
 
+It's now possible to disable showing posts in a given set of languages.
+
 Nested quoted posts are limited up to 3 levels.
 
 New configuration knob: by setting `keep_replies_posts` to true in `server.json`, remote posts that a local user has replied to are retained in the public timeline, preventing them from being purged (contributed by hanchan).
