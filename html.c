@@ -1852,7 +1852,7 @@ xs_html *html_top_controls(snac *user)
                         xs_html_attr("placeholder", L("en fr es de_AT")))),
 
                 xs_html_tag("p",
-                    xs_html_text(L("Exclude posts written in these languages:")),
+                    xs_html_text(L("Don't show posts written in these languages:")),
                     xs_html_sctag("br", NULL),
                     xs_html_sctag("input",
                         xs_html_attr("type", "text"),
