@@ -943,12 +943,12 @@ msgstr ""
 
 #: html.c:1855
 msgid "Don't show posts written in these languages:"
-msgstr ""
+msgstr "Beiträge in folgenden Sprachen nicht anzeigen:"
 
 #: html.c:3572 html.c:5108
 msgid "Liked, boosted or reacted posts"
-msgstr ""
+msgstr "Beiträge, die geliked, geboostet oder mit einer Reaktion versehen wurden"
 
 #: html.c:3573
 msgid "admirations"
-msgstr ""
+msgstr "Bewunderung"
