@@ -951,4 +951,4 @@ msgstr "Beiträge, die geliked, geboostet oder mit einer Reaktion versehen wurde
 
 #: html.c:3573
 msgid "admirations"
-msgstr "Bewunderung"
+msgstr "Wertschätzung"
