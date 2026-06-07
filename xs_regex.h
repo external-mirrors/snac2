@@ -35,12 +35,12 @@ xs_list *xs_regex_split_n(const char *str, const char *rx, int count)
     regmatch_t rm;
     int offset = 0;
     xs_list *list = xs_list_new();
-    const char *p;
+    const char *p = str;
 
     if (regcomp(&re, rx, REG_EXTENDED))
         return list;
 
-    while (count > 0 && !regexec(&re, (p = str + offset), 1, &rm, offset > 0 ? REG_NOTBOL : 0)) {
+    while (count > 0 && !regexec(&re, p, 1, &rm, offset > 0 ? REG_NOTBOL : 0)) {
         /* add first the leading part of the string */
         xs *s1 = xs_str_new_sz(p, rm.rm_so);
 
@@ -55,6 +55,7 @@ xs_list *xs_regex_split_n(const char *str, const char *rx, int count)
         offset += rm.rm_eo;
 
         count--;
+        p = str + offset;
     }
 
     /* add the rest of the string */

@@ -141,6 +141,7 @@ const char *xs_number_str(const xs_number *v);
 
 xs_data *xs_data_new(const void *data, int size);
 int xs_data_size(const xs_data *value);
+const void *xs_data_ptr(const xs_data *value);
 void xs_data_get(void *data, const xs_data *value);
 
 void *xs_memmem(const char *haystack, int h_size, const char *needle, int n_size);
@@ -965,10 +966,9 @@ int xs_list_in(const xs_list *list, const xs_val *val)
 
     int n = 0;
     const xs_val *v;
-    int sz = xs_size(val);
 
     xs_list_foreach(list, v) {
-        if (sz == xs_size(v) && memcmp(val, v, sz) == 0)
+        if (xs_cmp(val, v) == 0)
             return n;
 
         n++;
@@ -1524,10 +1524,17 @@ int xs_data_size(const xs_data *value)
 }
 
 
+const void *xs_data_ptr(const xs_data *value)
+/* return an internal pointer to the stored data */
+{
+    return &value[1 + _XS_TYPE_SIZE];
+}
+
+
 void xs_data_get(void *data, const xs_data *value)
 /* copies the raw data stored inside value into data */
 {
-    memcpy(data, &value[1 + _XS_TYPE_SIZE], xs_data_size(value));
+    memcpy(data, xs_data_ptr(value), xs_data_size(value));
 }
 
 
