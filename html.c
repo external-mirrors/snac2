@@ -4851,7 +4851,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
                         /* retry webfinger, this time with the 'official' id */
                         const char *id = xs_dict_get(object, "id");
 
-                        if (xs_is_string(id) && valid_status(webfinger_request(id, &actor_obj, &url_acct)) &&
+                        if (xs_is_string(id) && valid_status(webfinger_request_fake(id, &actor_obj, &url_acct)) &&
                             xs_is_string(url_acct))
                             q = url_acct;
                     }
