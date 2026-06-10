@@ -1067,8 +1067,8 @@ void httpd(void)
     signal(SIGTERM, term_handler);
     signal(SIGINT,  term_handler);
 
-    srv_log(xs_fmt("httpd%s start %s %s", p_state->use_fcgi ? " (FastCGI)" : "",
-                    full_address, USER_AGENT));
+    srv_log(xs_fmt(USER_AGENT " httpd%s start %s", p_state->use_fcgi ? " (FastCGI)" : "",
+                    full_address));
 
     /* show the number of usable file descriptors */
     struct rlimit r;
