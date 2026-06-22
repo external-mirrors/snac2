@@ -4208,8 +4208,8 @@ int mastoapi_put_handler(const xs_dict *req, const char *q_path,
                 if (valid_status(timeline_get_by_md5(&snac, md5, &msg))) {
                     const char *content = xs_dict_get(args, "status");
                     xs *atls = xs_list_new();
-                    xs *f_content0 = not_really_markdown(content, &atls, NULL);
                     xs *tag = xs_list_new();
+                    xs *f_content0 = not_really_markdown(content, &atls, &tag);
                     xs *f_content = process_tags(&snac, f_content0, &tag);
 
                     /* replace fields with new content */
