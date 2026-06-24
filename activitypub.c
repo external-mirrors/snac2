@@ -3075,7 +3075,7 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
             }
             else {
                 srv_log(xs_fmt("Update: mismatched actor '%s' and key '%s'", actor, key_id));
-                srv_archive_error("update_actor_key_mismatch", "bad keyId", actor, key_id);
+                srv_archive_error("update_actor_key_mismatch", "bad keyId", req, msg);
             }
         }
         else
@@ -3093,7 +3093,7 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
                 else
                 if (strcmp(atto, key_id) != 0) {
                     snac_log(snac, xs_fmt("Update: mismatched attributedTo '%s' and key '%s'", atto, key_id));
-                    srv_archive_error("update_post_key_mismatch", "bad keyId", atto, key_id);
+                    srv_archive_error("update_post_key_mismatch", "bad keyId", req, msg);
                 }
                 else
                 if (xs_startswith(id, srv_baseurl) && !xs_startswith(id, actor))
@@ -3149,7 +3149,7 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
             else
             if (strcmp(atto, key_id) != 0) {
                 snac_log(snac, xs_fmt("Delete: mismatched attributedTo '%s' and key '%s'", atto, key_id));
-                srv_archive_error("delete_post_key_mismatch", "bad keyId", atto, key_id);
+                srv_archive_error("delete_post_key_mismatch", "bad keyId", req, msg);
             }
             else
             if (xs_startswith(object, srv_baseurl) && !is_msg_mine(snac, object))
@@ -3198,7 +3198,7 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
         if (xs_is_string(old_account) && xs_is_string(new_account)) {
             if (strcmp(old_account, key_id) != 0) {
                 snac_log(snac, xs_fmt("'Move': mismatched old_account %s and key %s", old_account, key_id));
-                srv_archive_error("move_old_account_key_mismatch", "bad keyId", old_account, msg);
+                srv_archive_error("move_old_account_key_mismatch", "bad keyId", req, msg);
             }
             else
             if (following_check(snac, old_account)) {
