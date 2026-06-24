@@ -16,6 +16,8 @@ Ensure actors' public key PEM never includes anything after the end marker.
 
 Fixed some memory leaks (contributed by inz).
 
+Several additional keyId checks (many thanks to lainsoykaf for bringing this to my attention).
+
 Updated French, Brazilian Portuguese, German, Spanish translations (contributed by dragondaddy, daltux, zen).
 
 ## 2.92
