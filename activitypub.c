@@ -2686,11 +2686,19 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
 
     /* check the signature */
     xs *sig_err = NULL;
+    xs *key_id = NULL;
 
-    if (!check_signature(req, &sig_err)) {
+    if (!check_signature(req, &sig_err, &key_id)) {
         srv_log(xs_fmt("bad signature %s (%s)", actor, sig_err));
 
         srv_archive_error("check_signature", sig_err, req, msg);
+        return -1;
+    }
+
+    if (strcmp(actor, key_id) != 0) {
+        srv_log(xs_fmt("mismatched actor '%s' and key '%s'", actor, key_id));
+
+        srv_archive_error("mismatched_actor_and_key", "bad keyId", req, msg);
         return -1;
     }
 

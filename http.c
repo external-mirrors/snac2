@@ -123,7 +123,7 @@ xs_dict *http_signed_request(snac *snac, const char *method, const char *url,
 }
 
 
-int check_signature(const xs_dict *req, xs_str **err)
+int check_signature(const xs_dict *req, xs_str **err, xs_str **key_id)
 /* check the signature */
 {
     const char *sig_hdr = xs_dict_get(req, "signature");
@@ -181,6 +181,9 @@ int check_signature(const xs_dict *req, xs_str **err)
     /* strip the # from the keyId */
     if ((p = strchr(keyId, '#')) != NULL)
         *p = '\0';
+
+    /* copy the keyId */
+    *key_id = xs_dup(keyId);
 
     xs *actor = NULL;
     int status;

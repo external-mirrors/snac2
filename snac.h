@@ -348,7 +348,7 @@ xs_dict *http_signed_request(snac *snac, const char *method, const char *url,
                             const char *body, int b_size,
                             int *status, xs_str **payload, int *p_size,
                             int timeout);
-int check_signature(const xs_dict *req, xs_str **err);
+int check_signature(const xs_dict *req, xs_str **err, xs_str **key_id);
 
 srv_state *srv_state_op(xs_str **fname, int op);
 void httpd(void);
