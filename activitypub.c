@@ -3067,10 +3067,16 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
     else
     if (strcmp(type, "Update") == 0) { /** **/
         if (xs_match(utype, "Person|Service|Application")) { /** **/
-            actor_add(actor, xs_dict_get(msg, "object"));
-            timeline_touch(snac);
+            if (strcmp(actor, key_id) == 0) {
+                actor_add(actor, xs_dict_get(msg, "object"));
+                timeline_touch(snac);
 
-            snac_log(snac, xs_fmt("updated actor %s", actor));
+                snac_log(snac, xs_fmt("updated actor %s", actor));
+            }
+            else {
+                srv_log(xs_fmt("Update: mismatched actor '%s' and key '%s'", actor, key_id));
+                srv_archive_error("update_actor_key_mismatch", "bad keyId", actor, key_id);
+            }
         }
         else
         if (xs_match(utype, "Note|Page|Article|Video|Audio|Event")) { /** **/
