@@ -2695,13 +2695,6 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
         return -1;
     }
 
-    if (strcmp(actor, key_id) != 0) {
-        srv_log(xs_fmt("mismatched actor '%s' and key '%s'", actor, key_id));
-
-        srv_archive_error("mismatched_actor_and_key", "bad keyId", req, msg);
-        return -1;
-    }
-
     /* if no user is set, no further checks can be done; propagate */
     if (snac == NULL)
         return 2;
