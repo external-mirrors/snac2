@@ -3858,6 +3858,11 @@ void enqueue_close_question(snac *user, const char *id, int end_secs)
 void enqueue_object_request(snac *user, const char *id, int forward_secs)
 /* enqueues the request of an object in the future */
 {
+    if (forward_secs < 0) {
+        /* set it to a somewhat random delay */
+        forward_secs = xs_hash_func(user->uid, strlen(user->uid)) % -forward_secs;
+    }
+
     xs *qmsg = _new_qmsg("object_request", id, 0);
     xs *ntid = tid(forward_secs);
     xs *fn   = xs_fmt("%s/queue/%s.json", user->basedir, ntid);
@@ -3886,6 +3891,11 @@ void enqueue_verify_links(snac *user)
 void enqueue_actor_refresh(snac *user, const char *actor, int forward_secs)
 /* enqueues an actor refresh */
 {
+    if (forward_secs < 0) {
+        /* set it to a somewhat random delay */
+        forward_secs = xs_hash_func(user->uid, strlen(user->uid)) % -forward_secs;
+    }
+
     xs *qmsg = _new_qmsg("actor_refresh", "", 0);
     xs *ntid = tid(forward_secs);
     xs *fn   = xs_fmt("%s/queue/%s.json", user->basedir, ntid);

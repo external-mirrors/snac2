@@ -3077,7 +3077,7 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
             else {
                 /* actor / key mismatch: don't accept blindly, but request an actor update
                    from the original source, as the Update may come from a relay and be legit */
-                enqueue_actor_refresh(snac, actor, 0);
+                enqueue_actor_refresh(snac, actor, -10);
 
                 snac_log(snac, xs_fmt("Update: mismatched actor '%s' and key '%s'", actor, key_id));
             }
@@ -3097,7 +3097,7 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
                 else
                 if (strcmp(atto, key_id) != 0) {
                     /* actor / key mismatch: request the object from the original source */
-                    enqueue_object_request(snac, id, 0);
+                    enqueue_object_request(snac, id, -10);
 
                     snac_log(snac, xs_fmt("Update: mismatched attributedTo '%s' and key '%s'", atto, key_id));
                 }
