@@ -3086,6 +3086,16 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
                 snac_log(snac, xs_fmt("malformed message: no 'id' field"));
             else
             if (object_here(id)) {
+                const char *atto = get_atto(object);
+
+                if (atto == NULL)
+                    snac_log(snac, xs_fmt("ignored post 'Update' with no attributedTo %s", id));
+                else
+                if (strcmp(atto, key_id) != 0) {
+                    snac_log(snac, xs_fmt("Update: mismatched attributedTo '%s' and key '%s'", atto, key_id));
+                    srv_archive_error("update_post_key_mismatch", "bad keyId", atto, key_id);
+                }
+                else
                 if (xs_startswith(id, srv_baseurl) && !xs_startswith(id, actor))
                     snac_log(snac, xs_fmt("ignored incorrect 'Update' %s %s", actor, id));
                 else {
@@ -3126,10 +3136,22 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
         if (xs_type(object) == XSTYPE_DICT)
             object = xs_dict_get(object, "id");
 
+        xs *obj_data = NULL;
+
         if (xs_is_null(object))
             snac_log(snac, xs_fmt("malformed message: no 'id' field"));
         else
-        if (object_here(object)) {
+        if (valid_status(object_get(object, &obj_data))) {
+            const char *atto = get_atto(obj_data);
+
+            if (atto == NULL)
+                snac_log(snac, xs_fmt("ignored 'Delete' for object with attributedTo %s", object));
+            else
+            if (strcmp(atto, key_id) != 0) {
+                snac_log(snac, xs_fmt("Delete: mismatched attributedTo '%s' and key '%s'", atto, key_id));
+                srv_archive_error("delete_post_key_mismatch", "bad keyId", atto, key_id);
+            }
+            else
             if (xs_startswith(object, srv_baseurl) && !is_msg_mine(snac, object))
                 snac_log(snac, xs_fmt("ignored incorrect 'Delete' %s %s", actor, object));
             else {
