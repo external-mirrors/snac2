@@ -3075,9 +3075,11 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
                 snac_log(snac, xs_fmt("updated actor %s", actor));
             }
             else {
-                xs_str *e = xs_fmt("Update: mismatched actor '%s' and key '%s'", actor, key_id);
-                srv_archive_error("update_actor_key_mismatch", e, req, msg);
-                snac_log(snac, e);
+                /* actor / key mismatch: don't accept blindly, but request an actor update
+                   from the original source, as the Update may come from a relay and be legit */
+                enqueue_actor_refresh(snac, actor, 0);
+
+                snac_log(snac, xs_fmt("Update: mismatched actor '%s' and key '%s'", actor, key_id));
             }
         }
         else
@@ -3094,9 +3096,10 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
                     snac_log(snac, xs_fmt("ignored post 'Update' with no attributedTo %s", id));
                 else
                 if (strcmp(atto, key_id) != 0) {
-                    xs_str *e = xs_fmt("Update: mismatched attributedTo '%s' and key '%s'", atto, key_id);
-                    srv_archive_error("update_post_key_mismatch", e, req, msg);
-                    snac_log(snac, e);
+                    /* actor / key mismatch: request the object from the original source */
+                    enqueue_object_request(snac, id, 0);
+
+                    snac_log(snac, xs_fmt("Update: mismatched attributedTo '%s' and key '%s'", atto, key_id));
                 }
                 else
                 if (xs_startswith(id, srv_baseurl) && !xs_startswith(id, actor))
