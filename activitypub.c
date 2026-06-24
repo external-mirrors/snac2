@@ -3145,7 +3145,7 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
             const char *atto = get_atto(obj_data);
 
             if (atto == NULL)
-                snac_log(snac, xs_fmt("ignored 'Delete' for object with attributedTo %s", object));
+                snac_log(snac, xs_fmt("ignored 'Delete' for object without attributedTo %s", object));
             else
             if (strcmp(atto, key_id) != 0) {
                 snac_log(snac, xs_fmt("Delete: mismatched attributedTo '%s' and key '%s'", atto, key_id));
@@ -3195,7 +3195,12 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
         const char *old_account = xs_dict_get(msg, "object");
         const char *new_account = xs_dict_get(msg, "target");
 
-        if (!xs_is_null(old_account) && !xs_is_null(new_account)) {
+        if (xs_is_string(old_account) && xs_is_string(new_account)) {
+            if (strcmp(old_account, key_id) != 0) {
+                snac_log(snac, xs_fmt("'Move': mismatched old_account %s and key %s", old_account, key_id));
+                srv_archive_error("move_old_account_key_mismatch", "bad keyId", old_account, msg);
+            }
+            else
             if (following_check(snac, old_account)) {
                 xs *n_actor = NULL;
 
