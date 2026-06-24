@@ -2979,7 +2979,7 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
         else {
             xs_str *e = xs_fmt("ignored 'Accept' for object type '%s'", utype);
             srv_archive_error("accept", e, req, msg);
-            snac_debug(snac, 1, e);
+            snac_log(snac, e);
         }
     }
     else
