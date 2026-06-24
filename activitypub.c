@@ -2977,8 +2977,9 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
             snac_debug(snac, 1, xs_dup("ignored 'Accept' + 'Create'"));
         }
         else {
-            srv_archive_error("accept", "ignored Accept", req, msg);
-            snac_debug(snac, 1, xs_fmt("ignored 'Accept' for object type '%s'", utype));
+            xs_str *e = xs_fmt("ignored 'Accept' for object type '%s'", utype);
+            srv_archive_error("accept", e, req, msg);
+            snac_debug(snac, 1, e);
         }
     }
     else
@@ -3074,8 +3075,9 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
                 snac_log(snac, xs_fmt("updated actor %s", actor));
             }
             else {
-                srv_log(xs_fmt("Update: mismatched actor '%s' and key '%s'", actor, key_id));
-                srv_archive_error("update_actor_key_mismatch", "bad keyId", req, msg);
+                xs_str *e = xs_fmt("Update: mismatched actor '%s' and key '%s'", actor, key_id);
+                srv_archive_error("update_actor_key_mismatch", e, req, msg);
+                snac_log(snac, e);
             }
         }
         else
@@ -3092,8 +3094,9 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
                     snac_log(snac, xs_fmt("ignored post 'Update' with no attributedTo %s", id));
                 else
                 if (strcmp(atto, key_id) != 0) {
-                    snac_log(snac, xs_fmt("Update: mismatched attributedTo '%s' and key '%s'", atto, key_id));
-                    srv_archive_error("update_post_key_mismatch", "bad keyId", req, msg);
+                    xs_str *e = xs_fmt("Update: mismatched attributedTo '%s' and key '%s'", atto, key_id);
+                    srv_archive_error("update_post_key_mismatch", e, req, msg);
+                    snac_log(snac, e);
                 }
                 else
                 if (xs_startswith(id, srv_baseurl) && !xs_startswith(id, actor))
@@ -3148,8 +3151,8 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
                 snac_log(snac, xs_fmt("ignored 'Delete' for object without attributedTo %s", object));
             else
             if (strcmp(atto, key_id) != 0) {
+                /* don't call srv_archive_error() on this, because it can be a delete from a relay */
                 snac_log(snac, xs_fmt("Delete: mismatched attributedTo '%s' and key '%s'", atto, key_id));
-                srv_archive_error("delete_post_key_mismatch", "bad keyId", req, msg);
             }
             else
             if (xs_startswith(object, srv_baseurl) && !is_msg_mine(snac, object))
@@ -3197,8 +3200,9 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
 
         if (xs_is_string(old_account) && xs_is_string(new_account)) {
             if (strcmp(old_account, key_id) != 0) {
-                snac_log(snac, xs_fmt("'Move': mismatched old_account %s and key %s", old_account, key_id));
-                srv_archive_error("move_old_account_key_mismatch", "bad keyId", req, msg);
+                xs_str *e = xs_fmt("'Move': mismatched old_account %s and key %s", old_account, key_id);
+                srv_archive_error("move_old_account_key_mismatch", e, req, msg);
+                snac_log(snac, e);
             }
             else
             if (following_check(snac, old_account)) {
