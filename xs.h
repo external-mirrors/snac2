@@ -98,6 +98,8 @@ xs_list *_xs_list_append(xs_list *list, const xs_val *vals[]);
 #define xs_list_append(list, ...) _xs_list_append(list, (const xs_val *[]){ __VA_ARGS__, NULL })
 int xs_list_iter(xs_list **list, const xs_val **value);
 int xs_list_next(const xs_list *list, const xs_val **value, int *ctxt);
+int xs_list_cap(xs_list *list, int max);
+xs_list *xs_list_reverse(const xs_list *l);
 int xs_list_len(const xs_list *list);
 const xs_val *xs_list_get(const xs_list *list, int num);
 xs_list *xs_list_del(xs_list *list, int num);
@@ -848,6 +850,52 @@ int xs_list_next(const xs_list *list, const xs_val **value, int *ctxt)
     *ctxt = p - list;
 
     return goon;
+}
+
+
+int xs_list_cap(xs_list *list, int max)
+/* caps the list to have a maximum of max items */
+{
+    int n, ctxt = 0;
+    const char *v;
+
+    /* advance upto max elements */
+    for (n = 0; n < max + 1 && xs_list_next(list, &v, &ctxt); n++);
+
+    /* more than max items? */
+    if (n == max + 1) {
+        /* insert an end of list over the XSTYPE_LITEM of the old item */
+        char *p = (char *)v;
+        p[-1] = '\0';
+
+        /* rewrite the list len */
+        _xs_put_size(list, p - list);
+    }
+
+    return n == max + 1;
+}
+
+
+xs_list *xs_list_reverse(const xs_list *l)
+/* creates a new list as a reverse version of l */
+{
+    xs_list *n = xs_dup(l);
+    const xs_val *v;
+
+    /* move to one byte before the EOM */
+    char *p = n + xs_size(n) - 1;
+
+    xs_list_foreach(l, v) {
+        /* size of v, plus the LITEM */
+        int z = xs_size(v) + 1;
+
+        p -= z;
+
+        /* copy v, including its LITEM */
+        memcpy(p, v - 1, z);
+    }
+
+    return n;
 }
 
 

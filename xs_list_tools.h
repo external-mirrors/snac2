@@ -5,7 +5,6 @@
 #define _XS_LIST_TOOLS_H
 
  xs_list *xs_list_insert_sorted(xs_list *list, const xs_val *nv);
- xs_list *xs_list_reverse(const xs_list *l);
  xs_val **xs_list_to_array(const xs_list *l, int *len);
  int xs_list_sort_cmp(const void *p1, const void *p2);
  int xs_list_sort_inv_cmp(const void *p1, const void *p2);
@@ -34,29 +33,6 @@ xs_list *xs_list_insert_sorted(xs_list *list, const xs_val *nv)
     }
 
     return _xs_list_write_litem(list, offset - 1, nv, xs_size(nv));
-}
-
-
-xs_list *xs_list_reverse(const xs_list *l)
-/* creates a new list as a reverse version of l */
-{
-    xs_list *n = xs_dup(l);
-    const xs_val *v;
-
-    /* move to one byte before the EOM */
-    char *p = n + xs_size(n) - 1;
-
-    xs_list_foreach(l, v) {
-        /* size of v, plus the LITEM */
-        int z = xs_size(v) + 1;
-
-        p -= z;
-
-        /* copy v, including its LITEM */
-        memcpy(p, v - 1, z);
-    }
-
-    return n;
 }
 
 
