@@ -20,7 +20,7 @@ Several additional keyId checks (many thanks to lainsoykaf for bringing this to 
 
 Fixed crash in the JSON parser (many thanks to nullenvk for bringing this to my attention).
 
-Mastodon API: fixed error in custom emojis after edition (contributed by e0w0e).
+Mastodon API: fixed lost custom emojis after edition (contributed by e0w0e).
 
 Updated French, Brazilian Portuguese, German, Spanish translations (contributed by dragondaddy, daltux, zen).
 
