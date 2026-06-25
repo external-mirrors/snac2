@@ -18,6 +18,8 @@ Fixed some memory leaks (contributed by inz).
 
 Several additional keyId checks (many thanks to lainsoykaf for bringing this to my attention).
 
+Fixed crash in the JSON parser (many thanks to nullenvk for bringing this to my attention).
+
 Updated French, Brazilian Portuguese, German, Spanish translations (contributed by dragondaddy, daltux, zen).
 
 ## 2.92
