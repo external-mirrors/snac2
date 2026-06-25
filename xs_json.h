@@ -281,7 +281,7 @@ static xs_val *_xs_json_load_lexer(FILE *f, js_type *t)
                     }
 
                     /* replace dangerous control codes with their visual representations */
-                    if (cp < ' ' && !strchr("\r\n\t", cp))
+                    if (cp == 0 || (cp < ' ' && !strchr("\r\n\t", cp)))
                         cp += 0x2400;
 
                     break;
