@@ -362,9 +362,10 @@ int main(int argc, char *argv[])
         const xs_list *i;
 
         xs_list_foreach(l, i) {
-            printf("%s %ld★ %ld↺\n", xs_list_get(i, 0),
+            printf("%s %ld★ %ld↺ %ld☺\n", xs_list_get(i, 0),
                 xs_number_get_l(xs_list_get(i, 1)),
-                xs_number_get_l(xs_list_get(i, 2)));
+                xs_number_get_l(xs_list_get(i, 2)),
+                xs_number_get_l(xs_list_get(i, 3)));
         }
 
         return 0;

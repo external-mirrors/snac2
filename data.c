@@ -1051,6 +1051,14 @@ int object_announces_len(const char *id)
 }
 
 
+int object_emojireacts_len(const char *id)
+/* returns the number of emojireacts (without reading the index) */
+{
+    xs *fn = _object_index_fn(id, "_e.idx");
+    return index_len(fn);
+}
+
+
 xs_list *object_children(const char *id)
 /* returns the list of an object's children */
 {

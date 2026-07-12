@@ -157,6 +157,7 @@ int object_emoji_react(const char *mid, const char *eid);
 int object_rm_emoji_react(const char *mid, const char *eid);
 int object_likes_len(const char *id);
 int object_announces_len(const char *id);
+int object_emojireacts_len(const char *id);
 
 xs_list *object_children(const char *id);
 xs_list *object_likes(const char *id);

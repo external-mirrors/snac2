@@ -1024,8 +1024,8 @@ static int top_ten_sort(const void *v1, const void *v2)
     const xs_list *l1 = *(const xs_list **)v1;
     const xs_list *l2 = *(const xs_list **)v2;
 
-    const char *c1 = xs_list_get(l1, 3);
-    const char *c2 = xs_list_get(l2, 3);
+    const char *c1 = xs_list_get(l1, 4);
+    const char *c2 = xs_list_get(l2, 4);
 
     return xs_cmp(c2, c1);
 }
@@ -1060,9 +1060,10 @@ xs_list *user_top_ten(snac *user, int count)
         /* get metrics */
         int ls = object_likes_len(id);
         int as = object_announces_len(id);
+        int es = object_emojireacts_len(id);
 
         /* build the entry and convert to list */
-        xs *s = xs_fmt("%s\t%d\t%d\t%010d", id, ls, as, ls + as);
+        xs *s = xs_fmt("%s\t%d\t%d\t%d\t%010d", id, ls, as, es, ls + as + es);
         xs *l = xs_split(s, "\t");
 
         u_list = xs_list_append(u_list, l);
