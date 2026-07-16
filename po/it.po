@@ -162,7 +162,7 @@ msgstr "(per URL o user@host)"
 
 #: html.c:1520 html.c:2139 html.c:5737
 msgid "Boost"
-msgstr "Annuncia"
+msgstr "Rilancia"
 
 #: html.c:1522 html.c:1539 html.c:1561
 msgid "(by URL)"
@@ -238,7 +238,7 @@ msgstr "Questo account è un bot"
 
 #: html.c:1797
 msgid "Auto-boost all mentions to this account"
-msgstr "Annuncio automatico delle citazioni a quest'account"
+msgstr "Rilancio automatico delle citazioni a quest'account"
 
 #: html.c:1799
 msgid "This account is private (posts are not shown through the web)"
@@ -326,7 +326,7 @@ msgstr "Annuncia questo post ai tuoi seguenti"
 
 #: html.c:2144 html.c:5755
 msgid "Unboost"
-msgstr "Rimuovi annuncio"
+msgstr "Ritira il boost"
 
 #: html.c:2144
 msgid "I regret I boosted this"
@@ -370,7 +370,7 @@ msgstr "Smetti di seguire il gruppo o canale"
 
 #: html.c:2174 html.c:5820
 msgid "Follow Group"
-msgstr "Segui grupp"
+msgstr "Segui il gruppo"
 
 #: html.c:2175
 msgid "Start following this group or channel"
@@ -438,7 +438,7 @@ msgstr "Evento"
 
 #: html.c:2510 html.c:2539
 msgid "boosted"
-msgstr "Annunciato"
+msgstr "rilanciato"
 
 #: html.c:2553
 msgid "in reply to"
@@ -539,7 +539,7 @@ msgstr "Senza limite"
 
 #: html.c:4033
 msgid "Allow announces (boosts) from this user"
-msgstr "Permetti annunci dall'utente"
+msgstr "Permetti annunci (boost) dall'utente"
 
 #: html.c:4036 html.c:5782
 msgid "Limit"
@@ -547,7 +547,7 @@ msgstr "Limite"
 
 #: html.c:4037
 msgid "Block announces (boosts) from this user"
-msgstr "Blocca annunci dall'utente"
+msgstr "Blocca annunci (boost) dall'utente"
 
 #: html.c:4046
 msgid "Delete this user"
@@ -737,23 +737,23 @@ msgstr "bozze"
 
 #: html.c:733
 msgid "Scheduled post..."
-msgstr ""
+msgstr "Post programmati..."
 
 msgid "Post date and time:"
-msgstr ""
+msgstr "Data e ora del post:"
 
 #: html.c:3608 html.c:5153
 msgid "Scheduled posts"
-msgstr ""
+msgstr "Post programmati"
 
 #: html.c:3609
 msgid "scheduled posts"
-msgstr ""
+msgstr "post programmati"
 
 #: html.c:727
 #, c-format
 msgid "Post date and time (timezone: %s):"
-msgstr ""
+msgstr "Data e ora del post (timezone: %s):"
 
 #: html.c:1841
 msgid "Time zone:"
@@ -761,7 +761,7 @@ msgstr ""
 
 #: html.c:708
 msgid "Language:"
-msgstr ""
+msgstr "Lingua:"
 
 #: html.c:1779
 msgid "Notify webhook:"
@@ -773,7 +773,7 @@ msgstr ""
 
 #: html.c:1846
 msgid "Languages you usually post in:"
-msgstr ""
+msgstr "Lingua nella quale posti di solito"
 
 #: html.c:1852 html.c:1861
 msgid "en fr es de_AT"
@@ -781,19 +781,19 @@ msgstr ""
 
 #: html.c:521
 msgid "Visibility: "
-msgstr ""
+msgstr "Visibilità: "
 
 msgid "Public"
-msgstr ""
+msgstr "Pubblico"
 
 msgid "Unlisted"
-msgstr ""
+msgstr "Non elencato"
 
 msgid "Followers-only"
-msgstr ""
+msgstr "Solo follower"
 
 msgid "Direct Message"
-msgstr ""
+msgstr "Messaggio diretto"
 
 #: html.c:581 html.c:2728 html.c:2753 html.c:5701
 msgid "EmojiUnreact"
@@ -809,144 +809,144 @@ msgstr ""
 
 #: html.c:2803
 msgid "Emoji reactions: "
-msgstr ""
+msgstr "Reazioni Emoji: "
 
 #: html.c:1957
 msgid "Muted words..."
-msgstr ""
+msgstr "Parole silenziate..."
 
 #: html.c:1959
 msgid "One word per line, partial matches count"
-msgstr ""
+msgstr "Una parola per linea, vale la corrispondenza parziale"
 
 #: html.c:1980
 msgid "Update muted words"
-msgstr ""
+msgstr "Aggiorna le parole silenziate"
 
 #: html.c:2628
 msgid "Muted: "
-msgstr ""
+msgstr "Silenziati: "
 
 #: html.c:4146
 msgid "Contact's posts"
-msgstr ""
+msgstr "Post dei contatti"
 
 #: html.c:4215
 msgid "More (x 10)..."
-msgstr ""
+msgstr "Ancora (x 10)..."
 
 #: html.c:873
 msgid "End in 3 days"
-msgstr ""
+msgstr "Termina in 3 giorni"
 
 #: html.c:876
 msgid "End in 1 year"
-msgstr ""
+msgstr "Termina in 1 anno"
 
 #: html.c:4303
 msgid "Likes"
-msgstr ""
+msgstr "Like"
 
 #: html.c:4304
 msgid "Emoji reacts"
-msgstr ""
+msgstr "Reazioni Emoji"
 
 #: html.c:4305
 msgid "Mentions"
-msgstr ""
+msgstr "Citazioni"
 
 #: html.c:4306
 msgid "Announces"
-msgstr ""
+msgstr "Boost"
 
 #: html.c:4307
 msgid "Follows"
-msgstr ""
+msgstr "Ti segue"
 
 #: html.c:4308
 msgid "Unfollows"
-msgstr ""
+msgstr "Ha smesso di seguirti"
 
 #: html.c:4309
 msgid "Follow requests"
-msgstr ""
+msgstr "Ha chiesto di seguirti"
 
 #: html.c:4310
 msgid "Blocks"
-msgstr ""
+msgstr "Ti ha bloccato"
 
 #: html.c:4311
 msgid "Polls"
-msgstr ""
+msgstr "Sondaggi"
 
 #: html.c:4315
 msgid "Save"
-msgstr ""
+msgstr "Salva"
 
 #: html.c:4323
 msgid "Notifications filter..."
-msgstr ""
+msgstr "Filtro delle notifiche..."
 
 #: data.c:45
 msgid "Jan"
-msgstr ""
+msgstr "Gen"
 
 #: data.c:46
 msgid "Feb"
-msgstr ""
+msgstr "Feb"
 
 #: data.c:47
 msgid "Mar"
-msgstr ""
+msgstr "Mar"
 
 #: data.c:48
 msgid "Apr"
-msgstr ""
+msgstr "Apr"
 
 #: data.c:49
 msgid "May"
-msgstr ""
+msgstr "Mag"
 
 #: data.c:50
 msgid "Jun"
-msgstr ""
+msgstr "Giu"
 
 #: data.c:51
 msgid "Jul"
-msgstr ""
+msgstr "Lug"
 
 #: data.c:52
 msgid "Aug"
-msgstr ""
+msgstr "Ago"
 
 #: data.c:53
 msgid "Sep"
-msgstr ""
+msgstr "Set"
 
 #: data.c:54
 msgid "Oct"
-msgstr ""
+msgstr "Ott"
 
 #: data.c:55
 msgid "Nov"
-msgstr ""
+msgstr "Mov"
 
 #: data.c:56
 msgid "Dec"
-msgstr ""
+msgstr "Dic"
 
 #: html.c:1808
 msgid "Show unlisted posts in the public page and RSS feed"
-msgstr ""
+msgstr "Mostra i post non elencati nella pagina pubblica e nei feed RSS"
 
 #: html.c:1855
 msgid "Don't show posts written in these languages:"
-msgstr ""
+msgstr "Non mostrare i post scritti in queste lingue:"
 
 #: html.c:3572 html.c:5108
 msgid "Liked, boosted or reacted posts"
-msgstr ""
+msgstr "Post piaciuti, rilanciati o con reazioni"
 
 #: html.c:3573
 msgid "admirations"
-msgstr ""
+msgstr "apprezzati"
