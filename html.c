@@ -2045,6 +2045,9 @@ xs_str *build_mentions(snac *user, const xs_dict *msg)
         }
     }
 
+#if 0
+    /* disabled by now */
+
     /* also add the author of this post as a mention */
     const char *atto = get_atto(msg);
 
@@ -2065,6 +2068,7 @@ xs_str *build_mentions(snac *user, const xs_dict *msg)
             }
         }
     }
+#endif
 
     if (*s) {
         xs *s1 = s;
