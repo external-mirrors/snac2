@@ -4,6 +4,10 @@
 
 The author of a replied post is no longer added to the CC: line, as it does not have much sense.
 
+Mastodon API: avatars and headers can be deleted (contributed by bm90).
+
+Updated Czech and Italian translations (contributed by pmjv and fidiben).
+
 ## 2.93
 
 Added a new *admirations* entry point to the web UI, containing a timeline of liked, boosted and reacted posts. Please take note that, after installing the new version, it will start empty, and be filled with subsequent reactions (contributed by violette).
