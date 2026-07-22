@@ -4104,6 +4104,24 @@ int mastoapi_delete_handler(const xs_dict *req, const char *q_path,
         else
             status = HTTP_STATUS_UNAUTHORIZED;
     }
+    else
+    if (xs_startswith(cmd, "/v1/profile/")) {
+        if (logged_in) {
+            xs *l = xs_split(cmd, "/");
+            const char *p = xs_list_get(l, -1);
+
+            if (strcmp(p, "avatar") == 0 || strcmp(p, "header") == 0) {
+                snac.config = xs_dict_set(snac.config, p, "");
+
+                if (user_persist(&snac, 1) == 0)
+                    credentials_get(body, ctype, &status, snac);
+                else
+                    status = HTTP_STATUS_INTERNAL_SERVER_ERROR;
+            }
+        }
+        else
+            status = HTTP_STATUS_UNAUTHORIZED;
+    }
 
     /* user cleanup */
     if (logged_in)
