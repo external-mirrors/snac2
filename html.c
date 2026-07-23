@@ -4337,7 +4337,7 @@ xs_str *html_notifications(snac *user, int skip, int show)
             xs_html_attr("id",           "clear"),
             xs_html_sctag("input",
                 xs_html_attr("type",     "submit"),
-                xs_html_attr("class",    "snac-btn-like"),
+                xs_html_attr("class",    "snac-btn-clear-all"),
                 xs_html_attr("value",    L("Clear all")))));
 
     xs_html *noti_new = NULL;
