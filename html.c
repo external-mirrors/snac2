@@ -3700,7 +3700,7 @@ xs_str *html_timeline(snac *user, const xs_list *list, int read_only,
             continue;
 
         const int scope = get_msg_visibility(msg);
-        if (user != NULL && scope != SCOPE_PUBLIC && !is_msg_mine(user, xs_dict_get(msg, "id"))) {
+        if (user != NULL && scope != SCOPE_PUBLIC && scope != SCOPE_UNLISTED && !is_msg_mine(user, xs_dict_get(msg, "id"))) {
             /* is this message a non-public reply? */
             const char *irt = get_in_reply_to(msg);
 
