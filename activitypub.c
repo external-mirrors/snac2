@@ -3053,6 +3053,9 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
                         /* distribute the post to users following these hashtags */
                         followed_hashtag_distribute(a_msg);
 
+                        /* actor is [back] alive */
+                        actor_failure(who, 2);
+
                         do_notify = 1;
                     }
                     else
