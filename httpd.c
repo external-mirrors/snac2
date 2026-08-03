@@ -285,8 +285,8 @@ int server_get_handler(xs_dict *req, const char *q_path,
         status = HTTP_STATUS_OK;
         *ctype = "application/json; charset=utf-8";
         *body  = xs_fmt("{\"links\":["
-            "{\"rel\":\"http:/" "/nodeinfo.diaspora.software/ns/schema/2.0\",\"href\":\"%s/nodeinfo_2_0\"},"
-            "{\"rel\":\"http:/" "/nodeinfo.diaspora.software/ns/schema/2.1\",\"href\":\"%s/nodeinfo_2_1\"}"
+            "{\"rel\":\"http:/" "/nodeinfo.diaspora.software/ns/schema/2.1\",\"href\":\"%s/nodeinfo_2_1\"},"
+            "{\"rel\":\"http:/" "/nodeinfo.diaspora.software/ns/schema/2.0\",\"href\":\"%s/nodeinfo_2_0\"}"
             "]}",
             srv_baseurl, srv_baseurl);
     }
