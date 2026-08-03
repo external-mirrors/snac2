@@ -4,6 +4,8 @@
 
 The author of a replied post is no longer added to the CC: line, as it does not have much sense.
 
+Fixed mentions for users with - in their identifiers.
+
 Mastodon API: avatars and headers can be deleted (contributed by bm90).
 
 Updated Czech and Italian translations (contributed by pmjv and fidiben).
