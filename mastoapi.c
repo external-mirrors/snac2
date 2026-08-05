@@ -4251,6 +4251,16 @@ int mastoapi_put_handler(const xs_dict *req, const char *q_path,
 
                     msg = xs_dict_set(msg, "tag", tag);
 
+                    if (xs_is_true(xs_dict_get(args, "sensitive"))) {
+                        const char *spoiler_text = xs_dict_get(args, "spoiler_text");
+                        msg = xs_dict_set(msg, "summary", spoiler_text);
+                        msg = xs_dict_set(msg, "sensitive", xs_stock(XSTYPE_TRUE));
+                    }
+                    else {
+                        msg = xs_dict_set(msg, "summary", "");
+                        msg = xs_dict_set(msg, "sensitive", xs_stock(XSTYPE_FALSE));
+                    }
+
                     /* overwrite object, not updating the indexes */
                     const char *id = xs_dict_get(msg, "id");
 
