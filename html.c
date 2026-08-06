@@ -216,7 +216,7 @@ xs_str *html_date_label(snac *user, const char *date)
 
     /* check if a user has actually set a timezone */
     if (user != NULL && xs_dict_get(user->config, "tz") != NULL &&
-        (t = xs_parse_iso_date(date, 0)) != 0) {
+        xs_endswith(date, "Z") && (t = xs_parse_iso_date(date, 0)) != 0) {
         t += xs_tz_offset(user->tz);
 
         time_t today = time(NULL);
