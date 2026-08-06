@@ -10,6 +10,8 @@ Unlisted replies to unknown posts were being skipped from the timeline, so don't
 
 If an actor marked as broken gets a post boosted (proving that is [back] functioning), it's unmarked as such.
 
+Don't try (and fail) to parse non-UTC dates in posts (I'll provide a real fix eventually).
+
 Mastodon API: fixed a bug that made changing the sensitive content string impossible, avatars and headers can be deleted (contributed by bm90).
 
 Updated Czech and Italian translations (contributed by pmjv and fidiben).
