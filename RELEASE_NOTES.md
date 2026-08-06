@@ -4,7 +4,9 @@
 
 The author of a replied post is no longer added to the CC: line, as it does not have much sense.
 
-Fixed mentions for users with - in their identifiers.
+Fixed mentions for users with hyphens in their identifiers.
+
+Unlisted replies to unknown posts were being skipped from the timeline, so don't do that.
 
 If an actor marked as broken gets a post boosted (proving that is [back] functioning), it's unmarked as such.
 
