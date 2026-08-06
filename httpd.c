@@ -504,9 +504,9 @@ void httpd_connection(FILE *f)
         q_path = xs_crop_i(q_path, strlen(p), 0);
 
     /* add users endpoint redirection mimic Mastodon behaviour */
-    const char *users_endpoint = "/users";
+    const char *users_endpoint = "/users/";
     if (xs_startswith(q_path, users_endpoint)) {
-        q_path = xs_crop_i(q_path, strlen(users_endpoint), 0);
+        q_path = xs_crop_i(q_path, strlen(users_endpoint) - 1, 0);
         status = HTTP_STATUS_FOUND;
     }
 
