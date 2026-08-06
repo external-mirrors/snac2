@@ -12,6 +12,8 @@ If an actor marked as broken gets a post boosted (proving that is [back] functio
 
 Don't try (and fail) to parse non-UTC dates in posts (I'll provide a real fix eventually).
 
+Fixed a redirection loop in the `/users` alias.
+
 Mastodon API: fixed a bug that made changing the sensitive content string impossible, avatars and headers can be deleted (contributed by bm90).
 
 Updated Czech and Italian translations (contributed by pmjv and fidiben).
