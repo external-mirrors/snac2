@@ -1,6 +1,6 @@
 # Release Notes
 
-## UNRELEASED
+## 2.94
 
 The author of a replied post is no longer added to the CC: line, as it does not have much sense.
 
