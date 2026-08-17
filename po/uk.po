@@ -768,192 +768,192 @@ msgstr "Часовий пояс:"
 
 #: html.c:708
 msgid "Language:"
-msgstr ""
+msgstr "Мова:"
 
 #: html.c:1779
 msgid "Notify webhook:"
-msgstr ""
+msgstr "Вебхук для сповіщення:"
 
 #: html.c:1785
 msgid "http://example.com/webhook"
-msgstr ""
+msgstr "http://example.com/webhook"
 
 #: html.c:1846
 msgid "Languages you usually post in:"
-msgstr ""
+msgstr "Типові мови для дописів:"
 
 #: html.c:1852 html.c:1861
 msgid "en fr es de_AT"
-msgstr ""
+msgstr "en fr es de_AT"
 
 #: html.c:521
 msgid "Visibility: "
-msgstr ""
+msgstr "Видимість: "
 
 msgid "Public"
-msgstr ""
+msgstr "Публічний допис"
 
 msgid "Unlisted"
-msgstr ""
+msgstr "Прихований допис"
 
 msgid "Followers-only"
-msgstr ""
+msgstr "Тільки для підписників"
 
 msgid "Direct Message"
-msgstr ""
+msgstr "Приватний допис"
 
 #: html.c:581 html.c:2728 html.c:2753 html.c:5701
 msgid "EmojiUnreact"
-msgstr ""
+msgstr "Прибрати реакцію"
 
 #: html.c:581 html.c:1559 html.c:2728 html.c:2753 html.c:5713
 msgid "EmojiReact"
-msgstr ""
+msgstr "Відреагувати"
 
 #: html.c:2251
 msgid "Emoji react..."
-msgstr ""
+msgstr "Реакції..."
 
 #: html.c:2803
 msgid "Emoji reactions: "
-msgstr ""
+msgstr "Реакції: "
 
 #: html.c:1957
 msgid "Muted words..."
-msgstr ""
+msgstr "Приглушені слова..."
 
 #: html.c:1959
 msgid "One word per line, partial matches count"
-msgstr ""
+msgstr "Одне слово в кожному рядку, враховуються часткові збіги"
 
 #: html.c:1980
 msgid "Update muted words"
-msgstr ""
+msgstr "Оновити приглушені слова"
 
 #: html.c:2628
 msgid "Muted: "
-msgstr ""
+msgstr "Приглушено: "
 
 #: html.c:4146
 msgid "Contact's posts"
-msgstr ""
+msgstr "Дописи контакту"
 
 #: html.c:4215
 msgid "More (x 10)..."
-msgstr ""
+msgstr "Більше (x 10)..."
 
 #: html.c:873
 msgid "End in 3 days"
-msgstr ""
+msgstr "Закінчується через 3 дні"
 
 #: html.c:876
 msgid "End in 1 year"
-msgstr ""
+msgstr "Закінчується через 1 рік"
 
 #: html.c:4303
 msgid "Likes"
-msgstr ""
+msgstr "Вподобайки"
 
 #: html.c:4304
 msgid "Emoji reacts"
-msgstr ""
+msgstr "Реакції"
 
 #: html.c:4305
 msgid "Mentions"
-msgstr ""
+msgstr "Згадки"
 
 #: html.c:4306
 msgid "Announces"
-msgstr ""
+msgstr "Оголошення"
 
 #: html.c:4307
 msgid "Follows"
-msgstr ""
+msgstr "Підписки"
 
 #: html.c:4308
 msgid "Unfollows"
-msgstr ""
+msgstr "Відписки"
 
 #: html.c:4309
 msgid "Follow requests"
-msgstr ""
+msgstr "Запити на підписку"
 
 #: html.c:4310
 msgid "Blocks"
-msgstr ""
+msgstr "Блокування"
 
 #: html.c:4311
 msgid "Polls"
-msgstr ""
+msgstr "Опитування"
 
 #: html.c:4315
 msgid "Save"
-msgstr ""
+msgstr "Зберегти"
 
 #: html.c:4323
 msgid "Notifications filter..."
-msgstr ""
+msgstr "Фільтр сповіщень..."
 
 #: data.c:45
 msgid "Jan"
-msgstr ""
+msgstr "січ"
 
 #: data.c:46
 msgid "Feb"
-msgstr ""
+msgstr "лют"
 
 #: data.c:47
 msgid "Mar"
-msgstr ""
+msgstr "бер"
 
 #: data.c:48
 msgid "Apr"
-msgstr ""
+msgstr "кві"
 
 #: data.c:49
 msgid "May"
-msgstr ""
+msgstr "тра"
 
 #: data.c:50
 msgid "Jun"
-msgstr ""
+msgstr "чер"
 
 #: data.c:51
 msgid "Jul"
-msgstr ""
+msgstr "лип"
 
 #: data.c:52
 msgid "Aug"
-msgstr ""
+msgstr "сер"
 
 #: data.c:53
 msgid "Sep"
-msgstr ""
+msgstr "вер"
 
 #: data.c:54
 msgid "Oct"
-msgstr ""
+msgstr "жов"
 
 #: data.c:55
 msgid "Nov"
-msgstr ""
+msgstr "лис"
 
 #: data.c:56
 msgid "Dec"
-msgstr ""
+msgstr "гру"
 
 #: html.c:1808
 msgid "Show unlisted posts in the public page and RSS feed"
-msgstr ""
+msgstr "Показати приховані дописи на публічній сторінці та в RSS-каналі"
 
 #: html.c:1855
 msgid "Don't show posts written in these languages:"
-msgstr ""
+msgstr "Не показувати дописи, написані цими мовами:"
 
 #: html.c:3572 html.c:5108
 msgid "Liked, boosted or reacted posts"
-msgstr ""
+msgstr "Дописи з вподобайками, поширеннями та реакціями"
 
 #: html.c:3573
 msgid "admirations"
-msgstr ""
+msgstr "захоплення"
