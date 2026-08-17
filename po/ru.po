@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: snac\n"
-"Last-Translator: grunfink\n"
+"Last-Translator: koru\n"
 "Language: ru\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
@@ -768,192 +768,192 @@ msgstr "Часовой пояс:"
 
 #: html.c:708
 msgid "Language:"
-msgstr ""
+msgstr "Язык:"
 
 #: html.c:1779
 msgid "Notify webhook:"
-msgstr ""
+msgstr "Вебхук для уведомлений:"
 
 #: html.c:1785
 msgid "http://example.com/webhook"
-msgstr ""
+msgstr "http://example.com/webhook"
 
 #: html.c:1846
 msgid "Languages you usually post in:"
-msgstr ""
+msgstr "Языки, на которых вы обычно пишете:"
 
 #: html.c:1852 html.c:1861
 msgid "en fr es de_AT"
-msgstr ""
+msgstr "en fr es de_AT"
 
 #: html.c:521
 msgid "Visibility: "
-msgstr ""
+msgstr "Видимость: "
 
 msgid "Public"
-msgstr ""
+msgstr "Публичное"
 
 msgid "Unlisted"
-msgstr ""
+msgstr "Скрытое"
 
 msgid "Followers-only"
-msgstr ""
+msgstr "Только для подписчиков"
 
 msgid "Direct Message"
-msgstr ""
+msgstr "Личное сообщение"
 
 #: html.c:581 html.c:2728 html.c:2753 html.c:5701
 msgid "EmojiUnreact"
-msgstr ""
+msgstr "Снять эмодзи-реакцию"
 
 #: html.c:581 html.c:1559 html.c:2728 html.c:2753 html.c:5713
 msgid "EmojiReact"
-msgstr ""
+msgstr "Эмодзи-реакция"
 
 #: html.c:2251
 msgid "Emoji react..."
-msgstr ""
+msgstr "Эмодзи-реакция..."
 
 #: html.c:2803
 msgid "Emoji reactions: "
-msgstr ""
+msgstr "Эмодзи-реакции: "
 
 #: html.c:1957
 msgid "Muted words..."
-msgstr ""
+msgstr "Скрытые слова..."
 
 #: html.c:1959
 msgid "One word per line, partial matches count"
-msgstr ""
+msgstr "По одному слову на строку, учитываются частичные совпадения"
 
 #: html.c:1980
 msgid "Update muted words"
-msgstr ""
+msgstr "Обновить скрытые слова"
 
 #: html.c:2628
 msgid "Muted: "
-msgstr ""
+msgstr "Скрыто: "
 
 #: html.c:4146
 msgid "Contact's posts"
-msgstr ""
+msgstr "Сообщения контакта"
 
 #: html.c:4215
 msgid "More (x 10)..."
-msgstr ""
+msgstr "Ещё (x 10)..."
 
 #: html.c:873
 msgid "End in 3 days"
-msgstr ""
+msgstr "Заканчивается через 3 дня"
 
 #: html.c:876
 msgid "End in 1 year"
-msgstr ""
+msgstr "Заканчивается через 1 год"
 
 #: html.c:4303
 msgid "Likes"
-msgstr ""
+msgstr "Лайки"
 
 #: html.c:4304
 msgid "Emoji reacts"
-msgstr ""
+msgstr "Эмодзи-реакции"
 
 #: html.c:4305
 msgid "Mentions"
-msgstr ""
+msgstr "Упоминания"
 
 #: html.c:4306
 msgid "Announces"
-msgstr ""
+msgstr "Продвижения"
 
 #: html.c:4307
 msgid "Follows"
-msgstr ""
+msgstr "Подписки"
 
 #: html.c:4308
 msgid "Unfollows"
-msgstr ""
+msgstr "Отписки"
 
 #: html.c:4309
 msgid "Follow requests"
-msgstr ""
+msgstr "Запросы на подписку"
 
 #: html.c:4310
 msgid "Blocks"
-msgstr ""
+msgstr "Блокировки"
 
 #: html.c:4311
 msgid "Polls"
-msgstr ""
+msgstr "Опросы"
 
 #: html.c:4315
 msgid "Save"
-msgstr ""
+msgstr "Сохранить"
 
 #: html.c:4323
 msgid "Notifications filter..."
-msgstr ""
+msgstr "Фильтр уведомлений..."
 
 #: data.c:45
 msgid "Jan"
-msgstr ""
+msgstr "Янв"
 
 #: data.c:46
 msgid "Feb"
-msgstr ""
+msgstr "Фев"
 
 #: data.c:47
 msgid "Mar"
-msgstr ""
+msgstr "Мар"
 
 #: data.c:48
 msgid "Apr"
-msgstr ""
+msgstr "Апр"
 
 #: data.c:49
 msgid "May"
-msgstr ""
+msgstr "Май"
 
 #: data.c:50
 msgid "Jun"
-msgstr ""
+msgstr "Июн"
 
 #: data.c:51
 msgid "Jul"
-msgstr ""
+msgstr "Июл"
 
 #: data.c:52
 msgid "Aug"
-msgstr ""
+msgstr "Авг"
 
 #: data.c:53
 msgid "Sep"
-msgstr ""
+msgstr "Сен"
 
 #: data.c:54
 msgid "Oct"
-msgstr ""
+msgstr "Окт"
 
 #: data.c:55
 msgid "Nov"
-msgstr ""
+msgstr "Ноя"
 
 #: data.c:56
 msgid "Dec"
-msgstr ""
+msgstr "Дек"
 
 #: html.c:1808
 msgid "Show unlisted posts in the public page and RSS feed"
-msgstr ""
+msgstr "Показывать скрытые сообщения на публичной странице и в RSS-ленте"
 
 #: html.c:1855
 msgid "Don't show posts written in these languages:"
-msgstr ""
+msgstr "Не показывать сообщения на этих языках:"
 
 #: html.c:3572 html.c:5108
 msgid "Liked, boosted or reacted posts"
-msgstr ""
+msgstr "Понравившиеся, продвинутые сообщения или сообщения с реакцией"
 
 #: html.c:3573
 msgid "admirations"
-msgstr ""
+msgstr "симпатии"
