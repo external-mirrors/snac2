@@ -5328,11 +5328,11 @@ int html_get_handler(const xs_dict *req, const char *q_path,
                     }
                 }
             }
-            else
-            if (status >= 400 && status <= 499)
-                status = HTTP_STATUS_NOT_FOUND;
 
             snac_debug(&snac, 1, xs_fmt("Proxy for %s %d", url, status));
+
+            if (status >= 400 && status <= 499)
+                status = HTTP_STATUS_NOT_FOUND;
         }
     }
     else
