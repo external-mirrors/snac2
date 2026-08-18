@@ -5293,6 +5293,10 @@ int html_get_handler(const xs_dict *req, const char *q_path,
             /* pick the raw path (including optional ? arguments) */
             const char *raw_path = xs_dict_get(req, "raw_path");
 
+            /* skip the prefix and user part */
+            xs *s = xs_fmt("%s/%s/", xs_dict_get(srv_config, "prefix"), snac.uid);
+            raw_path += strlen(s);
+
             /* skip to where the proxy/ string starts */
             raw_path += xs_str_in(raw_path, proxy_prefix);
 
