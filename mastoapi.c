@@ -1186,13 +1186,13 @@ xs_dict *mastoapi_status(snac *snac, const xs_dict *msg)
                 int count = 1;
 
                 if (contentl) {
-                    count = atoi(xs_list_get(contentl, 0)) + 1;
+                    count = xs_number_get(xs_list_get(contentl, 0)) + 1;
                     if (strncmp(xs_list_get(contentl, 1), xs_stock(XSTYPE_TRUE), 1) == 0)
                         me = xs_stock(XSTYPE_TRUE);
                 }
 
                 xs *fl = xs_list_new();
-                xs *c1 = xs_fmt("%d", count);
+                xs *c1 = xs_number_new(count);
                 fl = xs_list_append(fl, c1, me);
                 sfrl = xs_dict_append(sfrl, content, fl);
             }
