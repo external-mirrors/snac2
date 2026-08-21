@@ -24,6 +24,9 @@ xs_html *_xs_html_sctag(const char *tag, xs_html *var[]);
 xs_html *_xs_html_container(xs_html *var[]);
 #define xs_html_container(...) _xs_html_container((xs_html *[]) { __VA_ARGS__, NULL })
 
+xs_html *_xs_html_xtag(const char *tag, xs_html *var[]);
+#define xs_html_xtag(tag, ...) _xs_html_xtag(tag, (xs_html *[]) { __VA_ARGS__, NULL })
+
 void xs_html_render_f(xs_html *h, FILE *f);
 xs_str *xs_html_render_s(xs_html *tag, const char *prefix);
 #define xs_html_render(tag) xs_html_render_s(tag, NULL)
@@ -184,6 +187,20 @@ xs_html *_xs_html_sctag(const char *tag, xs_html *var[])
 xs_html *_xs_html_container(xs_html *var[])
 {
     return _xs_html_tag_t(XS_HTML_CONTAINER, NULL, var);
+}
+
+
+xs_html *_xs_html_xtag(const char *tag, xs_html *var[])
+{
+    if (xs_is_null(tag))
+        return _xs_html_container(var);
+    else
+    if (xs_endswith(tag, "/")) {
+        xs *tag2 = xs_crop_i(xs_dup(tag), 0, -1);
+        return _xs_html_sctag(tag2, var);
+    }
+
+    return _xs_html_tag(tag, var);
 }
 
 

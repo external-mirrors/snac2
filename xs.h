@@ -135,6 +135,7 @@ xs_dict *xs_dict_set_path_sep(xs_dict *dict, const char *path, const xs_val *val
 #define xs_dict_set_path(dict, path, value) xs_dict_set_path_sep(dict, path, value, ".")
 
 xs_val *xs_val_new(xstype t);
+xs_number *_xs_number_new(const char *str);
 xs_number *xs_number_new(double f);
 xs_number *xs_number_new_l(long l);
 double xs_number_get(const xs_number *v);
@@ -164,6 +165,7 @@ uint64_t xs_hash64_func(const char *data, int size);
 
 #define xs_is_true(v) (xs_type((v)) == XSTYPE_TRUE)
 #define xs_is_false(v) (xs_type((v)) == XSTYPE_FALSE)
+#define xs_bool(v) xs_stock((v) ? XSTYPE_TRUE : XSTYPE_FALSE)
 #define xs_not(v) xs_stock(xs_is_true((v)) ? XSTYPE_FALSE : XSTYPE_TRUE)
 #define xs_is_string(v) (xs_type((v)) == XSTYPE_STRING)
 #define xs_is_list(v) (xs_type((v)) == XSTYPE_LIST)
@@ -706,7 +708,7 @@ xs_str *xs_tolower_i(xs_str *str)
     int n;
 
     for (n = 0; str[n]; n++)
-        str[n] = tolower(str[n]);
+        str[n] = tolower((int)str[n]);
 
     return str;
 }
@@ -720,7 +722,7 @@ xs_str *xs_toupper_i(xs_str *str)
     int n;
 
     for (n = 0; str[n]; n++)
-        str[n] = toupper(str[n]);
+        str[n] = toupper((int)str[n]);
 
     return str;
 }
@@ -1559,7 +1561,8 @@ xs_data *xs_data_new(const void *data, int size)
 
     _xs_put_size(v, total_size);
 
-    memcpy(&v[1 + _XS_TYPE_SIZE], data, size);
+    if (data)
+        memcpy(&v[1 + _XS_TYPE_SIZE], data, size);
 
     return v;
 }
