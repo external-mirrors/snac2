@@ -3899,7 +3899,10 @@ xs_html *html_people_list(snac *user, xs_list *list, const char *header, const c
                     const char *lo = xs_is_string(longitude) ? longitude : xs_number_str(longitude);
 
                     if (xs_is_string(la) && xs_is_string(lo)) {
-                        xs *label = xs_fmt("%s,%s", la, lo);
+                        xs *sla = xs_utf8_crop_i(xs_dup(la), 0, 7);
+                        xs *slo = xs_utf8_crop_i(xs_dup(lo), 0, 7);
+
+                        xs *label = xs_fmt("%s,%s", sla, slo);
                         xs *url   = xs_fmt("https://openstreetmap.org/search?query=%s,%s", la, lo);
 
                         xs_html_add(snac_post,
