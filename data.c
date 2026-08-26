@@ -2355,7 +2355,7 @@ int actor_get_refresh(snac *user, const char *actor, xs_dict **data)
 
 /** user limiting (announce blocks) **/
 
-int limited(snac *user, const char *id, int cmd)
+int limited(snac *user, const char *id, snac_op op)
 /* announce messages from a followed (0: check, 1: limit; 2: unlimit) */
 {
     int ret = 0;
@@ -2363,12 +2363,12 @@ int limited(snac *user, const char *id, int cmd)
     xs *md5 = xs_md5_hex(id, strlen(id));
     xs *fn  = xs_fmt("%s/%s", dir, md5);
 
-    switch (cmd) {
-    case 0: /** check **/
+    switch (op) {
+    case OP_CHECK: /** check **/
         ret = !!(mtime(fn) > 0.0);
         break;
 
-    case 1: /** limit **/
+    case OP_ADD: /** limit **/
         mkdirx(dir);
 
         if (mtime(fn) > 0.0)
@@ -2385,11 +2385,14 @@ int limited(snac *user, const char *id, int cmd)
         }
         break;
 
-    case 2: /** unlimit **/
+    case OP_DEL: /** unlimit **/
         if (mtime(fn) > 0.0)
             ret = unlink(fn);
         else
             ret = -1;
+        break;
+
+    default:
         break;
     }
 

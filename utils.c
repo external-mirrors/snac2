@@ -744,7 +744,7 @@ void export_csv(snac *user)
             webfinger_request_fake(actor, NULL, &uid);
 
             if (xs_is_string(uid))
-                fprintf(f, "%s,%s,false,\n", uid, limited(user, actor, 0) ? "false" : "true");
+                fprintf(f, "%s,%s,false,\n", uid, limited(user, actor, OP_CHECK) ? "false" : "true");
         }
 
         fclose(f);
