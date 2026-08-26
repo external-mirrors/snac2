@@ -2594,7 +2594,7 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
     }
 
     /* this instance is alive */
-    instance_failure(actor, 2);
+    instance_failure(actor, OP_DEL);
 
     /* question votes may not have a type */
     if (xs_is_null(type))
@@ -3029,7 +3029,7 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
                 const char *who = get_atto(a_msg);
 
                 /* got the admired object: instance is [back] online */
-                instance_failure(object, 2);
+                instance_failure(object, OP_DEL);
 
                 if (who && !is_muted(snac, who)) {
                     /* bring the actor */
@@ -3479,7 +3479,7 @@ void process_user_queue_item(snac *user, xs_dict *q_item)
 
                 /* mark actor and instance as working */
                 actor_failure(actor, OP_DEL);
-                instance_failure(actor, 2);
+                instance_failure(actor, OP_DEL);
             }
             else {
                 if (status == HTTP_STATUS_GONE || status == HTTP_STATUS_NOT_FOUND) {
@@ -3604,7 +3604,7 @@ void process_queue_item(xs_dict *q_item)
             return;
         }
 
-        if (instance_failure(inbox, 0)) {
+        if (instance_failure(inbox, OP_CHECK)) {
             srv_debug(1, xs_fmt("output message error: too many failures for instance %s", inbox));
             return;
         }
@@ -3621,7 +3621,7 @@ void process_queue_item(xs_dict *q_item)
         status = send_to_inbox_raw(keyid, seckey, inbox, msg, &payload, &p_size, timeout);
 
         /* register or clear a value for this instance */
-        instance_failure(inbox, valid_status(status) ? 2 : 1);
+        instance_failure(inbox, valid_status(status) ? OP_DEL : OP_ADD);
 
         if (payload) {
             if (p_size > 1024) {

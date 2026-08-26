@@ -309,7 +309,7 @@ xs_list *content_search(snac *user, const char *regex,
             int priv, int skip, int show, int max_secs, int *timeout);
 
 int actor_failure(const char *actor, snac_op op);
-int instance_failure(const char *url, int op);
+int instance_failure(const char *url, snac_op op);
 
 int grave(const char *objid, int op);
 

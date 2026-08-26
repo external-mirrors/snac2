@@ -3275,7 +3275,7 @@ int actor_failure(const char *actor, snac_op op)
 }
 
 
-int instance_failure(const char *url, int op)
+int instance_failure(const char *url, snac_op op)
 /* do some checks and accounting on instance failures */
 {
     int ret = 0;
@@ -3290,7 +3290,7 @@ int instance_failure(const char *url, int op)
     xs *fn = xs_fmt("%s/failure/%s", srv_basedir, md5);
 
     switch (op) {
-    case 0: /** check **/
+    case OP_CHECK: /** check **/
         if ((mt = mtime(fn)) != 0.0) {
             /* grace time */
             double seconds_failing = xs_number_get(xs_dict_get_def(srv_config, "max_failing_days", "15"))
@@ -3302,7 +3302,7 @@ int instance_failure(const char *url, int op)
 
         break;
 
-    case 1: /** register a failure **/
+    case OP_ADD: /** register a failure **/
         if (mtime(fn) == 0.0) {
             FILE *f;
 
@@ -3315,10 +3315,13 @@ int instance_failure(const char *url, int op)
 
         break;
 
-    case 2: /** clear a failure **/
+    case OP_DEL: /** clear a failure **/
         /* called whenever a message comes from this instance */
         unlink(fn);
 
+        break;
+
+    default:
         break;
     }
 
