@@ -3054,7 +3054,7 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
                         followed_hashtag_distribute(a_msg);
 
                         /* actor is [back] alive */
-                        actor_failure(who, 2);
+                        actor_failure(who, OP_DEL);
 
                         do_notify = 1;
                     }
@@ -3461,7 +3461,7 @@ void process_user_queue_item(snac *user, xs_dict *q_item)
         const char *actor = xs_dict_get(q_item, "actor");
         double mtime = object_mtime(actor);
 
-        if (actor_failure(actor, 0) == -1) {
+        if (actor_failure(actor, OP_CHECK) == -1) {
             /* actor is broken beyond repair */
             snac_debug(user, 1, xs_fmt("actor_refresh skipped broken actor %s", actor));
         }
@@ -3478,16 +3478,16 @@ void process_user_queue_item(snac *user, xs_dict *q_item)
                 actor_add(actor, actor_o);
 
                 /* mark actor and instance as working */
-                actor_failure(actor, 2);
+                actor_failure(actor, OP_DEL);
                 instance_failure(actor, 2);
             }
             else {
                 if (status == HTTP_STATUS_GONE || status == HTTP_STATUS_NOT_FOUND) {
-                    actor_failure(actor, 1);
+                    actor_failure(actor, OP_ADD);
                     snac_log(user, xs_fmt("actor_refresh marking actor %s as broken %d", actor, status));
                 }
                 else {
-                    actor_failure(actor, 2);
+                    actor_failure(actor, OP_DEL);
                     object_touch(actor);
                 }
             }

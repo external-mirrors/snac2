@@ -3233,7 +3233,7 @@ xs_list *content_search(snac *user, const char *regex,
 }
 
 
-int actor_failure(const char *actor, int op)
+int actor_failure(const char *actor, snac_op op)
 /* actor failure maintenance */
 {
     int ret = 0;
@@ -3242,13 +3242,13 @@ int actor_failure(const char *actor, int op)
     xs *fn = xs_fmt("%s/failure/%s", srv_basedir, md5);
 
     switch (op) {
-    case 0: /** check **/
+    case OP_CHECK: /** check **/
         if (mtime(fn))
             ret = -1;
 
         break;
 
-    case 1: /** register a failure **/
+    case OP_ADD: /** register a failure **/
         if (mtime(fn) == 0.0) {
             FILE *f;
 
@@ -3261,10 +3261,13 @@ int actor_failure(const char *actor, int op)
 
         break;
 
-    case 2: /** clear a failure **/
+    case OP_DEL: /** clear a failure **/
         /* called whenever a message comes from this instance */
         unlink(fn);
 
+        break;
+
+    default:
         break;
     }
 

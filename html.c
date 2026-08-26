@@ -362,7 +362,7 @@ xs_html *html_actor_icon(snac *user, xs_dict *actor, const char *date,
                 xs_html_raw("&#128148;")));
     }
 
-    if (actor_failure(actor_id, 0) == -1) {
+    if (actor_failure(actor_id, OP_CHECK) == -1) {
         xs_html_add(actor_icon,
             xs_html_text(" "),
             xs_html_tag("span",

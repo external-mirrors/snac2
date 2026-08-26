@@ -79,6 +79,14 @@ typedef struct {
     enum { THST_STOP, THST_WAIT, THST_IN, THST_QUEUE } th_state[MAX_THREADS];
 } srv_state;
 
+typedef enum {
+    OP_CHECK = 0,
+    OP_ADD = 1,
+    OP_DEL = 2,
+    OP_LIST = 3,
+    OP_FIND = 4
+} snac_op;
+
 extern srv_state *p_state;
 
 enum {
@@ -300,7 +308,7 @@ int content_match(const char *file, const xs_dict *msg);
 xs_list *content_search(snac *user, const char *regex,
             int priv, int skip, int show, int max_secs, int *timeout);
 
-int actor_failure(const char *actor, int op);
+int actor_failure(const char *actor, snac_op op);
 int instance_failure(const char *url, int op);
 
 int grave(const char *objid, int op);
