@@ -3951,7 +3951,7 @@ int activitypub_get_handler(const xs_dict *req, const char *q_path,
     uid = xs_list_get(l, 1);
     if (!user_open(&snac, uid)) {
         /* invalid user */
-        status = grave(uid, 0) ? HTTP_STATUS_GONE : HTTP_STATUS_NOT_FOUND;
+        status = grave(uid, OP_CHECK) ? HTTP_STATUS_GONE : HTTP_STATUS_NOT_FOUND;
         srv_debug(1, xs_fmt("activitypub_get_handler bad user %s %d", uid, status));
         return status;
     }
@@ -4151,7 +4151,7 @@ int activitypub_post_handler(const xs_dict *req, const char *q_path,
     const char *uid = xs_list_get(l, 1);
     if (!user_open(&snac, uid)) {
         /* invalid user */
-        status = grave(uid, 0) ? HTTP_STATUS_GONE : HTTP_STATUS_NOT_FOUND;
+        status = grave(uid, OP_CHECK) ? HTTP_STATUS_GONE : HTTP_STATUS_NOT_FOUND;
         srv_debug(1, xs_fmt("activitypub_post_handler bad user %s %d", uid, status));
         return status;
     }

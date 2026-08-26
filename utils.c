@@ -372,7 +372,7 @@ int adduser(const char *uid)
     }
 
     /* remove the grave */
-    grave(uid, 2);
+    grave(uid, OP_DEL);
 
     printf("\nUser password is %s\n", pwd);
 
@@ -467,7 +467,7 @@ int deluser(snac *user)
         }
     }
 
-    grave(user->uid, 1);
+    grave(user->uid, OP_ADD);
 
     rm_rf(user->basedir);
 

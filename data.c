@@ -3329,7 +3329,7 @@ int instance_failure(const char *url, snac_op op)
 }
 
 
-int grave(const char *objid, int op)
+int grave(const char *objid, snac_op op)
 /* the graveyeard of deleted objects */
 {
     int ret = 0;
@@ -3339,11 +3339,11 @@ int grave(const char *objid, int op)
     FILE *f;
 
     switch (op) {
-    case 0: /** check **/
+    case OP_CHECK: /** check **/
         ret = mtime(fn) > 0.0 ? 1 : 0;
         break;
 
-    case 1: /** add **/
+    case OP_ADD: /** add **/
         mkdirx(dir);
 
         if ((f = fopen(fn, "w")) != NULL) {
@@ -3353,8 +3353,11 @@ int grave(const char *objid, int op)
 
         break;
 
-    case 2: /** del **/
+    case OP_DEL: /** del **/
         unlink(fn);
+        break;
+
+    default:
         break;
     }
 

@@ -311,7 +311,7 @@ xs_list *content_search(snac *user, const char *regex,
 int actor_failure(const char *actor, snac_op op);
 int instance_failure(const char *url, snac_op op);
 
-int grave(const char *objid, int op);
+int grave(const char *objid, snac_op op);
 
 void enqueue_input(snac *snac, const xs_dict *msg, const xs_dict *req, int retries);
 void enqueue_shared_input(const xs_dict *msg, const xs_dict *req, int retries);
