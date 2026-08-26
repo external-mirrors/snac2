@@ -1795,7 +1795,7 @@ xs_list *mastoapi_account_lists(snac *user, const char *uid)
         const char *list_id    = xs_list_get(li, 0);
         const char *list_title = xs_list_get(li, 1);
         if (uid) {
-            xs *users = list_members(user, list_id, NULL, 0);
+            xs *users = list_members(user, list_id, NULL, OP_LIST);
             if (xs_list_in(users, actor_md5) == -1)
                 continue;
         }
@@ -2527,7 +2527,7 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
                     p = xs_list_get(l, -2);
 
                     if (p && xs_is_hex(p)) {
-                        xs *actors = list_members(&snac1, p, NULL, 0);
+                        xs *actors = list_members(&snac1, p, NULL, OP_LIST);
                         xs *out = xs_list_new();
                         int c = 0;
                         const char *v;
@@ -3843,7 +3843,7 @@ int mastoapi_post_handler(const xs_dict *req, const char *q_path,
                     const char *v;
 
                     while (xs_list_next(accts, &v, &c)) {
-                        list_members(&snac, id, v, 1);
+                        list_members(&snac, id, v, OP_ADD);
                     }
 
                     xs *out = xs_dict_new();
@@ -4052,7 +4052,7 @@ int mastoapi_delete_handler(const xs_dict *req, const char *q_path,
                     const char *v;
 
                     while (xs_list_next(accts, &v, &c)) {
-                        list_members(&snac, p, v, 2);
+                        list_members(&snac, p, v, OP_DEL);
                     }
                 }
                 else {

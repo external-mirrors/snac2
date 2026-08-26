@@ -2621,7 +2621,7 @@ xs_list *list_timeline(snac *user, const char *list, int skip, int show)
 }
 
 
-xs_val *list_members(snac *user, const char *list, const char *actor_md5, int op)
+xs_val *list_members(snac *user, const char *list, const char *actor_md5, snac_op op)
 /* list member management */
 {
     xs_val *l = NULL;
@@ -2635,12 +2635,12 @@ xs_val *list_members(snac *user, const char *list, const char *actor_md5, int op
     xs *fn = xs_fmt("%s/list/%s.lst", user->basedir, list);
 
     switch (op) {
-    case 0: /** list members **/
+    case OP_LIST: /** list members **/
         l = index_list(fn, XS_ALL);
 
         break;
 
-    case 1: /** append actor to list **/
+    case OP_ADD: /** append actor to list **/
         if (xs_is_string(actor_md5) && xs_is_hex(actor_md5)) {
             if (!index_in_md5(fn, actor_md5))
                 index_add_md5(fn, actor_md5);
@@ -2648,7 +2648,7 @@ xs_val *list_members(snac *user, const char *list, const char *actor_md5, int op
 
         break;
 
-    case 2: /** delete actor from list **/
+    case OP_DEL: /** delete actor from list **/
         if (xs_is_string(actor_md5) && xs_is_hex(actor_md5))
             index_del_md5(fn, actor_md5);
 

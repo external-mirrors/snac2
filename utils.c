@@ -705,7 +705,7 @@ void export_csv(snac *user)
             const char *lid = xs_list_get(li, 0);
             const char *ltitle = xs_list_get(li, 1);
 
-            xs *actors = list_members(user, lid, NULL, 0);
+            xs *actors = list_members(user, lid, NULL, OP_LIST);
             const char *md5;
 
             xs_list_foreach(actors, md5) {
@@ -935,7 +935,7 @@ void import_list_csv(snac *user, const char *ifn)
                     if (valid_status(webfinger_request(acct, &url, &uid))) {
                         xs *actor_md5 = xs_md5_hex(url, strlen(url));
 
-                        list_members(user, list_id, actor_md5, 1);
+                        list_members(user, list_id, actor_md5, OP_ADD);
                         snac_log(user, xs_fmt("Added %s to list %s", url, lname));
 
                         if (!following_check(user, url)) {
