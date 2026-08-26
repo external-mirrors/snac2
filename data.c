@@ -2474,13 +2474,13 @@ xs_list *tag_search(const char *tag, int skip, int show)
 
 /** lists **/
 
-xs_val *list_maint(snac *user, const char *list, int op)
+xs_val *list_maint(snac *user, const char *list, snac_op op)
 /* list maintenance */
 {
     xs_val *l = NULL;
 
     switch (op) {
-    case 0: /** list of lists **/
+    case OP_LIST: /** list of lists **/
         {
             FILE *f;
             xs *spec = xs_fmt("%s/list/" "*.id", user->basedir);
@@ -2509,9 +2509,9 @@ xs_val *list_maint(snac *user, const char *list, int op)
 
         break;
 
-    case 1: /** create new list (list is the name) **/
+    case OP_ADD: /** create new list (list is the name) **/
         {
-            xs *lol = list_maint(user, NULL, 0);
+            xs *lol = list_maint(user, NULL, OP_LIST);
             int c = 0;
             const xs_list *v;
             int add = 1;
@@ -2546,7 +2546,7 @@ xs_val *list_maint(snac *user, const char *list, int op)
 
         break;
 
-    case 2: /** delete list (list is the id) **/
+    case OP_DEL: /** delete list (list is the id) **/
         {
             if (xs_is_hex(list)) {
                 xs *fn = xs_fmt("%s/list/%s.id", user->basedir, list);
@@ -2565,7 +2565,7 @@ xs_val *list_maint(snac *user, const char *list, int op)
 
         break;
 
-    case 3: /** get list name **/
+    case OP_ID: /** get list name **/
         if (xs_is_hex(list)) {
             FILE *f;
             xs *fn = xs_fmt("%s/list/%s.id", user->basedir, list);
@@ -2578,9 +2578,9 @@ xs_val *list_maint(snac *user, const char *list, int op)
 
         break;
 
-    case 4: /** find list id by name **/
+    case OP_FIND: /** find list id by name **/
         if (xs_is_string(list)) {
-            xs *lol = list_maint(user, NULL, 0);
+            xs *lol = list_maint(user, NULL, OP_LIST);
             const xs_list *li;
 
             xs_list_foreach(lol, li) {
@@ -2590,6 +2590,9 @@ xs_val *list_maint(snac *user, const char *list, int op)
                 }
             }
         }
+
+    default:
+        break;
     }
 
     return l;

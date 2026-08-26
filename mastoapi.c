@@ -1781,7 +1781,7 @@ xs_list *mastoapi_account_lists(snac *user, const char *uid)
 {
     xs_list *out  = xs_list_new();
     xs *actor_md5 = NULL;
-    xs *lol       = list_maint(user, NULL, 0);
+    xs *lol       = list_maint(user, NULL, OP_LIST);
 
     if (uid) {
         if (!xs_is_hex(uid))
@@ -2549,7 +2549,7 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
                 else
                 if (xs_is_hex(p)) {
                     xs *out = xs_list_new();
-                    xs *lol = list_maint(&snac1, NULL, 0);
+                    xs *lol = list_maint(&snac1, NULL, OP_LIST);
                     int c = 0;
                     const xs_list *v;
 
@@ -3803,7 +3803,7 @@ int mastoapi_post_handler(const xs_dict *req, const char *q_path,
             if (xs_type(title) == XSTYPE_STRING) {
                 /* add the list */
                 xs *out = xs_dict_new();
-                xs *lid = list_maint(&snac, title, 1);
+                xs *lid = list_maint(&snac, title, OP_ADD);
 
                 if (!xs_is_null(lid)) {
                     out = xs_dict_append(out, "id", lid);
@@ -4058,7 +4058,7 @@ int mastoapi_delete_handler(const xs_dict *req, const char *q_path,
                 else {
                     /* delete list */
                     if (xs_is_hex(p)) {
-                        list_maint(&snac, p, 2);
+                        list_maint(&snac, p, OP_DEL);
                     }
                 }
             }

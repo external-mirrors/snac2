@@ -3534,7 +3534,7 @@ xs_str *html_timeline(snac *user, const xs_list *list, int read_only,
             xs_html_attr("class", "snac-list-of-lists"));
         xs_html_add(body, lol);
 
-        xs *lists = list_maint(user, NULL, 0); /* get list of lists */
+        xs *lists = list_maint(user, NULL, OP_LIST); /* get list of lists */
 
         int ct = 0;
         const char *v;
@@ -5179,7 +5179,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
                 xs *ttl = timeline_top_level(&snac, list);
 
                 xs *base = xs_fmt("/list/%s", lid);
-                xs *name = list_maint(&snac, lid, 3);
+                xs *name = list_maint(&snac, lid, OP_ID);
                 xs *title = xs_fmt(L("Showing timeline for list '%s'"), name);
 
                 *body = html_timeline(&snac, ttl, 0, skip, show,

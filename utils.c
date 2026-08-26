@@ -698,7 +698,7 @@ void export_csv(snac *user)
     if ((f = fopen(fn, "w")) != NULL) {
         snac_log(user, xs_fmt("Creating %s...", fn));
 
-        xs *lol = list_maint(user, NULL, 0);
+        xs *lol = list_maint(user, NULL, OP_LIST);
         const xs_list *li;
 
         xs_list_foreach(lol, li) {
@@ -927,7 +927,7 @@ void import_list_csv(snac *user, const char *ifn)
 
                 if (lname && acct) {
                     /* create the list */
-                    xs *list_id = list_maint(user, lname, 1);
+                    xs *list_id = list_maint(user, lname, OP_ADD);
 
                     xs *url = NULL;
                     xs *uid = NULL;

@@ -84,7 +84,8 @@ typedef enum {
     OP_ADD = 1,
     OP_DEL = 2,
     OP_LIST = 3,
-    OP_FIND = 4
+    OP_FIND = 4,
+    OP_ID = 5
 } snac_op;
 
 extern srv_state *p_state;
@@ -259,7 +260,7 @@ void tag_index(const char *id, const xs_dict *obj);
 xs_str *tag_fn(const char *tag);
 xs_list *tag_search(const char *tag, int skip, int show);
 
-xs_val *list_maint(snac *user, const char *list, int op);
+xs_val *list_maint(snac *user, const char *list, snac_op op);
 xs_str *list_timeline_fn(snac *user, const char *list);
 xs_list *list_timeline(snac *user, const char *list, int skip, int show);
 xs_val *list_members(snac *user, const char *list_id, const char *actor_md5, snac_op op);
