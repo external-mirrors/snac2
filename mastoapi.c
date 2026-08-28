@@ -3170,6 +3170,43 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
         else
             status = HTTP_STATUS_UNAUTHORIZED;
     }
+    else
+    if (xs_startswith(cmd, "/v1/media/") || xs_startswith(cmd, "/v2/media/")) { /** **/
+        if (logged_in) {
+            xs *p = xs_split(cmd, "/");
+            const char *id = xs_list_get(p, -1);
+
+            if (xs_is_string(id)) {
+                xs *filename = xs_fmt("%s/static/%s", snac1.basedir, id);
+
+                if (mtime(filename)) {
+                    /* file exists */
+                    xs *alt  = static_get_meta(&snac1, id);
+                    xs *url  = xs_fmt("%s/s/%s", snac1.actor, id);
+                    xs *mime = xs_split(xs_mime_by_ext(filename), "/");
+                    const char *type = xs_list_get(mime, 0);
+
+                    if (!xs_match(type, "image|video|audio"))
+                        type = "unknown";
+
+                    xs *d = xs_dict_new();
+
+                    d = xs_dict_set(d, "id", id);
+                    d = xs_dict_set(d, "url", url);
+                    d = xs_dict_set(d, "preview_url", url);
+                    d = xs_dict_set(d, "remote_url", url);
+                    d = xs_dict_set(d, "type", type);
+                    d = xs_dict_set(d, "description", xs_or(alt, ""));
+
+                    *body = xs_json_dumps(d, 4);
+                    *ctype = "application/json";
+                    status = HTTP_STATUS_OK;
+                }
+            }
+        }
+        else
+            status = HTTP_STATUS_UNAUTHORIZED;
+    }
 
     /* user cleanup */
     if (logged_in)
