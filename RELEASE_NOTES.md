@@ -4,7 +4,7 @@
 
 Added some fixes to media proxy code.
 
-Mastodon API: Don't return reactions count as string (contributed by mkljczk).
+Mastodon API: Don't return reactions count as string (contributed by mkljczk), implemented GET /v1/media (contributed by clairemont).
 
 Updated Ukrainian and Russian translations (contributed by wincentbalin and koru).
 
