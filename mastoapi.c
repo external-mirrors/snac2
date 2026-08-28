@@ -2307,10 +2307,13 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
     }
     else
     if (strcmp(cmd, "/v1/conversations") == 0) { /** **/
-        /* TBD */
-        *body  = xs_dup("[]");
-        *ctype = "application/json";
-        status = HTTP_STATUS_OK;
+        if (logged_in) {
+            *body  = xs_dup("[]");
+            *ctype = "application/json";
+            status = HTTP_STATUS_OK;
+        }
+        else
+            status = HTTP_STATUS_UNAUTHORIZED;
     }
     else
     if (strcmp(cmd, "/v1/notifications") == 0) { /** **/
@@ -2471,25 +2474,37 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
     else
     if (strcmp(cmd, "/v1/filters") == 0) { /** **/
         /* snac will never have filters */
-        *body  = xs_dup("[]");
-        *ctype = "application/json";
-        status = HTTP_STATUS_OK;
+        if (logged_in) {
+            *body  = xs_dup("[]");
+            *ctype = "application/json";
+            status = HTTP_STATUS_OK;
+        }
+        else
+            status = HTTP_STATUS_UNAUTHORIZED;
     }
     else
     if (strcmp(cmd, "/v2/filters") == 0) { /** **/
         /* snac will never have filters
          * but still, without a v2 endpoint a short delay is introduced
          * in some apps */
-        *body  = xs_dup("[]");
-        *ctype = "application/json";
-        status = HTTP_STATUS_OK;
+        if (logged_in) {
+            *body  = xs_dup("[]");
+            *ctype = "application/json";
+            status = HTTP_STATUS_OK;
+        }
+        else
+            status = HTTP_STATUS_UNAUTHORIZED;
     }
     else
     if (strcmp(cmd, "/v1/favourites") == 0) { /** **/
         /* snac will never support a list of favourites */
-        *body  = xs_dup("[]");
-        *ctype = "application/json";
-        status = HTTP_STATUS_OK;
+        if (logged_in) {
+            *body  = xs_dup("[]");
+            *ctype = "application/json";
+            status = HTTP_STATUS_OK;
+        }
+        else
+            status = HTTP_STATUS_UNAUTHORIZED;
     }
     else
     if (strcmp(cmd, "/v1/bookmarks") == 0) { /** **/
@@ -2580,10 +2595,13 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
     }
     else
     if (strcmp(cmd, "/v1/scheduled_statuses") == 0) { /** **/
-        /* TBD */
-        *body  = xs_dup("[]");
-        *ctype = "application/json";
-        status = HTTP_STATUS_OK;
+        if (logged_in) {
+            *body  = xs_dup("[]");
+            *ctype = "application/json";
+            status = HTTP_STATUS_OK;
+        }
+        else
+            status = HTTP_STATUS_UNAUTHORIZED;
     }
     else
     if (strcmp(cmd, "/v1/follow_requests") == 0) { /** **/
@@ -2951,9 +2969,13 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
     else
     if (strcmp(cmd, "/v1/preferences") == 0) { /** **/
         /* TBD */
-        *body  = xs_dup("{}");
-        *ctype = "application/json";
-        status = HTTP_STATUS_OK;
+        if (logged_in) {
+            *body  = xs_dup("{}");
+            *ctype = "application/json";
+            status = HTTP_STATUS_OK;
+        }
+        else
+            status = HTTP_STATUS_UNAUTHORIZED;
     }
     else
     if (strcmp(cmd, "/v1/markers") == 0) { /** **/
@@ -3004,15 +3026,23 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
     }
     else
     if (strcmp(cmd, "/v1/blocks") == 0) { /** **/
-        *body  = xs_dup("[]");
-        *ctype = "application/json";
-        status = HTTP_STATUS_OK;
+        if (logged_in) {
+            *body  = xs_dup("[]");
+            *ctype = "application/json";
+            status = HTTP_STATUS_OK;
+        }
+        else
+            status = HTTP_STATUS_UNAUTHORIZED;
     }
     else
     if (strcmp(cmd, "/v1/mutes") == 0) { /** **/
-        *body  = xs_dup("[]");
-        *ctype = "application/json";
-        status = HTTP_STATUS_OK;
+        if (logged_in) {
+            *body  = xs_dup("[]");
+            *ctype = "application/json";
+            status = HTTP_STATUS_OK;
+        }
+        else
+            status = HTTP_STATUS_UNAUTHORIZED;
     }
     else
     if (strcmp(cmd, "/v1/trends/tags") == 0) { /** **/
