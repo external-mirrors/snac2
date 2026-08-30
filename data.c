@@ -3593,6 +3593,7 @@ xs_list *notify_filter_list(snac *snac, xs_list *notifs, int skip, int show)
     int n_folreq_on = xs_is_true(xs_dict_get_def(n_filter, "folreqs", n_def));
     int n_blocks_on = xs_is_true(xs_dict_get_def(n_filter, "blocks", n_def));
     int n_polls_on  = xs_is_true(xs_dict_get_def(n_filter, "polls", n_def));
+    int n_webmen_on  = xs_is_true(xs_dict_get_def(n_filter, "webmentions", n_def));
 
     const xs_str *v;
     xs_list *flt = xs_list_new();
@@ -3632,6 +3633,8 @@ xs_list *notify_filter_list(snac *snac, xs_list *notifs, int skip, int show)
         if (strcmp(type, "Block") == 0 && !n_blocks_on)
             continue;
         if (strcmp(type, "Announce") == 0 && !n_ann_on)
+            continue;
+        if (strcmp(type, "Webmention") == 0 && !n_webmen_on)
             continue;
 
         if (skip) {
