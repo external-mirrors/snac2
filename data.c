@@ -3576,7 +3576,7 @@ xs_list *notify_list(snac *snac, int skip, int show)
 }
 
 
-xs_list *notify_filter_list(snac *snac, xs_list *notifs)
+xs_list *notify_filter_list(snac *snac, xs_list *notifs, int skip, int show)
 /* apply user-defined notification filter to IDs */
 {
     const xs_dict *n_filter = xs_dict_get(snac->config, "notify_filter");
@@ -3633,7 +3633,17 @@ xs_list *notify_filter_list(snac *snac, xs_list *notifs)
             continue;
         if (strcmp(type, "Announce") == 0 && !n_ann_on)
             continue;
+
+        if (skip) {
+            skip--;
+            continue;
+        }
+
         flt = xs_list_append(flt, v);
+        show--;
+
+        if (show == 0)
+            break;
     }
     return flt;
 }
@@ -3644,7 +3654,7 @@ int notify_new_num(snac *snac)
 {
     xs *t = notify_check_time(snac, 0);
     xs *lst_unfilt = notify_list(snac, 0, XS_ALL);
-    xs *lst = notify_filter_list(snac, lst_unfilt);
+    xs *lst = notify_filter_list(snac, lst_unfilt, 0, XS_ALL);
     int cnt = 0;
 
     xs_list *p = lst;

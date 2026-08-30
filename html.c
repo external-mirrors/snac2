@@ -4267,7 +4267,7 @@ xs_str *html_notifications(snac *user, int skip, int show)
     if (xs_is_true(xs_dict_get(srv_config, "proxy_media")))
         proxy = user->actor;
 
-    xs *n_list_unfilt = notify_list(user, skip, show);
+    xs *n_list_unfilt = notify_list(user, 0, XS_ALL);
     xs *n_time = notify_check_time(user, 0);
 
     xs_html *body = html_user_body(user, 0);
@@ -4278,7 +4278,7 @@ xs_str *html_notifications(snac *user, int skip, int show)
         user->tz = xs_dict_get_def(user->config, "tz", "UTC"); // previous line invalidates user->tz
         n_filter = xs_dict_get(user->config, "notify_filter");
     }
-    xs *n_list = notify_filter_list(user, n_list_unfilt);
+    xs *n_list = notify_filter_list(user, n_list_unfilt, skip, show);
     /* all filters are true by default */
     const xs_val *n_def = xs_stock( XSTYPE_TRUE );
     int n_likes_on  = xs_is_true(xs_dict_get_def(n_filter, "likes", n_def));
@@ -4607,7 +4607,8 @@ xs_str *html_notifications(snac *user, int skip, int show)
                 xs_html_text(L("None"))));
 
     /* add the navigation footer */
-    xs *next_p = notify_list(user, skip + show, 1);
+    xs *next_p = notify_filter_list(user, n_list_unfilt, skip + show, 1);
+
     if (xs_list_len(next_p)) {
         xs *url = xs_fmt("%s/notifications?skip=%d&show=%d",
             user->actor, skip + show, show);
