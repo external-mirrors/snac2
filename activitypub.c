@@ -2813,6 +2813,10 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
             utype = "Follow";
         }
 
+        if (strcmp(actor, key_id)) {
+            snac_log(snac, xs_fmt("Undo: mismatched actor '%s' and key '%s'", actor, key_id));
+        }
+        else
         if (strcmp(utype, "Follow") == 0) { /** **/
             if (!id) {
                 snac_log(snac, xs_fmt("no id (msg.object.object) when "
