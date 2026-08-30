@@ -93,7 +93,7 @@ int validate_uid(const char *uid)
         return 0;
 
     while (*uid) {
-        if (!(isalnum(*uid) || *uid == '_'))
+        if (!(isalnum((int)*uid) || *uid == '_'))
             return 0;
 
         uid++;
