@@ -4,6 +4,8 @@
 
 Added some fixes to media proxy code.
 
+Fixed EmojiReact code to allow any emoticon defined in `emojis.json`, not only those with colon-wrapped identifiers.
+
 Mastodon API: Don't return reactions count as string (contributed by mkljczk), implemented GET /v1/media (contributed by clairemont).
 
 Fixed bug in documentation examples (contributed by Sprite_tm).
