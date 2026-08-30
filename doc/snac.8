@@ -869,7 +869,7 @@ ProxyPreserveHost On
 
 # Main web access point
 <Location /fedi>
-    ProxyPass http://127.0.0.1:8001/social
+    ProxyPass http://127.0.0.1:8001/fedi
 </Location>
 
 # WebFinger
@@ -908,7 +908,7 @@ ProxyPreserveHost On
 
 # optional (Mastodon-like "authorize interaction" entrypoint)
 <Location /authorize_interaction>
-    ProxyPass http://127.0.0.1:8001/share
+    ProxyPass http://127.0.0.1:8001/authorize_interaction
 </Location>
 .Ed
 .Pp
