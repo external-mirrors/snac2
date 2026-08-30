@@ -1607,7 +1607,7 @@ xs_dict *msg_emoji_init(snac *snac, const char *mid, const char *eid_o)
 {
     xs_dict *n_msg = msg_admiration(snac, mid, "EmojiReact");
 
-    xs *eid = xs_strip_chars_i(xs_dup(eid_o), ":");
+    xs *eid = xs_dup(eid_o);
     xs *content = NULL;
     xs *tag = xs_list_new();
     xs *dict = xs_dict_new();
@@ -1623,14 +1623,14 @@ xs_dict *msg_emoji_init(snac *snac, const char *mid, const char *eid_o)
         content = xs_dup(eid);
 
     else if (*eid == '%') {
-        content = xs_url_dec_emoji(xs_dup(eid));
+        content = xs_url_dec_emoji(eid);
         if (content == NULL) {
             xs_free(n_msg);
             return NULL;
         }
     }
     else {
-        content = xs_fmt(":%s:", eid);
+        content = xs_dup(eid);
         const char *emo = xs_dict_get(emjs, content);
 
         if (emo == NULL) {

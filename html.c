@@ -5727,8 +5727,6 @@ int html_post_handler(const xs_dict *req, const char *q_path,
         if (strcmp(action, L("EmojiReact")) == 0) { /** **/
             xs *eid = xs_dup(xs_dict_get(p_vars, "eid"));
 
-            eid = xs_strip_chars_i(eid, ":");
-
             xs *ret = msg_emoji_init(&snac, id, eid);
             /* fails if either invalid or already reacted */
             if (!ret) {
