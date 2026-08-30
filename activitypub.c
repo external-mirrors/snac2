@@ -2836,10 +2836,9 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
         }
         /* *key emojis are like w/ Emoji tag */
         else
-        if ((isEmoji || strcmp(utype, "EmojiReact") == 0) &&
-                (content && strcmp(content, "♥") != 0)) {
+        if (isEmoji || strcmp(utype, "EmojiReact") == 0) {
             const xs_val *mid = xs_dict_get(object, "id");
-            int status = object_rm_emoji_react((char *)id, mid);
+            int status = object_rm_emoji_react(id, mid);
             /* ensure *key notifications type */
             utype = "EmojiReact";
 
