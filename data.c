@@ -2740,7 +2740,7 @@ static int _load_raw_file(const char *fn, xs_val **data, int *size,
             if (etag != NULL)
                 *etag = xs_dup(e);
 
-            srv_debug(1, xs_fmt("_load_raw_file(): %s %d", fn, status));
+            srv_debug(2, xs_fmt("_load_raw_file(): %s %d", fn, status));
         }
     }
 
