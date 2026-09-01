@@ -97,7 +97,7 @@ enum {
     SCOPE_FOLLOWERS = 3,
 };
 
-void snac_log(snac *user, xs_str *str);
+void snac_log(const snac *user, xs_str *str);
 #define snac_debug(user, level, str) do { if (dbglevel >= (level)) \
     { snac_log((user), (str)); } } while (0)
 

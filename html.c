@@ -4651,6 +4651,40 @@ void set_user_lang(snac *user)
 }
 
 
+int text_browser_friendly(const snac *user, const char *user_agent)
+/* returns true if the web UI must be adapted to text browsers */
+/* basically, this means to avoid details/summary as much as possible */
+{
+    if (user != NULL && xs_is_string(user_agent)) {
+        snac_debug(user, 1, xs_fmt("user-agent: %s", user_agent));
+
+        const char *text_browser_uas = xs_dict_get(user->config, "text_browser_uas");
+
+        if (xs_is_string(text_browser_uas)) {
+            xs *l = xs_split(text_browser_uas, "\n");
+            const char *v;
+
+            xs_list_foreach(l, v) {
+                if (*v == '\0')
+                    continue;
+
+                xs *v2 = xs_strip_i(xs_dup(v));
+
+                /* a * means "all browsers", then yes */
+                if (strcmp(v2, "*") == 0)
+                    return 1;
+
+                /* if this string is inside user_agent, then yes */
+                if (xs_str_in(user_agent, v2) != -1)
+                    return 1;
+            }
+        }
+    }
+
+    return 0;
+}
+
+
 int html_get_handler(const xs_dict *req, const char *q_path,
                      char **body, int *b_size, char **ctype,
                      xs_str **etag, xs_str **last_modified)
@@ -4665,6 +4699,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
     int save = 1;
     int proxy = 0;
     int terse = 0;
+    int tb_friendly = 0;
     const char *v;
 
     const xs_dict *q_vars = xs_dict_get(req, "q_vars");
@@ -4733,6 +4768,8 @@ int html_get_handler(const xs_dict *req, const char *q_path,
 
     if (xs_is_true(xs_dict_get(srv_config, "proxy_media")))
         proxy = 1;
+
+    tb_friendly = text_browser_friendly(user, xs_dict_get(req, "user-agent"));
 
     /* return the RSS if requested by Accept header */
     if (accept != NULL) {

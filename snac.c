@@ -127,7 +127,7 @@ void srv_log(xs_str *str)
 }
 
 
-void snac_log(snac *snac, xs_str *str)
+void snac_log(const snac *snac, xs_str *str)
 /* prints a user debugging information */
 {
     xs *o_str = str;
