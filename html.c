@@ -1624,6 +1624,7 @@ xs_html *html_top_controls(snac *user, int tb_friendly)
     const char *webhook      = xs_dict_get_def(user->config, "notify_webhook", "");
     const char *post_langs   = xs_dict_get_def(user->config, "post_langs", "");
     const char *excluded_langs = xs_dict_get_def(user->config, "excluded_langs", "");
+    const char *text_browser_uas = xs_dict_get_def(user->config, "text_browser_uas", "");
 
     xs *metadata = NULL;
     const xs_dict *md = xs_dict_get(user->config, "metadata");
@@ -1869,6 +1870,16 @@ xs_html *html_top_controls(snac *user, int tb_friendly)
                         xs_html_attr("name", "excluded_langs"),
                         xs_html_attr("value", excluded_langs),
                         xs_html_attr("placeholder", L("en fr es de_AT")))),
+
+                xs_html_tag("p",
+                    xs_html_text(L("Show a simpler web UI for browsers with these user agents (one per line):")),
+                    xs_html_sctag("br", NULL),
+                    xs_html_tag("textarea",
+                        xs_html_attr("name", "text_browser_uas"),
+                        xs_html_attr("cols", "40"),
+                        xs_html_attr("rows", "4"),
+                        xs_html_attr("placeholder", "Links\nLynx\nNetSurf"),
+                    xs_html_text(text_browser_uas))),
 
                 xs_html_tag("p",
                     xs_html_text(L("New password:")),
@@ -4698,7 +4709,7 @@ int text_browser_friendly(const snac *user, const char *user_agent)
 
                 xs *v2 = xs_strip_i(xs_dup(v));
 
-                /* a * means "all browsers", then yes */
+                /* an asterisk alone means "all browsers", so yes */
                 if (strcmp(v2, "*") == 0)
                     return 1;
 
@@ -6118,6 +6129,8 @@ int html_post_handler(const xs_dict *req, const char *q_path,
 
         if ((v = xs_dict_get(p_vars, "metadata")) != NULL)
             snac.config = xs_dict_set(snac.config, "metadata", v);
+
+        snac.config = xs_dict_set(snac.config, "text_browser_uas", xs_dict_get_def(p_vars, "text_browser_uas", ""));
 
         /* uploads */
         const char *uploads[] = { "avatar", "header", NULL };
