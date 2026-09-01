@@ -1465,9 +1465,18 @@ xs_html *html_checkbox(const char *form_name, const char *label, int flag)
 }
 
 
-xs_html *html_top_controls(snac *user)
+xs_html *html_top_controls(snac *user, int tb_friendly)
 /* generates the top controls */
 {
+    if (tb_friendly) {
+        /* generate only a link to the /operations entrypoint */
+        xs *url = xs_fmt("%s/operations", user->actor);
+
+        return xs_html_tag("a",
+            xs_html_attr("href", url),
+            xs_html_text(L("Operations...")));
+    }
+
     xs *ops_action = xs_fmt("%s/admin/action", user->actor);
 
     xs_html *top_controls = xs_html_tag("div",
@@ -3529,7 +3538,7 @@ xs_str *html_timeline(snac *user, const xs_list *list, int read_only,
 
     if (user && !read_only)
         xs_html_add(body,
-            html_top_controls(user));
+            html_top_controls(user, tb_friendly));
 
     if (error != NULL) {
         xs_html_add(body,
@@ -4887,7 +4896,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
                 h_body);
 
             xs_html_add(h_body,
-                html_top_controls(&snac),
+                html_top_controls(&snac, 0),
                 html_footer(&snac));
 
             *body   = xs_html_render_s(html, "<!DOCTYPE html>\n");
