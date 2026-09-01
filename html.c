@@ -1537,6 +1537,7 @@ xs_html *html_top_controls(snac *user)
                     xs_html_attr("value",   L("Like"))),
                 xs_html_text(" "),
                 xs_html_text(L("(by URL)"))),
+            xs_html_tag("p", NULL),
             xs_html_tag("form",
                 xs_html_attr("autocomplete", "off"),
                 xs_html_attr("method",       "post"),
