@@ -2,6 +2,8 @@
 
 ## UNRELEASED
 
+Improved support for text-only web browsers: it's now possible to configure a set of web browser user-agent strings that will receive simpler HTML in the private timeline web UI. Basically, it consists in avoiding `details` / `summary` HTML tags as much as possible.
+
 Added some fixes to media proxy code.
 
 Fixed EmojiReact code to allow any emoticon defined in `emojis.json`, not only those with colon-wrapped identifiers.
