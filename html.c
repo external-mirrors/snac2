@@ -4874,6 +4874,28 @@ int html_get_handler(const xs_dict *req, const char *q_path,
         }
     }
     else
+    if (strcmp(p_path, "operations") == 0) { /** operations and user settings **/
+        if (!login(&snac, req)) {
+            *body  = xs_dup(uid);
+            status = HTTP_STATUS_UNAUTHORIZED;
+        }
+        else {
+            xs_html *h_body = html_user_body(&snac, 0);
+
+            xs_html *html = xs_html_tag("html",
+                html_user_head(&snac, NULL, NULL),
+                h_body);
+
+            xs_html_add(h_body,
+                html_top_controls(&snac),
+                html_footer(&snac));
+
+            *body   = xs_html_render_s(html, "<!DOCTYPE html>\n");
+            *b_size = strlen(*body);
+            status  = HTTP_STATUS_OK;
+        }
+    }
+    else
     if (strcmp(p_path, "admin") == 0) { /** private timeline **/
         if (!login(&snac, req)) {
             *body  = xs_dup(uid);
