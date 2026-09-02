@@ -3529,12 +3529,18 @@ xs_dict *notify_get(snac *snac, const char *id)
     fn = xs_strip_i(fn);
     fn = xs_str_cat(fn, ".json");
 
-    FILE *f;
     xs_dict *out = NULL;
 
-    if ((f = fopen(fn, "r")) != NULL) {
-        out = xs_json_load(f);
-        fclose(f);
+    struct stat st;
+
+    if (stat(fn, &st) != -1) {
+        if (st.st_size < 100000) {
+            FILE *f;
+            if ((f = fopen(fn, "r")) != NULL) {
+                out = xs_json_load(f);
+                fclose(f);
+            }
+        }
     }
 
     return out;
