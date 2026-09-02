@@ -2,6 +2,8 @@
 
 ## UNRELEASED
 
+Fixed a bug in the notification page that made snac hang forever while trying to read abnormally big files.
+
 Improved support for text-only web browsers: it's now possible to configure a set of web browser user-agent strings that will receive simpler HTML in the private timeline web UI. Basically, it consists in avoiding `details` / `summary` HTML tags as much as possible.
 
 Added some fixes to media proxy code.
