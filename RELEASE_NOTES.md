@@ -1,6 +1,6 @@
 # Release Notes
 
-## UNRELEASED
+## 2.95
 
 Fixed a bug in the notification page that made snac hang forever while trying to read abnormally big files.
 
