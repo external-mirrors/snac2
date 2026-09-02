@@ -4695,7 +4695,7 @@ int text_browser_friendly(const snac *user, const char *user_agent)
 /* basically, this means to avoid details/summary as much as possible */
 {
     if (user != NULL && xs_is_string(user_agent)) {
-        snac_debug(user, 1, xs_fmt("user-agent: %s", user_agent));
+        snac_debug(user, 2, xs_fmt("user-agent: %s", user_agent));
 
         const char *text_browser_uas = xs_dict_get(user->config, "text_browser_uas");
 
