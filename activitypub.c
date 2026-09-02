@@ -4110,6 +4110,12 @@ int activitypub_post_handler(const xs_dict *req, const char *q_path,
         xs_str_in(i_ctype, "application/ld+json") == -1)
         return 0;
 
+    if (p_size >= 100000) {
+        *body  = xs_str_new("too big");
+        *ctype = "text/plain";
+        return HTTP_STATUS_BAD_REQUEST;
+    }
+
     /* decode the message */
     xs *msg = xs_json_loads(payload);
     const char *id = xs_dict_get(msg, "id");
