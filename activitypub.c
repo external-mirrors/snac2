@@ -82,6 +82,9 @@ int activitypub_request(snac *user, const char *url, xs_dict **data)
             NULL, NULL, 0, &status, &payload, &p_size, 0);
     }
 
+    if (p_size >= 100000)
+        return HTTP_STATUS_BAD_REQUEST;
+
     if (status == 0 || (status >= 500 && status <= 599)) {
         /* I found an instance running Misskey that returned
            500 on signed messages but returned the object
