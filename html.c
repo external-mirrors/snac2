@@ -4115,11 +4115,28 @@ xs_html *html_people_list(snac *user, xs_list *list, const char *header, const c
             xs *dm_div_id  = xs_fmt("%s_%s_dm", md5, t);
             xs *dm_form_id = xs_fmt("%s_reply_form", md5);
 
+            /* build a mention for the DM body: it seems that Mastodon,
+               if a mention is not present, it does not recognize it as a DM,
+               even if it has a one-item 'to' field with only the user */
+            xs *dm_body = NULL;
+
+            {
+                const char *webfinger = xs_dict_get(actor, "webfinger");
+
+                if (xs_is_string(webfinger))
+                    dm_body = xs_fmt("@%s ", webfinger);
+                else {
+                    const char *uname = xs_dict_get_def(actor, "preferredUsername", "anonymous");
+                    xs *l = xs_split(actor_id, "/");
+                    dm_body = xs_fmt("@%s@%s ", uname, xs_list_get(l, 2));
+                }
+            }
+
             xs_html_add(snac_controls,
                 xs_html_tag("p", NULL),
                 html_note(user, L("Direct Message..."),
                     dm_div_id, dm_form_id,
-                    "", "",
+                    "", dm_body,
                     NULL, actor_id,
                     xs_stock(XSTYPE_FALSE), "",
                     SCOPE_MENTIONED, NULL,
