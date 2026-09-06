@@ -163,7 +163,7 @@ This will:
 - [Improving snac Performance with Nginx Proxy Cache (by Stefano Marinelli)](https://it-notes.dragas.net/2025/01/29/improving-snac-performance-with-nginx-proxy-cache/).
 - [Caching Snac Proxied Media With Nginx (by Stefano Marinelli)](https://it-notes.dragas.net/2025/02/08/caching-snac-proxied-media-with-nginx/).
 - [My snac config (activitypub instance) with Caddy (by ffuentes)](https://ffuentes.sdf.org/communication/2025/08/23/my-snac-config-activitypub-instance-with-caddy.html).
-- [A bit of lore about Susie, snac's default avatar](https://comam.es/snac/grunfink/p/1754553922.333170).
+- [A bit of lore about Susie, snac's default avatar](https://comam.es/snac/grunfink/p/1754553922.333170?terse=true).
 
 ## Incredibly awesome CSS themes for snac
 
