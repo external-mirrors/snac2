@@ -31,35 +31,85 @@ This is not the manual; man pages `snac(1)` (user manual), `snac(5)` (formats) a
 
 This program is written in highly portable C. It uses the `__attribute__((__cleanup__))` GNU extension, that is supported at least by the `gcc`, `clang` and `tcc` C compilers. The only external dependencies are `openssl` and `curl`.
 
-On Debian/Ubuntu, you can satisfy these requirements by running
+The source code is available [here](https://comam.es/what-is-snac). Here are some detailed descriptions on how to build and install snac in a set of operating systems:
+
+### Debian/Ubuntu
+
+Requirements:
 
 ```sh
-apt install libssl-dev libcurl4-openssl-dev
+apt install libssl-dev libcurl4-openssl-dev # as root
 ```
 
-On OpenBSD you just need to install `curl`:
+Build and install:
+
+```
+make
+make install # as root
+```
+
+### OpenBSD
+
+Requirements:
 
 ```sh
 pkg_add curl
 ```
 
-On FreeBSD, to install `curl` just type:
+Build and install:
+
+```
+make
+make install # as root
+```
+
+### FreeBSD
+
+Requirements:
 
 ```sh
 pkg install curl
 ```
 
-On NetBSD, to install `curl` just type:
+Build and install:
+
+```
+make
+make install # as root
+```
+
+### NetBSD
+
+Requirements:
 
 ```sh
 pkgin install curl
 ```
 
-The source code is available [here](https://comam.es/what-is-snac).
+Build and install:
 
-Run `make` and then `make install` as root. 
+```
+make -f Makefile.NetBSD
+make -f Makefile.NetBSD install # as root
+```
 
-If you're compiling on NetBSD, you should use the specific provided Makefile and run `make -f Makefile.NetBSD` and then `make -f Makefile.NetBSD install` as root.
+### Illumos / OpenIndiana (2026.04)
+
+Requirements:
+
+```sh
+sudo pkg install openssl-3
+sudo pkg set-mediator -V 3 openssl
+```
+
+Build and install:
+
+```sh
+make CC=gcc LDFLAGS=-lsocket
+sudo make install-illumos
+```
+
+### Conditional compilation
 
 From version 2.27, `snac` includes support for the Mastodon API; if you are not interested on it, you can compile it out by running
 
