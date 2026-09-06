@@ -32,6 +32,16 @@ install:
 	mkdir -p -m 755 $(PREFIX_MAN)/man8
 	install -m 644 doc/snac.8 $(PREFIX_MAN)/man8/snac.8
 
+install-illumos:
+	mkdir -p -m 755 $(PREFIX)/bin
+	install -m 755 -f $(PREFIX)/bin snac
+	mkdir -p -m 755 $(PREFIX_MAN)/man1
+	install -m 644 -f $(PREFIX_MAN)/man1 doc/snac.1
+	mkdir -p -m 755 $(PREFIX_MAN)/man5
+	install -m 644 -f $(PREFIX_MAN)/man5 doc/snac.5
+	mkdir -p -m 755 $(PREFIX_MAN)/man8
+	install -m 644 -f $(PREFIX_MAN)/man8 doc/snac.8
+
 uninstall:
 	rm $(PREFIX)/bin/snac
 	rm $(PREFIX_MAN)/man1/snac.1
