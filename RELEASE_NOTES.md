@@ -1,5 +1,9 @@
 # Release Notes
 
+## UNRELEASED
+
+Added information to README.md on how to build and install on Illumos / OpenIndiana Hipster 2026.04 (contributed by aleteoryx).
+
 ## 2.95
 
 Fixed a bug in the notification page that made snac hang forever while trying to read abnormally big files.
