@@ -1227,7 +1227,7 @@ void notify(snac *snac, const char *type, const char *utype, const char *actor, 
         /* only notify of notes specifically for us */
         xs *rcpts = recipient_list(snac, msg, 0);
 
-        if (xs_list_in(rcpts, snac->actor) == -1)
+        if (xs_list_in(rcpts, snac->actor) == -1 && !cool(snac, actor, OP_CHECK))
             return;
 
         /* discard votes */

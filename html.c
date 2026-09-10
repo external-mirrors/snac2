@@ -4476,8 +4476,25 @@ xs_str *html_notifications(snac *user, int skip, int show)
         xs *label_sanitized = sanitize(type);
         const char *label = label_sanitized;
 
-        if (strcmp(type, "Create") == 0)
-            label = L("Mention");
+        if (strcmp(type, "Create") == 0) {
+            label = L("Post");
+
+            /* check if it's a mention */
+            const xs_list *l = xs_dict_get_def(obj, "tag", xs_stock(XSTYPE_LIST));
+            const xs_dict *d;
+
+            xs_list_foreach(l, d) {
+                if (xs_is_dict(d)) {
+                    const char *type = xs_dict_get_def(d, "type", "");
+                    const char *href = xs_dict_get_def(d, "href", "");
+
+                    if (strcmp(type, "Mention") == 0 && strcmp(href, user->actor) == 0) {
+                        label = L("Mention");
+                        break;
+                    }
+                }
+            }
+        }
         else
         if (strcmp(type, "Update") == 0 && strcmp(utype, "Question") == 0)
             label = L("Finished poll");
