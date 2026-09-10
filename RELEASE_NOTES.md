@@ -2,6 +2,8 @@
 
 ## UNRELEASED
 
+Accounts can be marked as cool. From these accounts, you will notified whenever they post.
+
 Added information to README.md on how to build and install on Illumos / OpenIndiana Hipster 2026.04 (contributed by aleteoryx).
 
 ## 2.95
