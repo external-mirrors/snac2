@@ -15,6 +15,7 @@
 #include "xs_random.h"
 #include "xs_po.h"
 #include "xs_http.h"
+#include "xs_list_tools.h"
 
 #include "snac.h"
 
@@ -3415,6 +3416,29 @@ int grave(const char *objid, snac_op op)
     }
 
     return ret;
+}
+
+
+const xs_str *words_in_content(const xs_list *words, const xs_val *content)
+/* returns a word that matches any of the words in content */
+{
+    if (!xs_is_list(words) || !xs_is_string(content)) {
+        return NULL;
+    }
+    xs *c = xs_split(content, " ");
+    xs *sc = xs_list_sort(c, NULL);
+
+    const xs_str *wv;
+    const xs_str *cv;
+    xs_list_foreach(words, wv) {
+        xs_list_foreach(sc, cv) {
+            xs_tolower_i((xs_str*)cv);
+            if(xs_str_in(cv, wv) != -1)
+                return wv;
+        }
+    }
+
+    return NULL;
 }
 
 

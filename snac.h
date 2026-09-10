@@ -316,6 +316,8 @@ int instance_failure(const char *url, snac_op op);
 
 int grave(const char *objid, snac_op op);
 
+const xs_str *words_in_content(const xs_list *words, const xs_val *content);
+
 void enqueue_input(snac *snac, const xs_dict *msg, const xs_dict *req, int retries);
 void enqueue_shared_input(const xs_dict *msg, const xs_dict *req, int retries);
 void enqueue_output_raw(const char *keyid, const char *seckey,
