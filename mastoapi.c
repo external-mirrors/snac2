@@ -1707,6 +1707,11 @@ xs_list *mastoapi_timeline(snac *user, const xs_dict *args, const char *index_fn
                 /* discard hidden notes */
                 if (is_hidden(user, id))
                     continue;
+
+                /* muted words? */
+                if (words_in_content(xs_dict_get(user->config, "muted_words"),
+                                     xs_dict_get(msg, "content")))
+                    continue;
             }
             else {
                 /* skip non-public messages */
