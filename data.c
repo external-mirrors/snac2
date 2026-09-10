@@ -3667,19 +3667,7 @@ xs_list *notify_filter_list(snac *snac, xs_list *notifs, int skip, int show)
         if (strcmp(type, "EmojiReact") == 0 && xs_is_true(xs_dict_get(srv_config, "disable_emojireact")))
             continue;
         if (strcmp(type, "Create") == 0) {
-            int is_mention = 0;
-            const xs_list *l = xs_dict_get_def(obj, "tag", xs_stock(XSTYPE_LIST));
-            const xs_dict *d;
-
-            xs_list_foreach(l, d) {
-                const char *type = xs_dict_get_def(d, "type", "");
-                const char *href = xs_dict_get_def(d, "href", "");
-
-                if (strcmp(type, "Mention") == 0 && strcmp(href, snac->actor) == 0) {
-                    is_mention = 1;
-                    break;
-                }
-            }
+            int is_mention = was_mentioned(snac, obj);
 
             if (is_mention) {
                 if (!n_ments_on)

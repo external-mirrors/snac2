@@ -419,6 +419,7 @@ int send_to_actor(snac *snac, const char *actor, const xs_dict *msg,
 int is_msg_mine(snac *user, const char *id);
 int is_msg_public(const xs_dict *msg);
 int is_msg_from_private_user(const xs_dict *msg);
+int was_mentioned(snac *user, const xs_dict *msg);
 int is_msg_for_me(snac *snac, const xs_dict *msg);
 
 int process_user_queue(snac *snac);

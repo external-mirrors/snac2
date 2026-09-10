@@ -755,6 +755,24 @@ void followed_hashtag_distribute(const xs_dict *msg)
 }
 
 
+int was_mentioned(snac *user, const xs_dict *msg)
+/* checks if user was mentioned here */
+{
+    const xs_list *l = xs_dict_get_def(msg, "tag", xs_stock(XSTYPE_LIST));
+    const xs_dict *d;
+
+    xs_list_foreach(l, d) {
+        const char *type = xs_dict_get_def(d, "type", "");
+        const char *href = xs_dict_get_def(d, "href", "");
+
+        if (strcmp(type, "Mention") == 0 && strcmp(href, user->actor) == 0)
+            return 1;
+    }
+
+    return 0;
+}
+
+
 int is_msg_for_me(snac *snac, const xs_dict *c_msg)
 /* checks if this message is for me */
 {
