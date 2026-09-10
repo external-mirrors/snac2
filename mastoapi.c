@@ -2395,8 +2395,13 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
                 if (strcmp(type, "Follow") == 0)
                     type = "follow";
                 else
-                if (strcmp(type, "Create") == 0)
-                    type = "mention";
+                if (strcmp(type, "Create") == 0) {
+                    const xs_dict *obj = xs_dict_get_path(noti, "msg.object");
+                    if (xs_is_dict(obj) && was_mentioned(&snac1, obj))
+                        type = "mention";
+                    else
+                        type = "status";
+                }
                 else
                 if (strcmp(type, "Update") == 0 && strcmp(utype, "Question") == 0)
                     type = "poll";
