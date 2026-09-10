@@ -384,6 +384,8 @@ const char *get_atto(const xs_dict *msg);
 const char *get_in_reply_to(const xs_dict *msg);
 xs_list *get_attachments(const xs_dict *msg);
 
+int blocked_hashtag_check(snac *user, const xs_dict *msg);
+
 xs_dict *msg_admiration(snac *snac, const char *object, const char *type);
 xs_dict *msg_repulsion(snac *user, const char *id, const char *type);
 xs_dict *msg_emoji_init(snac *user, const char *mid, const char *eid);

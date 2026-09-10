@@ -1712,6 +1712,9 @@ xs_list *mastoapi_timeline(snac *user, const xs_dict *args, const char *index_fn
                 if (words_in_content(xs_dict_get(user->config, "muted_words"),
                                      xs_dict_get(msg, "content")))
                     continue;
+
+                if (blocked_hashtag_check(user, msg))
+                    continue;
             }
             else {
                 /* skip non-public messages */
