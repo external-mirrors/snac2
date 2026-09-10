@@ -60,6 +60,8 @@ int usage(const char *cmd)
         "unblock {basedir} {instance_url}     Unblocks a full instance\n"
         "limit {basedir} {uid} {actor}        Limits an actor (drops their announces)\n"
         "unlimit {basedir} {uid} {actor}      Unlimits an actor\n"
+        "cool {basedir} {uid} {actor}         Mark an actor as cool (notify whenever they post)\n"
+        "uncool {basedir} {uid} {actor}       Actor is no longer cool\n"
         "muted {basedir} {uid}                Lists the muted actors\n"
         "unmute {basedir} {uid} {actor}       Unmutes a previously muted actor\n"
         "verify_links {basedir} {uid}         Verifies a user's links (in the metadata)\n"
@@ -633,6 +635,28 @@ int main(int argc, char *argv[])
             snac_log(&snac, xs_fmt("actor %s is no longer limited", url));
         else
             snac_log(&snac, xs_fmt("error unlimiting actor %s (%d)", url, ret));
+
+        return 0;
+    }
+
+    if (strcmp(cmd, "cool") == 0) { /** **/
+        int ret;
+
+        if ((ret = cool(&snac, url, OP_ADD)) == 0)
+            snac_log(&snac, xs_fmt("posts from actor %s will now be notified", url));
+        else
+            snac_log(&snac, xs_fmt("error marking actor %s as cool (%d)", url, ret));
+
+        return 0;
+    }
+
+    if (strcmp(cmd, "uncool") == 0) { /** **/
+        int ret;
+
+        if ((ret = cool(&snac, url, OP_DEL)) == 0)
+            snac_log(&snac, xs_fmt("posts from actor %s will no longer be notified", url));
+        else
+            snac_log(&snac, xs_fmt("error unmarking actor %s as cool (%d)", url, ret));
 
         return 0;
     }

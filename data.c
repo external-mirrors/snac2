@@ -2400,6 +2400,53 @@ int limited(snac *user, const char *id, snac_op op)
 }
 
 
+/** cool users **/
+
+int cool(snac *user, const char *id, snac_op op)
+/* cool users (those users whose posts are notified) */
+{
+    int ret = 0;
+    xs *dir = xs_fmt("%s/cool", user->basedir);
+    xs *md5 = xs_md5_hex(id, strlen(id));
+    xs *fn  = xs_fmt("%s/%s", dir, md5);
+
+    switch (op) {
+    case OP_CHECK: /** check **/
+        ret = !!(mtime(fn) > 0.0);
+        break;
+
+    case OP_ADD: /** limit **/
+        mkdirx(dir);
+
+        if (mtime(fn) > 0.0)
+            ret = -1;
+        else {
+            FILE *f;
+
+            if ((f = fopen(fn, "w")) != NULL) {
+                fprintf(f, "%s\n", id);
+                fclose(f);
+            }
+            else
+                ret = -2;
+        }
+        break;
+
+    case OP_DEL: /** unlimit **/
+        if (mtime(fn) > 0.0)
+            ret = unlink(fn);
+        else
+            ret = -1;
+        break;
+
+    default:
+        break;
+    }
+
+    return ret;
+}
+
+
 /** tag indexing **/
 
 void tag_index(const char *id, const xs_dict *obj)

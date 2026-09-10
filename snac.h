@@ -252,6 +252,8 @@ int limited(snac *user, const char *id, snac_op);
 #define limit(user, id) limited((user), (id), OP_ADD)
 #define unlimit(user, id) limited((user), (id), OP_DEL)
 
+int cool(snac *user, const char *id, snac_op op);
+
 void hide(snac *snac, const char *id);
 int is_hidden(snac *snac, const char *id);
 int unhide(snac *user, const char *id);
