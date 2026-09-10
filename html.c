@@ -4093,6 +4093,15 @@ xs_html *html_people_list(snac *user, xs_list *list, const char *header, const c
                         html_button("delete", L("Delete"), L("Delete this user")));
             }
 
+            if (cool(user, actor_id, OP_CHECK))
+                xs_html_add(form,
+                    html_button("uncool", L("Not cool"),
+                        L("No longer notify me whenever this user posts")));
+            else
+                xs_html_add(form,
+                     html_button("cool", L("Cool"),
+                             L("Notify me whenever this users posts")));
+
             if (pending_check(user, actor_id)) {
                 xs_html_add(form,
                     html_button("approve", L("Approve"),
@@ -5935,6 +5944,14 @@ int html_post_handler(const xs_dict *req, const char *q_path,
         else
         if (strcmp(action, L("Unlimit")) == 0) { /** **/
             unlimit(&snac, actor);
+        }
+        else
+        if (strcmp(action, L("Cool")) == 0) { /** **/
+            cool(&snac, actor, OP_ADD);
+        }
+        else
+        if (strcmp(action, L("Not cool")) == 0) { /** **/
+            cool(&snac, actor, OP_DEL);
         }
         else
         if (strcmp(action, L("Follow")) == 0) { /** **/
