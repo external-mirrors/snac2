@@ -2,7 +2,7 @@
 
 ## UNRELEASED
 
-Accounts can be marked as cool. From these accounts, you will notified whenever they post.
+Accounts can be marked as cool; anytime a cool account posts something, a notification will be sent.
 
 Added information to README.md on how to build and install on Illumos / OpenIndiana Hipster 2026.04 (contributed by aleteoryx).
 
