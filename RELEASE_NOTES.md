@@ -4,6 +4,8 @@
 
 Accounts can be marked as cool; anytime a cool account posts something, a notification will be sent.
 
+Fixed an issue in Direct Messages sent from the people page; these posts didn't explicitly mention the recipient, and that confused some implementations.
+
 Added information to README.md on how to build and install on Illumos / OpenIndiana Hipster 2026.04 (contributed by aleteoryx).
 
 ## 2.95
