@@ -3647,6 +3647,7 @@ xs_list *notify_filter_list(snac *snac, xs_list *notifs, int skip, int show)
     int n_blocks_on = xs_is_true(xs_dict_get_def(n_filter, "blocks", n_def));
     int n_polls_on  = xs_is_true(xs_dict_get_def(n_filter, "polls", n_def));
     int n_webmen_on  = xs_is_true(xs_dict_get_def(n_filter, "webmentions", n_def));
+    int n_cool_posts_on  = xs_is_true(xs_dict_get_def(n_filter, "cool_posts", n_def));
 
     const xs_str *v;
     xs_list *flt = xs_list_new();
@@ -3660,10 +3661,35 @@ xs_list *notify_filter_list(snac *snac, xs_list *notifs, int skip, int show)
         const char *type  = xs_dict_get(noti, "type");
         const char *utype = xs_dict_get(noti, "utype");
         const char *actor_id = xs_dict_get(noti, "actor");
+        const xs_dict *msg = xs_dict_get(noti, "msg");
+        const xs_dict *obj = xs_dict_get_def(msg, "object", xs_stock(XSTYPE_DICT));
+
         if (strcmp(type, "EmojiReact") == 0 && xs_is_true(xs_dict_get(srv_config, "disable_emojireact")))
             continue;
-        if (strcmp(type, "Create") == 0 && !n_ments_on)
-            continue;
+        if (strcmp(type, "Create") == 0) {
+            int is_mention = 0;
+            const xs_list *l = xs_dict_get_def(obj, "tag", xs_stock(XSTYPE_LIST));
+            const xs_dict *d;
+
+            xs_list_foreach(l, d) {
+                const char *type = xs_dict_get_def(d, "type", "");
+                const char *href = xs_dict_get_def(d, "href", "");
+
+                if (strcmp(type, "Mention") == 0 && strcmp(href, snac->actor) == 0) {
+                    is_mention = 1;
+                    break;
+                }
+            }
+
+            if (is_mention) {
+                if (!n_ments_on)
+                    continue;
+            }
+            else {
+                if (!n_cool_posts_on)
+                    continue;
+            }
+        }
         if (strcmp(type, "Update") == 0 && strcmp(utype, "Question") == 0 && !n_polls_on)
             continue;
         if (strcmp(type, "Undo") == 0 && strcmp(utype, "Follow") == 0 && !n_unfol_on)

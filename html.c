@@ -4313,6 +4313,7 @@ void notify_filter(snac *user, const xs_dict *p_vars)
     int blocks_on = (v = xs_dict_get(p_vars, "blocks_on")) ? strcmp(v, "on") == 0 : 0;
     int polls_on  = (v = xs_dict_get(p_vars, "polls_on")) ? strcmp(v, "on") == 0 : 0;
     int webmen_on  = (v = xs_dict_get(p_vars, "webmentions_on")) ? strcmp(v, "on") == 0 : 0;
+    int cool_posts_on  = (v = xs_dict_get(p_vars, "cool_posts_on")) ? strcmp(v, "on") == 0 : 0;
     xs *filter = xs_dict_new();
     filter = xs_dict_set(filter, "likes", xs_stock(likes_on ? XSTYPE_TRUE : XSTYPE_FALSE));
     filter = xs_dict_set(filter, "reacts", xs_stock(reacts_on ? XSTYPE_TRUE : XSTYPE_FALSE));
@@ -4324,6 +4325,7 @@ void notify_filter(snac *user, const xs_dict *p_vars)
     filter = xs_dict_set(filter, "blocks", xs_stock(blocks_on ? XSTYPE_TRUE : XSTYPE_FALSE));
     filter = xs_dict_set(filter, "polls", xs_stock(polls_on ? XSTYPE_TRUE : XSTYPE_FALSE));
     filter = xs_dict_set(filter, "webmentions", xs_stock(webmen_on ? XSTYPE_TRUE : XSTYPE_FALSE));
+    filter = xs_dict_set(filter, "cool_posts", xs_stock(cool_posts_on ? XSTYPE_TRUE : XSTYPE_FALSE));
     user->config = xs_dict_set(user->config, "notify_filter", filter);
     user->tz = xs_dict_get_def(user->config, "tz", "UTC"); // previous line invalidates user->tz
 }
@@ -4359,6 +4361,7 @@ xs_str *html_notifications(snac *user, int skip, int show)
     int n_blocks_on = xs_is_true(xs_dict_get_def(n_filter, "blocks", n_def));
     int n_polls_on  = xs_is_true(xs_dict_get_def(n_filter, "polls", n_def));
     int n_webmen_on  = xs_is_true(xs_dict_get_def(n_filter, "webmentions", n_def));
+    int n_cool_posts_on  = xs_is_true(xs_dict_get_def(n_filter, "cool_posts", n_def));
 
     xs_html *html = xs_html_tag("html",
         html_user_head(user, NULL, NULL),
@@ -4386,6 +4389,7 @@ xs_str *html_notifications(snac *user, int skip, int show)
         html_checkbox("blocks_on", L("Blocks"), n_blocks_on),
         html_checkbox("polls_on", L("Polls"), n_polls_on),
         html_checkbox("webmentions_on", L("Webmentions"), n_webmen_on),
+        html_checkbox("cool_posts_on", L("Posts from cool users"), n_cool_posts_on),
         xs_html_sctag("input",
             xs_html_attr("type",     "submit"),
             xs_html_attr("class",    "button"),
