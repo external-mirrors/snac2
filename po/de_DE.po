@@ -957,28 +957,28 @@ msgstr "Reaktionen"
 #: html.c:1875
 msgid ""
 "Show a simpler web UI for browsers with these user agents (one per line):"
-msgstr ""
+msgstr "Zeige für Browser mit den folgenden User-Agents (jeweils einer pro Zeile) eine einfachere Web-Benutzeroberfläche an:"
 
 #: html.c:4075 html.c:5921
 msgid "Unmark as cool"
-msgstr ""
+msgstr "Nicht mehr cool "
 
 #: html.c:4076
 msgid "No longer notify me whenever this user posts"
-msgstr ""
+msgstr "Mich nicht mehr benachrichtigen, wenn dieser Nutzer etwas postet"
 
 #: html.c:4079 html.c:5917
 msgid "Mark as cool"
-msgstr ""
+msgstr "Markiere als cool"
 
 #: html.c:4080
 msgid "Notify me whenever this user posts"
-msgstr ""
+msgstr "Benachrichtige mich, sobald dieser Nutzer etwas postet"
 
 #: html.c:4368
 msgid "Webmentions"
-msgstr ""
+msgstr "Webmentions"
 
 #: html.c:4369
 msgid "Posts from cool users"
-msgstr ""
+msgstr "Beiträge von coolen Leuten"
