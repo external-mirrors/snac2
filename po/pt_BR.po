@@ -4,13 +4,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: snac\n"
-"PO-Revision-Date: 2026-06-09 11:00-0300\n"
+"PO-Revision-Date: 2026-09-11 19:15-0300\n"
 "Last-Translator: Daltux <@daltux@snac.daltux.net>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Geany / PoHelper 2.0\n"
+"X-Generator: VIM - Vi IMproved 9.2\n"
 
 #: html.c:627
 msgid "Sensitive content: "
@@ -959,28 +959,29 @@ msgstr "admirações"
 #: html.c:1875
 msgid ""
 "Show a simpler web UI for browsers with these user agents (one per line):"
-msgstr ""
+msgstr "Exibir uma interface Web mais simples em navegadores com estes agentes (um por linha):"
 
 #: html.c:4075 html.c:5921
 msgid "Unmark as cool"
-msgstr ""
+msgstr "Desmarcar como interessante"
 
 #: html.c:4076
 msgid "No longer notify me whenever this user posts"
-msgstr ""
+msgstr "Não me notifique mais quando esta conta postar"
 
 #: html.c:4079 html.c:5917
 msgid "Mark as cool"
-msgstr ""
+msgstr "Marcar como interessante"
 
 #: html.c:4080
 msgid "Notify me whenever this user posts"
-msgstr ""
+msgstr "Notificar-me quando esta conta postar"
 
 #: html.c:4368
 msgid "Webmentions"
-msgstr ""
+msgstr "Webmenções"
 
 #: html.c:4369
 msgid "Posts from cool users"
-msgstr ""
+msgstr "Publicações de contas interessantes"
+
