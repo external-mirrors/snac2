@@ -4072,12 +4072,12 @@ xs_html *html_people_list(snac *user, xs_list *list, const char *header, const c
 
             if (cool(user, actor_id, OP_CHECK))
                 xs_html_add(form,
-                    html_button("uncool", L("Not cool"),
+                    html_button("uncool", L("Unmark as cool"),
                         L("No longer notify me whenever this user posts")));
             else
                 xs_html_add(form,
-                     html_button("cool", L("Cool"),
-                             L("Notify me whenever this users posts")));
+                     html_button("cool", L("Mark as cool"),
+                             L("Notify me whenever this user posts")));
 
             if (pending_check(user, actor_id)) {
                 xs_html_add(form,
@@ -5914,11 +5914,11 @@ int html_post_handler(const xs_dict *req, const char *q_path,
             unlimit(&snac, actor);
         }
         else
-        if (strcmp(action, L("Cool")) == 0) { /** **/
+        if (strcmp(action, L("Mark as cool")) == 0) { /** **/
             cool(&snac, actor, OP_ADD);
         }
         else
-        if (strcmp(action, L("Not cool")) == 0) { /** **/
+        if (strcmp(action, L("Unmark as cool")) == 0) { /** **/
             cool(&snac, actor, OP_DEL);
         }
         else
