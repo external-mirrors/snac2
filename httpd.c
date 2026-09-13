@@ -481,6 +481,8 @@ void httpd_connection(FILE *f)
     else
         req = xs_httpd_request(f, &payload, &p_size);
 
+    fflush(f);
+
     if (req == NULL) {
         /* probably because a timeout */
         fclose(f);
