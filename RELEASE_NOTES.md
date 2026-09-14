@@ -6,6 +6,8 @@ Accounts can be marked as cool; anytime a cool account posts something, a notifi
 
 Fixed an issue in Direct Messages sent from the people page; these posts didn't explicitly mention the recipient, and that confused some implementations.
 
+Fixed a socket buffering issue under OpenIndiana (contributed by aleteoryx).
+
 Mastodon API: Fixed posts with muted words not being filtered out.
 
 Added information to README.md on how to build and install on Illumos / OpenIndiana Hipster 2026.04 (contributed by aleteoryx).
