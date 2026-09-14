@@ -8,6 +8,12 @@
 #define MAX_JSON_DEPTH 32
 #endif
 
+typedef struct {
+    union { FILE *f; const char *b; } src;
+    const char *b_end;
+} json_src;
+
+
 void xs_json_dump_value(const xs_val *data, int level, int indent, FILE *f);
 int xs_json_dump(const xs_val *data, int indent, FILE *f);
 xs_str *xs_json_dumps(const xs_val *data, int indent);
@@ -17,11 +23,11 @@ xs_val *xs_json_loads_full(const xs_str *json, int maxdepth);
 #define xs_json_load(f) xs_json_load_full(f, MAX_JSON_DEPTH)
 #define xs_json_loads(s) xs_json_loads_full(s, MAX_JSON_DEPTH)
 
-xstype xs_json_load_type(FILE *f);
-int xs_json_load_array_iter(FILE *f, xs_val **value, xstype *pt, int *c);
-int xs_json_load_object_iter(FILE *f, xs_str **key, xs_val **value, xstype *pt, int *c);
-int xs_json_load_array(FILE *f, int maxdepth, xs_list **l);
-int xs_json_load_object(FILE *f, int maxdepth, xs_dict **d);
+xstype xs_json_load_type(json_src *f);
+int xs_json_load_array_iter(json_src *f, xs_val **value, xstype *pt, int *c);
+int xs_json_load_object_iter(json_src *f, xs_str **key, xs_val **value, xstype *pt, int *c);
+int xs_json_load_array(json_src *f, int maxdepth, xs_list **l);
+int xs_json_load_object(json_src *f, int maxdepth, xs_dict **d);
 
 
 #ifdef XS_IMPLEMENTATION
@@ -211,8 +217,56 @@ typedef enum {
     JS_OBJECT
 } js_type;
 
+static int jgetc(json_src *f)
+/* calls fgetc on an underlying file, otherwise reads the buffer */
+{
+    if (f->b_end == NULL)
+        return fgetc(f->src.f);
+    else
+    if (f->src.b >= f->b_end)
+        return EOF;
+    else
+        return *(f->src.b)++;
+}
 
-static xs_val *_xs_json_load_lexer(FILE *f, js_type *t)
+
+static int jungetc(int c, json_src *f)
+/* calls ungetc on an underlying file, otherwise decrements the buf ptr */
+/* this function will NOT mutate an underlying buffer */
+{
+    if (f->b_end == NULL)
+        return ungetc(c, f->src.f);
+    else
+    if (c == EOF)
+        return EOF;
+    else {
+        f->src.b--;
+        return c;
+    }
+}
+
+
+#define jscanf(f, fmt, arg) _jscanf(f, fmt, fmt "%n", arg)
+static int _jscanf(json_src *restrict f, const char *restrict fmt, const char *restrict fmt2, void *arg)
+/* calls fscanf on an underlying file, otherwise reads the buffer. */
+{
+    if (f->b_end == NULL)
+        return fscanf(f->src.f, fmt, arg);
+    else
+    if (f->src.b >= f->b_end)
+        return EOF;
+    else {
+        int n, b;
+
+        n = sscanf(f->src.b, fmt2, arg, &b);
+        if (n >= 0)
+            f->src.b += b;
+        return n;
+    }
+}
+
+
+static xs_val *_xs_json_load_lexer(json_src *f, js_type *t)
 {
     int c;
     xs_val *v = NULL;
@@ -221,7 +275,7 @@ static xs_val *_xs_json_load_lexer(FILE *f, js_type *t)
     *t = JS_ERROR;
 
     /* skip blanks */
-    while ((c = fgetc(f)) == ' ' || c == '\t' || c == '\n' || c == '\r');
+    while ((c = jgetc(f)) == ' ' || c == '\t' || c == '\n' || c == '\r');
 
     if (c == '{')
         *t = JS_OCURLY;
@@ -247,9 +301,9 @@ static xs_val *_xs_json_load_lexer(FILE *f, js_type *t)
         v = xs_str_new(NULL);
         offset = 0;
 
-        while ((c = fgetc(f)) != '"' && c != EOF && *t != JS_ERROR) {
+        while ((c = jgetc(f)) != '"' && c != EOF && *t != JS_ERROR) {
             if (c == '\\') {
-                unsigned int cp = fgetc(f);
+                unsigned int cp = jgetc(f);
 
                 switch (cp) {
                 case 'n': cp = '\n'; break;
@@ -259,20 +313,20 @@ static xs_val *_xs_json_load_lexer(FILE *f, js_type *t)
                 case '\\': cp = '\\'; break;
                 case '/': cp = '/'; break;
                 case 'u': /* Unicode codepoint as an hex char */
-                    if (fscanf(f, "%04x", &cp) != 1) {
+                    if (jscanf(f, "%04x", &cp) != 1) {
                         *t = JS_ERROR;
                         break;
                     }
 
                     if (xs_is_surrogate(cp)) {
                         /* \u must follow */
-                        if (fgetc(f) != '\\' || fgetc(f) != 'u') {
+                        if (jgetc(f) != '\\' || jgetc(f) != 'u') {
                             *t = JS_ERROR;
                             break;
                         }
 
                         unsigned int p2;
-                        if (fscanf(f, "%04x", &p2) != 1) {
+                        if (jscanf(f, "%04x", &p2) != 1) {
                             *t = JS_ERROR;
                             break;
                         }
@@ -317,30 +371,30 @@ static xs_val *_xs_json_load_lexer(FILE *f, js_type *t)
     if (c == '-' || (c >= '0' && c <= '9') || c == '.') {
         double d;
 
-        ungetc(c, f);
-        if (fscanf(f, "%lf", &d) == 1) {
+        jungetc(c, f);
+        if (jscanf(f, "%lf", &d) == 1) {
             *t = JS_NUMBER;
             v = xs_number_new(d);
         }
     }
     else
     if (c == 't') {
-        if (fgetc(f) == 'r' && fgetc(f) == 'u' && fgetc(f) == 'e') {
+        if (jgetc(f) == 'r' && jgetc(f) == 'u' && jgetc(f) == 'e') {
             *t = JS_TRUE;
             v = xs_val_new(XSTYPE_TRUE);
         }
     }
     else
     if (c == 'f') {
-        if (fgetc(f) == 'a' && fgetc(f) == 'l' &&
-            fgetc(f) == 's' && fgetc(f) == 'e') {
+        if (jgetc(f) == 'a' && jgetc(f) == 'l' &&
+            jgetc(f) == 's' && jgetc(f) == 'e') {
             *t = JS_FALSE;
             v = xs_val_new(XSTYPE_FALSE);
         }
     }
     else
     if (c == 'n') {
-        if (fgetc(f) == 'u' && fgetc(f) == 'l' && fgetc(f) == 'l') {
+        if (jgetc(f) == 'u' && jgetc(f) == 'l' && jgetc(f) == 'l') {
             *t = JS_NULL;
             v = xs_val_new(XSTYPE_NULL);
         }
@@ -353,7 +407,7 @@ static xs_val *_xs_json_load_lexer(FILE *f, js_type *t)
 }
 
 
-int xs_json_load_array_iter(FILE *f, xs_val **value, xstype *pt, int *c)
+int xs_json_load_array_iter(json_src *f, xs_val **value, xstype *pt, int *c)
 /* loads the next scalar value from the JSON stream */
 /* if the value ahead is compound, value is NULL and pt is set */
 {
@@ -393,7 +447,7 @@ int xs_json_load_array_iter(FILE *f, xs_val **value, xstype *pt, int *c)
 }
 
 
-int xs_json_load_array(FILE *f, int maxdepth, xs_list **l)
+int xs_json_load_array(json_src *f, int maxdepth, xs_list **l)
 /* loads a full JSON array (after the initial OBRACK) */
 /* l can be NULL for the content to be dropped */
 {
@@ -441,7 +495,7 @@ int xs_json_load_array(FILE *f, int maxdepth, xs_list **l)
 }
 
 
-int xs_json_load_object_iter(FILE *f, xs_str **key, xs_val **value, xstype *pt, int *c)
+int xs_json_load_object_iter(json_src *f, xs_str **key, xs_val **value, xstype *pt, int *c)
 /* loads the next key and scalar value from the JSON stream */
 /* if the value ahead is compound, value is NULL and pt is set */
 {
@@ -491,7 +545,7 @@ int xs_json_load_object_iter(FILE *f, xs_str **key, xs_val **value, xstype *pt, 
 }
 
 
-int xs_json_load_object(FILE *f, int maxdepth, xs_dict **d)
+int xs_json_load_object(json_src *f, int maxdepth, xs_dict **d)
 /* loads a full JSON object (after the initial OCURLY) */
 /* d can be NULL for the content to be dropped */
 {
@@ -540,7 +594,7 @@ int xs_json_load_object(FILE *f, int maxdepth, xs_dict **d)
 }
 
 
-xstype xs_json_load_type(FILE *f)
+xstype xs_json_load_type(json_src *f)
 /* identifies the type of a JSON stream */
 {
     xstype t = XSTYPE_NULL;
@@ -558,8 +612,7 @@ xstype xs_json_load_type(FILE *f)
 }
 
 
-xs_val *xs_json_load_full(FILE *f, int maxdepth)
-/* loads a JSON file */
+static xs_val *_xs_json_load(json_src *f, int maxdepth)
 {
     xs_val *v = NULL;
     xstype t = xs_json_load_type(f);
@@ -578,18 +631,25 @@ xs_val *xs_json_load_full(FILE *f, int maxdepth)
 }
 
 
+xs_val *xs_json_load_full(FILE *fp, int maxdepth)
+/* loads a JSON file */
+{
+    json_src f;
+    f.src.f = fp;
+    f.b_end = NULL;
+
+    return _xs_json_load(&f, maxdepth);
+}
+
+
 xs_val *xs_json_loads_full(const xs_str *json, int maxdepth)
 /* loads a string in JSON format and converts to a multiple data */
 {
-    FILE *f;
-    xs_val *v = NULL;
+    json_src f;
+    f.src.b = json;
+    f.b_end = json+strlen(json);
 
-    if ((f = fmemopen((char *)json, strlen(json), "r")) != NULL) {
-        v = xs_json_load_full(f, maxdepth);
-        fclose(f);
-    }
-
-    return v;
+    return _xs_json_load(&f, maxdepth);
 }
 
 
