@@ -3432,8 +3432,8 @@ const xs_str *words_in_content(const xs_list *words, const xs_val *content)
     const xs_str *cv;
     xs_list_foreach(words, wv) {
         xs_list_foreach(sc, cv) {
-            xs_tolower_i((xs_str*)cv);
-            if(xs_str_in(cv, wv) != -1)
+            xs *s = xs_utf8_tolower(cv);
+            if(xs_str_in(s, wv) != -1)
                 return wv;
         }
     }
