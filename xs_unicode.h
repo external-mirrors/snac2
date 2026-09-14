@@ -16,8 +16,8 @@
  unsigned int *_xs_unicode_lower_search(unsigned int cpoint);
  #define xs_unicode_is_upper(cpoint) (!!_xs_unicode_upper_search(cpoint))
  #define xs_unicode_is_lower(cpoint) (!!_xs_unicode_lower_search(cpoint))
- unsigned int xs_unicode_to_upper(unsigned int cpoint);
- unsigned int xs_unicode_to_lower(unsigned int cpoint);
+ unsigned int xs_unicode_toupper(unsigned int cpoint);
+ unsigned int xs_unicode_tolower(unsigned int cpoint);
  int xs_unicode_nfd(unsigned int cpoint, unsigned int *base, unsigned int *diac);
  int xs_unicode_nfc(unsigned int base, unsigned int diac, unsigned int *cpoint);
  int xs_unicode_is_alpha(unsigned int cpoint);
@@ -29,8 +29,8 @@
  xs_str *xs_utf8_insert(xs_str *str, unsigned int cpoint, int *offset);
  xs_str *xs_utf8_cat(xs_str *str, unsigned int cpoint);
  xs_str *xs_utf8_crop_i(xs_str *str, int begin, int end);
- xs_str *xs_utf8_to_upper(const char *str);
- xs_str *xs_utf8_to_lower(const char *str);
+ xs_str *xs_utf8_toupper(const char *str);
+ xs_str *xs_utf8_tolower(const char *str);
  xs_str *xs_utf8_to_nfd(const char *str);
  xs_str *xs_utf8_to_nfc(const char *str);
 #endif
@@ -306,7 +306,7 @@ unsigned int *_xs_unicode_lower_search(unsigned int cpoint)
 }
 
 
-unsigned int xs_unicode_to_lower(unsigned int cpoint)
+unsigned int xs_unicode_tolower(unsigned int cpoint)
 /* returns the cpoint to lowercase */
 {
     if (cpoint < 0x80)
@@ -318,7 +318,7 @@ unsigned int xs_unicode_to_lower(unsigned int cpoint)
 }
 
 
-unsigned int xs_unicode_to_upper(unsigned int cpoint)
+unsigned int xs_unicode_toupper(unsigned int cpoint)
 /* returns the cpoint to uppercase */
 {
     if (cpoint < 0x80)
@@ -425,14 +425,14 @@ int xs_unicode_is_right_to_left(unsigned int cpoint)
 
 #ifdef _XS_H
 
-xs_str *xs_utf8_to_upper(const char *str)
+xs_str *xs_utf8_toupper(const char *str)
 {
     xs_str *s = xs_str_new(NULL);
     unsigned int cpoint;
     int offset = 0;
 
     while ((cpoint = xs_utf8_dec(&str))) {
-        cpoint = xs_unicode_to_upper(cpoint);
+        cpoint = xs_unicode_toupper(cpoint);
         s = xs_utf8_insert(s, cpoint, &offset);
     }
 
@@ -440,14 +440,14 @@ xs_str *xs_utf8_to_upper(const char *str)
 }
 
 
-xs_str *xs_utf8_to_lower(const char *str)
+xs_str *xs_utf8_tolower(const char *str)
 {
     xs_str *s = xs_str_new(NULL);
     unsigned int cpoint;
     int offset = 0;
 
     while ((cpoint = xs_utf8_dec(&str))) {
-        cpoint = xs_unicode_to_lower(cpoint);
+        cpoint = xs_unicode_tolower(cpoint);
         s = xs_utf8_insert(s, cpoint, &offset);
     }
 

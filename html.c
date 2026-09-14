@@ -173,7 +173,7 @@ xs_str *actor_pronouns(xs_dict *actor)
 
     if (xs_is_list((attachment = xs_dict_get(actor, "attachment")))) {
         xs_list_foreach(attachment, d) {
-            xs *prop = xs_utf8_to_lower(xs_dict_get(d, "name"));
+            xs *prop = xs_utf8_tolower(xs_dict_get(d, "name"));
             /* make sure that we are reading the correct metadata */
             if (strlen(prop) == 8 && strcmp(prop, "pronouns") == 0) {
                 /* safeguard from NULL values */
@@ -3295,7 +3295,7 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
     const char *o_content = xs_dict_get_def(msg, "content", "");
 
     if (xs_is_string(o_content) && xs_is_list(tags) && xs_list_len(tags)) {
-        xs *content = xs_utf8_to_lower(o_content);
+        xs *content = xs_utf8_tolower(o_content);
         const xs_dict *tag;
 
         xs_html *add_hashtags = xs_html_tag("ul",
@@ -3309,7 +3309,7 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
                 const char *name   = xs_dict_get(tag, "name");
 
                 if (xs_is_string(o_href) && xs_is_string(name)) {
-                    xs *href = xs_utf8_to_lower(o_href);
+                    xs *href = xs_utf8_tolower(o_href);
 
                     if (xs_str_in(content, href) == -1 && xs_str_in(content, name) == -1) {
                         /* not in the content: add here */
@@ -6297,7 +6297,7 @@ int html_post_handler(const xs_dict *req, const char *q_path,
                 if (xs_startswith(s1, "https:/"))
                     s2 = xs_dup(s1);
                 else {
-                    s2 = xs_utf8_to_lower(s1);
+                    s2 = xs_utf8_tolower(s1);
 
                     if (*s2 != '#')
                         s2 = xs_str_prepend_i(s2, "#");
@@ -6331,7 +6331,7 @@ int html_post_handler(const xs_dict *req, const char *q_path,
                 if (*s1 == '\0')
                     continue;
 
-                xs *s2 = xs_utf8_to_lower(s1);
+                xs *s2 = xs_utf8_tolower(s1);
                 if (*s2 != '#')
                     s2 = xs_str_prepend_i(s2, "#");
 
@@ -6360,7 +6360,7 @@ int html_post_handler(const xs_dict *req, const char *q_path,
                 if (*s1 == '\0')
                     continue;
 
-                xs *s2 = xs_utf8_to_lower(s1);
+                xs *s2 = xs_utf8_tolower(s1);
 
                 new_words = xs_list_insert_sorted(new_words, s2);
             }

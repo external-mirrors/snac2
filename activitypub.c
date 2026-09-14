@@ -425,7 +425,7 @@ int hashtag_in_msg(const xs_list *hashtags, const xs_dict *msg)
 
                     if (xs_is_string(type) && xs_is_string(name)) {
                         if (strcmp(type, "Hashtag") == 0) {
-                            xs *lc_name = xs_utf8_to_lower(name);
+                            xs *lc_name = xs_utf8_tolower(name);
 
                             if (xs_list_in(hashtags, lc_name) != -1)
                                 return 1;
@@ -1009,7 +1009,7 @@ xs_str *process_tags(snac *snac, const char *content, xs_list **tag)
             if (*v == '#') {
                 /* hashtag */
                 xs *d = xs_dict_new();
-                xs *n = xs_utf8_to_lower(v);
+                xs *n = xs_utf8_tolower(v);
                 xs *h = xs_fmt("%s?t=%s", srv_baseurl, n + 1);
                 xs *l = xs_fmt("<a href=\"%s\" class=\"mention hashtag\" rel=\"tag\">%s</a>", h, v);
 

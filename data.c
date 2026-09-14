@@ -2477,7 +2477,7 @@ void tag_index(const char *id, const xs_dict *obj)
                 if (*name == '\0')
                     continue;
 
-                xs* name_cased = xs_utf8_to_lower((xs_str *)name);
+                xs* name_cased = xs_utf8_tolower((xs_str *)name);
 
                 xs *md5_tag   = xs_md5_hex(name_cased, strlen(name_cased));
                 xs *tag_dir   = xs_fmt("%s/%c%c", g_tag_dir, md5_tag[0], md5_tag[1]);
@@ -2507,7 +2507,7 @@ xs_str *tag_fn(const char *tag)
     if (*tag == '#')
         tag++;
 
-    xs *lw_tag = xs_utf8_to_lower(tag);
+    xs *lw_tag = xs_utf8_tolower(tag);
     xs *md5    = xs_md5_hex(lw_tag, strlen(lw_tag));
 
     return xs_fmt("%s/tag/%c%c/%s.idx", srv_basedir, md5[0], md5[1], md5);
@@ -3102,7 +3102,7 @@ int content_match(const char *file, const xs_dict *msg)
             /* massage content (strip HTML tags, etc.) */
             xs *c1 = xs_regex_replace(v, "<[^>]+>", " ");
             c1 = xs_regex_replace_i(c1, " {2,}", " ");
-            xs *c = xs_utf8_to_lower(c1);
+            xs *c = xs_utf8_tolower(c1);
 
             while (!r && !feof(f)) {
                 xs *rx = xs_strip_i(xs_readline(f));
@@ -3128,7 +3128,7 @@ xs_list *content_search(snac *user, const char *regex,
     if (regex == NULL || *regex == '\0')
         return xs_list_new();
 
-    xs *i_regex = xs_utf8_to_lower(regex);
+    xs *i_regex = xs_utf8_tolower(regex);
 
     xs_set seen;
 
@@ -3261,7 +3261,7 @@ xs_list *content_search(snac *user, const char *regex,
         c = xs_regex_replace_i(c, " {2,}", " ");
 
         /* convert to lowercase */
-        xs *lc = xs_utf8_to_lower(c);
+        xs *lc = xs_utf8_tolower(c);
 
         /* apply regex */
         if (xs_regex_match(lc, i_regex)) {
