@@ -2118,7 +2118,19 @@ int mastoapi_get_handler(const xs_dict *req, const char *q_path,
                 }
                 else
                 if (strcmp(opt, "followers") == 0) {
+                    xs *wing = follower_list(&snac1);
                     out = xs_list_new();
+                    int c = 0;
+                    const char *v;
+
+                    while (xs_list_next(wing, &v, &c)) {
+                        xs *actor = NULL;
+
+                        if (valid_status(object_get(v, &actor))) {
+                            xs *acct = mastoapi_account(NULL, actor);
+                            out = xs_list_append(out, acct);
+                        }
+                    }
                 }
                 else
                 if (strcmp(opt, "lists") == 0) {
