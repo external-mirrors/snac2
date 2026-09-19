@@ -78,7 +78,7 @@ int usage(const char *cmd)
         "list_create {basedir} {uid} {name}   Creates a new list\n"
         "list_remove {basedir} {uid} {name}   Removes an existing list\n"
         "list_add {basedir} {uid} {name} {acct} Adds an account (@user@host or actor url) to a list\n"
-        "list_del {basedir} {uid} {name} {actor} Deletes an actor URL from a list\n"
+        "list_del {basedir} {uid} {name} {actor} Deletes an actor url from a list\n"
         "top_ten {basedir} {uid} [{N}]        Prints the most popular posts\n"
         "refresh {basedir} {uid}              Refreshes all actors\n";
 
