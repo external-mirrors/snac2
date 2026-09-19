@@ -1400,6 +1400,8 @@ xs_dict *mastoapi_relationship(snac *snac, const char *md5)
         rel = xs_dict_append(rel, "notifying",            xs_stock(XSTYPE_FALSE));
         rel = xs_dict_append(rel, "followed_by",
             follower_check(snac, actor) ? xs_stock(XSTYPE_TRUE) : xs_stock(XSTYPE_FALSE));
+        rel = xs_dict_append(rel, "requested_by",
+            pending_check(snac, actor) ? xs_stock(XSTYPE_TRUE) : xs_stock(XSTYPE_FALSE));
 
         rel = xs_dict_append(rel, "blocking",
             is_muted(snac, actor) ? xs_stock(XSTYPE_TRUE) : xs_stock(XSTYPE_FALSE));
