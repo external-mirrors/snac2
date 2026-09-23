@@ -572,6 +572,7 @@ xs_html *html_emoji(snac *user, const char *summary,
                         xs_html_sctag("input",
                             xs_html_attr("type",     react ? "hidden" : "text"),
                             xs_html_attr("name",     "eid"),
+                            xs_html_attr("required", "required"),
                             xs_html_attr(react ? "value" : "placeholder", react ? eid : placeholder)),
                         xs_html_text(" "),
                         xs_html_sctag("input",
@@ -5842,14 +5843,16 @@ int html_post_handler(const xs_dict *req, const char *q_path,
         if (strcmp(action, L("EmojiReact")) == 0) { /** **/
             xs *eid = xs_dup(xs_dict_get(p_vars, "eid"));
 
-            xs *ret = msg_emoji_init(&snac, id, eid);
-            /* fails if either invalid or already reacted */
-            if (!ret) {
-                object_user_cache_del(&snac, id, "admire");
-                ret = msg_emoji_unreact(&snac, id, eid);
+            if (xs_is_string(eid) && strcmp(eid, "%")) {
+                xs *ret = msg_emoji_init(&snac, id, eid);
+                /* fails if either invalid or already reacted */
+                if (!ret) {
+                    object_user_cache_del(&snac, id, "admire");
+                    ret = msg_emoji_unreact(&snac, id, eid);
+                }
+                if (!ret)
+                    status = HTTP_STATUS_NOT_FOUND;
             }
-            if (!ret)
-                status = HTTP_STATUS_NOT_FOUND;
         }
         else
         if (strcmp(action, L("Like")) == 0) { /** **/
