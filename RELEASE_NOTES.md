@@ -14,7 +14,7 @@ Mastodon API: Added missing `requested_by` field in the relationships entrypoint
 
 Added information to README.md on how to build and install on Illumos / OpenIndiana Hipster 2026.04 (contributed by aleteoryx).
 
-Updated Russian translation (contributed by koru).
+Updated Russian and Brazilian Portuguese translations (contributed by koru, daltux).
 
 ## 2.95
 
