@@ -6,6 +6,8 @@ Accounts can be marked as cool; anytime a cool account posts something, a notifi
 
 Fixed an issue in Direct Messages sent from the people page; these posts didn't explicitly mention the recipient, and that confused some implementations.
 
+Fixed crash when sending an empty EmojiReact.
+
 Fixed a socket buffering issue under OpenIndiana (contributed by aleteoryx).
 
 Mastodon API: Added missing `requested_by` field in the relationships entrypoint (contributed by Uilebheist), implemented the followers entrypoint (contributed by Uilebheist), fixed posts with muted words not being filtered out.
