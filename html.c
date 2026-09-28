@@ -2888,8 +2888,10 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
                         html_entry(user, quoted_post, 1, level + 1, md5, 1, tb_friendly)));
             }
             else
-            if (user)
+            if (user) {
+                snac_log(user, xs_fmt("deferred request of quoted post %s", quoted_id));
                 enqueue_object_request(user, quoted_id, 0);
+            }
         }
     }
 
