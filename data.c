@@ -16,6 +16,7 @@
 #include "xs_po.h"
 #include "xs_http.h"
 #include "xs_list_tools.h"
+#include "xs_curl.h"
 
 #include "snac.h"
 
@@ -86,6 +87,8 @@ int srv_open(const char *basedir, int auto_upgrade)
             prefix = xs_dict_get(srv_config, "prefix");
             dbglvl = xs_dict_get(srv_config, "dbglevel");
             proto  = xs_dict_get_def(srv_config, "protocol", "https");
+
+            xs_curl_force_ipv6 = xs_is_true(xs_dict_get(srv_config, "force_ipv6_requests"));
 
             if (host == NULL || prefix == NULL)
                 error = xs_str_new("ERROR: cannot get server data");

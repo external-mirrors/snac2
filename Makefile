@@ -61,12 +61,12 @@ activitypub.o: activitypub.c xs.h xs_json.h xs_curl.h xs_url.h xs_mime.h \
  xs_webmention.h xs_http.h xs_http_codes.h snac.h
 data.o: data.c xs.h xs_hex.h xs_io.h xs_json.h xs_openssl.h xs_glob.h \
  xs_set.h xs_time.h xs_regex.h xs_match.h xs_unicode.h xs_random.h \
- xs_po.h xs_http.h xs_http_codes.h snac.h
+ xs_po.h xs_http.h xs_http_codes.h xs_list_tools.h xs_curl.h snac.h
 format.o: format.c xs.h xs_regex.h xs_mime.h xs_html.h xs_json.h \
  xs_time.h xs_match.h xs_unicode.h snac.h
 html.o: html.c xs.h xs_io.h xs_json.h xs_regex.h xs_set.h xs_openssl.h \
  xs_time.h xs_mime.h xs_match.h xs_html.h xs_curl.h xs_unicode.h xs_url.h \
- xs_random.h xs_http.h xs_http_codes.h snac.h
+ xs_random.h xs_http.h xs_http_codes.h xs_list_tools.h snac.h
 http.o: http.c xs.h xs_io.h xs_openssl.h xs_curl.h xs_time.h xs_json.h \
  xs_http.h xs_http_codes.h snac.h
 httpd.o: httpd.c xs.h xs_io.h xs_json.h xs_socket.h xs_unix_socket.h \
