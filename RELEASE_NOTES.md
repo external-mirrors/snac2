@@ -8,6 +8,8 @@ Fixed an issue in Direct Messages sent from the people page; these posts didn't 
 
 Fixed crash when sending an empty EmojiReact.
 
+HTTP requests can now be forced to use IPv6 by setting the `force_ipv6_requests` configuration directive to `true` in `server.json`.
+
 Fixed a socket buffering issue under OpenIndiana (contributed by aleteoryx).
 
 Mastodon API: Added missing `requested_by` field in the relationships entrypoint (contributed by Uilebheist), implemented the followers entrypoint (contributed by Uilebheist), fixed posts with muted words not being filtered out.
