@@ -15,9 +15,15 @@ int xs_smtp_request(const char *url, const char *user, const char *pass,
 
 const char *xs_curl_strerr(int errnum);
 
+extern int xs_curl_force_http1;
+extern int xs_curl_force_ipv6;
+
 #ifdef XS_IMPLEMENTATION
 
 #include <curl/curl.h>
+
+int xs_curl_force_http1 = 0;
+int xs_curl_force_ipv6 = 0;
 
 static size_t _header_callback(char *buffer, size_t size,
                                size_t nitems, xs_dict **userdata)
@@ -115,10 +121,15 @@ xs_dict *xs_http_request(const char *method, const char *url,
 
     curl_easy_setopt(curl, CURLOPT_TIMEOUT, (long) timeout);
 
-#ifdef FORCE_HTTP_1_1
-    /* force HTTP/1.1 */
-    curl_easy_setopt(curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-#endif
+    if (xs_curl_force_http1) {
+        /* force HTTP/1.1 */
+        curl_easy_setopt(curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+    }
+
+    if (xs_curl_force_ipv6) {
+        /* force IPv6 */
+        curl_easy_setopt(curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V6);
+    }
 
     /* obey redirections */
     curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
