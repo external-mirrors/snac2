@@ -2917,6 +2917,12 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
                     return 1;
                 }
 
+                if (strcmp(key_id, atto) != 0) {
+                    snac_debug(snac, 1, xs_fmt("Warning: %s key_id != atto (%s != %s) -- deferring request", id, key_id, atto));
+                    enqueue_object_request(snac, id, 0);
+                    return 1;
+                }
+
                 if (strcmp(actor, atto) != 0)
                     snac_log(snac, xs_fmt("SUSPICIOUS: actor != atto (%s != %s)", actor, atto));
 
@@ -3470,8 +3476,12 @@ void process_user_queue_item(snac *user, xs_dict *q_item)
 
             status = activitypub_request(user, id, &data);
 
-            if (valid_status(status))
+            if (valid_status(status)) {
                 object_add_ow(id, data);
+
+                if (!timeline_here(user, id))
+                    timeline_add(user, id, data);
+            }
 
             snac_debug(user, 1, xs_fmt("object_request %s %d", id, status));
         }
