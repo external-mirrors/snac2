@@ -3476,12 +3476,8 @@ void process_user_queue_item(snac *user, xs_dict *q_item)
 
             status = activitypub_request(user, id, &data);
 
-            if (valid_status(status)) {
+            if (valid_status(status))
                 object_add_ow(id, data);
-
-                if (!timeline_here(user, id))
-                    timeline_add(user, id, data);
-            }
 
             snac_debug(user, 1, xs_fmt("object_request %s %d", id, status));
         }
