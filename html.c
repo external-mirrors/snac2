@@ -3382,10 +3382,7 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
             xs_list_next(children, &cmd5, &ctxt);
             xs *f_chd = NULL;
 
-            if (user)
-                timeline_get_by_md5(user, cmd5, &f_chd);
-            else
-                object_get_by_md5(cmd5, &f_chd);
+            object_get_by_md5(cmd5, &f_chd);
 
             if (f_chd != NULL && xs_is_null(xs_dict_get(f_chd, "name"))) {
                 const char *p_author = get_atto(msg);
@@ -3410,10 +3407,7 @@ xs_html *html_entry(snac *user, xs_dict *msg, int read_only,
             while (xs_list_next(children, &cmd5, &ctxt)) {
                 xs *chd = NULL;
 
-                if (user)
-                    timeline_get_by_md5(user, cmd5, &chd);
-                else
-                    object_get_by_md5(cmd5, &chd);
+                object_get_by_md5(cmd5, &chd);
 
                 if (chd != NULL) {
                     if (xs_is_null(xs_dict_get(chd, "name"))) {
