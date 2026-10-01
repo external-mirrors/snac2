@@ -2918,9 +2918,14 @@ int process_input_message(snac *snac, const xs_dict *msg, const xs_dict *req)
                 }
 
                 if (strcmp(key_id, atto) != 0) {
-                    snac_debug(snac, 1, xs_fmt("Warning: %s key_id != atto (%s != %s) -- deferring request", id, key_id, atto));
-                    enqueue_object_request(snac, id, 0);
-                    return 1;
+                    if (following_check(snac, key_id)) {
+                        snac_debug(snac, 1, xs_fmt("Warning: trusting key_id %s for post %s from %s atto", key_id, id, atto));
+                    }
+                    else {
+                        snac_debug(snac, 1, xs_fmt("Warning: %s key_id != atto (%s != %s) -- deferring request", id, key_id, atto));
+                        enqueue_object_request(snac, id, 0);
+                        return 1;
+                    }
                 }
 
                 if (strcmp(actor, atto) != 0)
