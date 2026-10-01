@@ -4355,6 +4355,33 @@ int mastoapi_put_handler(const xs_dict *req, const char *q_path,
                         msg = xs_dict_set(msg, "sensitive", xs_stock(XSTYPE_FALSE));
                     }
 
+                    const xs_list *media_attrs = xs_dict_get(args, "media_attributes");
+
+                    if (xs_is_list(media_attrs)) {
+                        /* change alt texts */
+                        xs *n_att = xs_dup(xs_dict_get(msg, "attachment"));
+
+                        if (xs_is_list(n_att)) {
+                            int num = xs_list_len(media_attrs);
+
+                            for (int n = 0; n < num; n++) {
+                                const xs_dict *d = xs_list_get(media_attrs, n);
+
+                                if (xs_is_dict(d)) {
+                                    xs *na = xs_dup(xs_list_get(n_att, n));
+
+                                    if (xs_is_dict(na)) {
+                                        const char *desc = xs_dict_get(d, "description");
+                                        na = xs_dict_set(na, "name", desc);
+                                        n_att = xs_list_set(n_att, n, na);
+                                    }
+                                }
+                            }
+                        }
+
+                        msg = xs_dict_set(msg, "attachment", n_att);
+                    }
+
                     /* overwrite object, not updating the indexes */
                     const char *id = xs_dict_get(msg, "id");
 
