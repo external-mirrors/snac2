@@ -85,6 +85,22 @@ double ftime(void)
     return atof(ntid);
 }
 
+xs_str *rfctime(int offset, struct timeval *tv)
+/* returns an RFC3339 format (with fractional seconds) compliant with Mastodon datetime */
+{
+    struct timeval tv2;
+
+    if (tv == NULL) {
+        gettimeofday(&tv2, NULL);
+        tv = &tv2;
+    }
+    xs_str *iso_date = xs_str_utctime((long)(*tv).tv_sec + (long)offset, "%Y-%m-%dT%H:%M:%S");
+    xs_str *date_with_ms =xs_fmt("%s.%03ldZ", iso_date, (long)(*tv).tv_usec/1000L);
+    xs_free(iso_date);
+
+    return date_with_ms;
+}
+
 
 int validate_uid(const char *uid)
 /* returns if uid is a valid identifier */
@@ -235,7 +251,7 @@ int strip_media(const char *fn)
         /* Heuristic: find 'user/' in the path to make it relative */
         /* This works for ~/user/..., /var/snac/user/..., etc. */
         const char *r_fn = strstr(fn, "user/");
-        
+
         if (r_fn == NULL) {
             /* Fallback: try to strip ~/ if present */
             if (strncmp(fn, "~/", 2) == 0)
@@ -318,7 +334,7 @@ int strip_media(const char *fn)
                 /* rename tmp file to original */
                 /* use full path for source because it was created relative to basedir */
                 xs *full_tmp_fn = xs_fmt("%s/%s", srv_basedir, tmp_fn);
-                
+
                 if (rename(full_tmp_fn, fn) == 0)
                     srv_debug(1, xs_fmt("strip_media: stripped %s", fn));
                 else
