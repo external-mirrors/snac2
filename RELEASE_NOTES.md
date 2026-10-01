@@ -12,7 +12,7 @@ HTTP requests can now be forced to use IPv6 by setting the `force_ipv6_requests`
 
 Fixed a socket buffering issue under OpenIndiana (contributed by aleteoryx).
 
-Mastodon API: Added missing `requested_by` field in the relationships entrypoint (contributed by Uilebheist), implemented the followers entrypoint (contributed by Uilebheist), fixed posts with muted words not being filtered out.
+Mastodon API: Added missing `requested_by` field in the relationships entrypoint (contributed by Uilebheist), implemented the followers entrypoint (contributed by Uilebheist), fixed posts with muted words not being filtered out, fixed editing of media alt texts.
 
 Added information to README.md on how to build and install on Illumos / OpenIndiana Hipster 2026.04 (contributed by aleteoryx).
 
