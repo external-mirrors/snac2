@@ -4362,24 +4362,28 @@ int mastoapi_put_handler(const xs_dict *req, const char *q_path,
                         xs *n_att = xs_dup(xs_dict_get(msg, "attachment"));
 
                         if (xs_is_list(n_att)) {
-                            int num = xs_list_len(media_attrs);
+                            const xs_dict *d;
 
-                            for (int n = 0; n < num; n++) {
-                                const xs_dict *d = xs_list_get(media_attrs, n);
-
+                            xs_list_foreach(media_attrs, d) {
                                 if (xs_is_dict(d)) {
-                                    xs *na = xs_dup(xs_list_get(n_att, n));
+                                    const char *id = xs_dict_get(d, "id");
+                                    const char *desc = xs_dict_get(d, "description");
 
-                                    if (xs_is_dict(na)) {
-                                        const char *desc = xs_dict_get(d, "description");
+                                    if (xs_is_string(id) && xs_is_string(desc)) {
+                                        /* we build these ids with post name + _N,
+                                           so split by _ and get the last item as index */
+                                        xs *l = xs_split(id, "_");
+                                        int n = atoi(xs_or(xs_list_get(l, -1), "0"));
+
+                                        xs *na = xs_dup(xs_list_get(n_att, n));
                                         na = xs_dict_set(na, "name", desc);
                                         n_att = xs_list_set(n_att, n, na);
                                     }
                                 }
                             }
-                        }
 
-                        msg = xs_dict_set(msg, "attachment", n_att);
+                            msg = xs_dict_set(msg, "attachment", n_att);
+                        }
                     }
 
                     /* overwrite object, not updating the indexes */
