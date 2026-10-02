@@ -954,28 +954,28 @@ msgstr "interakce"
 #: html.c:1875
 msgid ""
 "Show a simpler web UI for browsers with these user agents (one per line):"
-msgstr ""
+msgstr "Použít zjednodušené webové rozhraní pro prohlížeče s následujícími user agenty (jeden na řádek)"
 
 #: html.c:4075 html.c:5921
 msgid "Unmark as cool"
-msgstr ""
+msgstr "Odebrat super označení"
 
 #: html.c:4076
 msgid "No longer notify me whenever this user posts"
-msgstr ""
+msgstr "Přestat upozorňovat, když tento uživatel přidá příspěvek"
 
 #: html.c:4079 html.c:5917
 msgid "Mark as cool"
-msgstr ""
+msgstr "Označit jako super"
 
 #: html.c:4080
 msgid "Notify me whenever this user posts"
-msgstr ""
+msgstr "Upozornit, když tento uživatel přidá příspěvek"
 
 #: html.c:4368
 msgid "Webmentions"
-msgstr ""
+msgstr "Webzmíňky"
 
 #: html.c:4369
 msgid "Posts from cool users"
-msgstr ""
+msgstr "Příspěvky od super lidí"
