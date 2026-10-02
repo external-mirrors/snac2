@@ -3493,13 +3493,13 @@ xs_dict *markers_get(snac *snac, const xs_list *markers)
     xs_list_foreach(markers, v) {
         const xs_dict *mark = xs_dict_get(data, v);
         if (!xs_is_null(mark)) {
-            xs_dict *copy = xs_dup(mark);
+            xs *copy = xs_dup(mark);
             const xs_val *datetime = xs_dict_get(mark, "updated_at");
             if (!xs_is_null(datetime) && datetime[0] != '2') {
                 /* fix wrong timestamp format */
                 struct timeval tv;
-                if (sscanf(datetime, "%lu.%lu", &(tv.tv_sec), &(tv.tv_usec))==2)
-                    xs_dict_set(copy, "updated_at", rfctime(0, &tv));
+                if (sscanf(datetime, "%lu.%lu", (unsigned long *)&(tv.tv_sec), (unsigned long *)&(tv.tv_usec))==2)
+                    copy = xs_dict_set(copy, "updated_at", rfctime(0, &tv));
             }
             returns = xs_dict_append(returns, v, copy);
         }
