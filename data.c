@@ -3517,20 +3517,20 @@ xs_dict *markers_set(snac *snac, const char *home_marker, const char *notify_mar
 
     if (!xs_is_null(home_marker)) {
         xs *home = xs_dict_new();
-        xs *updated_at = xs_str_utctime(time(NULL), ISO_DATE_SPEC);
+        xs *s_tid = tid(0);
         home = xs_dict_append(home, "last_read_id", home_marker);
         home = xs_dict_append(home, "version", xs_stock(0));
-        home = xs_dict_append(home, "updated_at", updated_at);
+        home = xs_dict_append(home, "updated_at", s_tid);
         data = xs_dict_set(data, "home", home);
         written = xs_dict_append(written, "home", home);
     }
 
     if (!xs_is_null(notify_marker)) {
         xs *notify = xs_dict_new();
-        xs *updated_at = xs_str_utctime(time(NULL), ISO_DATE_SPEC);
+        xs *s_tid = tid(0);
         notify = xs_dict_append(notify, "last_read_id", notify_marker);
         notify = xs_dict_append(notify, "version", xs_stock(0));
-        notify = xs_dict_append(notify, "updated_at", updated_at);
+        notify = xs_dict_append(notify, "updated_at", s_tid);
         data = xs_dict_set(data, "notifications", notify);
         written = xs_dict_append(written, "notifications", notify);
     }
