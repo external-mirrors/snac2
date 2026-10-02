@@ -85,22 +85,6 @@ double ftime(void)
     return atof(ntid);
 }
 
-xs_str *rfctime(int offset, struct timeval *tv)
-/* returns an RFC3339 format (with fractional seconds) compliant with Mastodon datetime */
-{
-    struct timeval tv2;
-
-    if (tv == NULL) {
-        gettimeofday(&tv2, NULL);
-        tv = &tv2;
-    }
-    xs_str *iso_date = xs_str_utctime((long)(*tv).tv_sec + (long)offset, "%Y-%m-%dT%H:%M:%S");
-    xs_str *date_with_ms =xs_fmt("%s.%03ldZ", iso_date, (long)(*tv).tv_usec/1000L);
-    xs_free(iso_date);
-
-    return date_with_ms;
-}
-
 
 int validate_uid(const char *uid)
 /* returns if uid is a valid identifier */

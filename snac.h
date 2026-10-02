@@ -1,9 +1,6 @@
 /* snac - A simple, minimalistic ActivityPub instance */
 /* copyright (c) 2022 - 2026 grunfink et al. / MIT license */
 
-#include <sys/time.h> /* for struct timeval */
-#include "xs.h"       /* for xs_* */
-
 #define VERSION "2.95"
 
 #define USER_AGENT "snac/" VERSION

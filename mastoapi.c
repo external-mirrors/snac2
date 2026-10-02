@@ -875,6 +875,100 @@ xs_str *mastoapi_date(const char *date)
 }
 
 
+xs_str *rfctime(int offset, struct timeval *tv)
+/* returns an RFC3339 format (with fractional seconds) compliant with Mastodon datetime */
+{
+    struct timeval tv2;
+
+    if (tv == NULL) {
+        gettimeofday(&tv2, NULL);
+        tv = &tv2;
+    }
+    xs_str *iso_date = xs_str_utctime((long)(*tv).tv_sec + (long)offset, "%Y-%m-%dT%H:%M:%S");
+    xs_str *date_with_ms =xs_fmt("%s.%03ldZ", iso_date, (long)(*tv).tv_usec/1000L);
+    xs_free(iso_date);
+
+    return date_with_ms;
+}
+
+
+xs_dict *markers_get(snac *snac, const xs_list *markers)
+{
+    xs *data = NULL;
+    xs_dict *returns = xs_dict_new();
+    xs *fn = xs_fmt("%s/markers.json", snac->basedir);
+    const xs_str *v = NULL;
+    FILE *f;
+
+    if ((f = fopen(fn, "r")) != NULL) {
+        data = xs_json_load(f);
+        fclose(f);
+    }
+
+    if (xs_is_null(data))
+        data = xs_dict_new();
+
+    xs_list_foreach(markers, v) {
+        const xs_dict *mark = xs_dict_get(data, v);
+        if (!xs_is_null(mark)) {
+            xs *copy = xs_dup(mark);
+            const xs_val *datetime = xs_dict_get(mark, "updated_at");
+            if (!xs_is_null(datetime) && datetime[0] != '2') {
+                /* fix wrong timestamp format */
+                struct timeval tv;
+                if (sscanf(datetime, "%lu.%lu", (unsigned long *)&(tv.tv_sec), (unsigned long *)&(tv.tv_usec))==2)
+                    copy = xs_dict_set(copy, "updated_at", rfctime(0, &tv));
+            }
+            returns = xs_dict_append(returns, v, copy);
+        }
+    }
+    return returns;
+}
+
+xs_dict *markers_set(snac *snac, const char *home_marker, const char *notify_marker)
+/* gets or sets notification marker */
+{
+    xs *data = NULL;
+    xs_dict *written = xs_dict_new();
+    xs *fn = xs_fmt("%s/markers.json", snac->basedir);
+    FILE *f;
+
+    if ((f = fopen(fn, "r")) != NULL) {
+        data = xs_json_load(f);
+        fclose(f);
+    }
+
+    if (xs_is_null(data))
+        data = xs_dict_new();
+
+    if (!xs_is_null(home_marker)) {
+        xs *home = xs_dict_new();
+        xs *s_datetime = rfctime(0, NULL);
+        home = xs_dict_append(home, "last_read_id", home_marker);
+        home = xs_dict_append(home, "version", xs_stock(0));
+        home = xs_dict_append(home, "updated_at", s_datetime);
+        data = xs_dict_set(data, "home", home);
+        written = xs_dict_append(written, "home", home);
+    }
+
+    if (!xs_is_null(notify_marker)) {
+        xs *notify = xs_dict_new();
+        xs *s_datetime = rfctime(0, NULL);
+        notify = xs_dict_append(notify, "last_read_id", notify_marker);
+        notify = xs_dict_append(notify, "version", xs_stock(0));
+        notify = xs_dict_append(notify, "updated_at", s_datetime);
+        data = xs_dict_set(data, "notifications", notify);
+        written = xs_dict_append(written, "notifications", notify);
+    }
+
+    if ((f = fopen(fn, "w")) != NULL) {
+        xs_json_dump(data, 4, f);
+        fclose(f);
+    }
+
+    return written;
+}
+
 xs_dict *mastoapi_poll(snac *snac, const xs_dict *msg)
 /* creates a mastoapi Poll object */
 {
