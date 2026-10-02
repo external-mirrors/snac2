@@ -49,7 +49,6 @@ int mkdirx(const char *pathname);
 #define valid_status(status) xs_http_valid_status(status)
 xs_str *tid(int offset);
 double ftime(void);
-xs_str *rfctime(int offset, struct timeval *tv);
 
 void srv_log(xs_str *str);
 #define srv_debug(level, str) do { if (dbglevel >= (level)) \
