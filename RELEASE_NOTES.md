@@ -14,6 +14,8 @@ Fixed a socket buffering issue under OpenIndiana (contributed by aleteoryx).
 
 Mastodon API: Added missing `requested_by` field in the relationships entrypoint (contributed by Uilebheist), implemented the followers entrypoint (contributed by Uilebheist), use Mastodon's RFC3339 format for markers (contributed by nowster), fixed posts with muted words not being filtered out, fixed editing of media alt texts.
 
+Tweaked HTML to avoid elinks complaining about a missing '#top' fragment.
+
 Added information to README.md on how to build and install on Illumos / OpenIndiana Hipster 2026.04 (contributed by aleteoryx).
 
 Updated Russian, Brazilian Portuguese and Czech translations (contributed by koru, daltux, pmjv).
