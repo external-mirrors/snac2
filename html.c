@@ -1151,7 +1151,9 @@ static xs_html *html_user_body(snac *user, int read_only)
     if (user && !read_only && xs_is_true(xs_dict_get(srv_config, "proxy_media")))
         proxy = user->actor;
 
-    xs_html *body = xs_html_tag("body", NULL);
+    xs_html *body = xs_html_tag("body",
+        xs_html_tag("a",
+            xs_html_attr("name", "top")));
 
     /* top nav */
     xs_html *top_nav = xs_html_tag("nav",
