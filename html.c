@@ -6087,6 +6087,8 @@ int html_post_handler(const xs_dict *req, const char *q_path,
         }
         if ((v = xs_dict_get(p_vars, "email")) != NULL)
             snac.config = xs_dict_set(snac.config, "email", v);
+        else
+            snac.config = xs_dict_del(snac.config, "email");
         if ((v = xs_dict_get(p_vars, "telegram_bot")) != NULL)
             snac.config = xs_dict_set(snac.config, "telegram_bot", v);
         if ((v = xs_dict_get(p_vars, "telegram_chat_id")) != NULL)
