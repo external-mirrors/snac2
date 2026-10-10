@@ -51,6 +51,8 @@ typedef struct job_fifo_item {
 static job_fifo_item *job_fifo_first = NULL;
 static job_fifo_item *job_fifo_last  = NULL;
 
+int exit_signal = 0;
+
 
 /** other global data **/
 
@@ -909,6 +911,8 @@ void term_handler(int s)
 {
     (void)s;
 
+    exit_signal = s;
+
     longjmp(on_break, 1);
 }
 
@@ -1155,9 +1159,9 @@ void httpd(void)
 
     xs *uptime = xs_str_time_diff(time(NULL) - p_state->srv_start_time);
 
-    srv_log(xs_fmt("httpd%s stop %s (run time: %s)",
+    srv_log(xs_fmt("httpd%s stop %s (run time: %s, signal: %d)",
                 p_state->use_fcgi ? " (FastCGI)" : "",
-                full_address, uptime));
+                full_address, uptime, exit_signal));
 
     unlink(pidfile);
 }
