@@ -4707,7 +4707,34 @@ void mastoapi_purge(void)
 
                 if (xs_is_null(uid) || *uid == '\0') {
                     unlink(fn);
-                    srv_debug(2, xs_fmt("purged %s", fn));
+                    srv_debug(1, xs_fmt("purge incomplete app: %s", fn));
+                }
+            }
+        }
+    }
+
+    /* tokens */
+    {
+        xs *spec  = xs_fmt("%s/token/" "*.json", srv_basedir);
+        xs *files = xs_glob(spec, 1, 0);
+        const char *v;
+
+        xs_list_foreach(files, v) {
+            FILE *f;
+
+            xs *fn = xs_fmt("%s/token/%s", srv_basedir, v);
+
+            if (mtime(fn) < mt) {
+                if ((f = fopen(fn, "r")) != NULL) {
+                    xs *token = xs_json_load(f);
+                    fclose(f);
+
+                    const char *uid = xs_dict_get(token, "uid");
+
+                    if (xs_is_null(uid) || *uid == '\0') {
+                        unlink(fn);
+                        srv_debug(1, xs_fmt("purge incomplete token: %s", v));
+                    }
                 }
             }
         }
