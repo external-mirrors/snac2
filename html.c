@@ -5365,23 +5365,33 @@ int html_get_handler(const xs_dict *req, const char *q_path,
         if (xs_type(xs_dict_get(snac.config, "private")) == XSTYPE_TRUE)
             return HTTP_STATUS_FORBIDDEN;
 
-        int cnt = xs_number_get(xs_dict_get_def(srv_config, "max_public_entries", "20"));
+        if (history_mtime(&snac, "feed.rss") > timeline_mtime(&snac)) {
+            status = history_get(&snac, "feed.rss", body, b_size, xs_dict_get(req, "if-none-match"), etag);
 
-        xs *elems = timeline_simple_list(&snac, "public", 0, cnt, NULL);
-        xs *bio   = xs_dup(xs_dict_get(snac.config, "bio"));
+            snac_debug(&snac, 1, xs_fmt("serving cached RSS %d", status));
+        }
+        else {
+            int cnt = xs_number_get(xs_dict_get_def(srv_config, "max_public_entries", "20"));
 
-        xs *rss_title = xs_fmt("%s (@%s@%s)",
-            xs_dict_get(snac.config, "name"),
-            snac.uid,
-            xs_dict_get(srv_config, "host"));
-        xs *rss_link = xs_fmt("%s.rss", snac.actor);
+            xs *elems = timeline_simple_list(&snac, "public", 0, cnt, NULL);
+            xs *bio   = xs_dup(xs_dict_get(snac.config, "bio"));
 
-        *body   = rss_from_timeline(&snac, elems, rss_title, rss_link, bio);
-        *b_size = strlen(*body);
+            xs *rss_title = xs_fmt("%s (@%s@%s)",
+                xs_dict_get(snac.config, "name"),
+                snac.uid,
+                xs_dict_get(srv_config, "host"));
+            xs *rss_link = xs_fmt("%s.rss", snac.actor);
+
+            *body   = rss_from_timeline(&snac, elems, rss_title, rss_link, bio);
+            *b_size = strlen(*body);
+
+            history_add(&snac, "feed.rss", *body, *b_size, etag);
+            status  = HTTP_STATUS_OK;
+
+            snac_debug(&snac, 1, xs_fmt("serving RSS %d", status));
+        }
+
         *ctype  = "application/rss+xml; charset=utf-8";
-        status  = HTTP_STATUS_OK;
-
-        snac_debug(&snac, 1, xs_fmt("serving RSS"));
     }
     else
     if (proxy && (xs_startswith(p_path, "x/") || xs_startswith(p_path, "y/"))) { /** remote media by proxy **/
