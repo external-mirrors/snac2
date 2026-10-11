@@ -18,6 +18,8 @@ Tweaked HTML to avoid elinks complaining about a missing '#top' fragment.
 
 Fixed a bug that made deleting the notification email address impossible.
 
+RSS timelines are now cached because fuckers hammer for them continuously (probably AI crap bots).
+
 Added information to README.md on how to build and install on Illumos / OpenIndiana Hipster 2026.04 (contributed by aleteoryx).
 
 Updated Russian, Brazilian Portuguese and Czech translations (contributed by koru, daltux, pmjv).
