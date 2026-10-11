@@ -5350,7 +5350,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
         const char *id = xs_list_get(l, 1);
 
         if (id && *id) {
-            if (xs_endswith(id, "timeline.html_")) {
+            if (xs_endswith(id, "_")) {
                 /* Don't let them in */
                 *b_size = 0;
                 status = HTTP_STATUS_NOT_FOUND;
@@ -5365,8 +5365,8 @@ int html_get_handler(const xs_dict *req, const char *q_path,
         if (xs_type(xs_dict_get(snac.config, "private")) == XSTYPE_TRUE)
             return HTTP_STATUS_FORBIDDEN;
 
-        if (history_mtime(&snac, "feed.rss") > timeline_mtime(&snac)) {
-            status = history_get(&snac, "feed.rss", body, b_size, xs_dict_get(req, "if-none-match"), etag);
+        if (history_mtime(&snac, "feed.rss_") > timeline_mtime(&snac)) {
+            status = history_get(&snac, "feed.rss_", body, b_size, xs_dict_get(req, "if-none-match"), etag);
 
             snac_debug(&snac, 1, xs_fmt("serving cached RSS %d", status));
         }
@@ -5385,7 +5385,7 @@ int html_get_handler(const xs_dict *req, const char *q_path,
             *body   = rss_from_timeline(&snac, elems, rss_title, rss_link, bio);
             *b_size = strlen(*body);
 
-            history_add(&snac, "feed.rss", *body, *b_size, etag);
+            history_add(&snac, "feed.rss_", *body, *b_size, etag);
             status  = HTTP_STATUS_OK;
 
             snac_debug(&snac, 1, xs_fmt("serving RSS %d", status));
