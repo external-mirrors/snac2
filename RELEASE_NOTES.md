@@ -1,6 +1,6 @@
 # Release Notes
 
-## UNRELEASED
+## 2.96
 
 Accounts can be marked as cool; anytime a cool account posts something, a notification will be sent.
 
