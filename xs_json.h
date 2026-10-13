@@ -8,11 +8,15 @@
 #define MAX_JSON_DEPTH 32
 #endif
 
+
+#ifdef NO_FMEMOPEN
 typedef struct {
     union { FILE *f; const char *b; } src;
     const char *b_end;
 } json_src;
-
+#else
+#define json_src FILE
+#endif
 
 void xs_json_dump_value(const xs_val *data, int level, int indent, FILE *f);
 int xs_json_dump(const xs_val *data, int indent, FILE *f);
@@ -217,6 +221,9 @@ typedef enum {
     JS_OBJECT
 } js_type;
 
+
+#ifdef NO_FMEMOPEN
+
 static int jgetc(json_src *f)
 /* calls fgetc on an underlying file, otherwise reads the buffer */
 {
@@ -265,6 +272,13 @@ static int _jscanf(json_src *restrict f, const char *restrict fmt, const char *r
     }
 }
 
+#else
+
+#define jgetc(f) fgetc(f)
+#define jungetc(c, f) ungetc(c, f)
+#define jscanf(f, fmt, ...) fscanf(f, fmt, __VA_ARGS__)
+
+#endif /* NO_FMEMOPEN */
 
 static xs_val *_xs_json_load_lexer(json_src *f, js_type *t)
 {
@@ -611,8 +625,12 @@ xstype xs_json_load_type(json_src *f)
     return t;
 }
 
-
+#ifdef NO_FMEMOPEN
 static xs_val *_xs_json_load(json_src *f, int maxdepth)
+#else
+xs_val *xs_json_load_full(FILE *f, int maxdepth)
+/* loads a JSON file */
+#endif
 {
     xs_val *v = NULL;
     xstype t = xs_json_load_type(f);
@@ -631,6 +649,8 @@ static xs_val *_xs_json_load(json_src *f, int maxdepth)
 }
 
 
+#ifdef NO_FMEMOPEN
+
 xs_val *xs_json_load_full(FILE *fp, int maxdepth)
 /* loads a JSON file */
 {
@@ -641,15 +661,28 @@ xs_val *xs_json_load_full(FILE *fp, int maxdepth)
     return _xs_json_load(&f, maxdepth);
 }
 
+#endif
 
 xs_val *xs_json_loads_full(const xs_str *json, int maxdepth)
 /* loads a string in JSON format and converts to a multiple data */
 {
+#ifdef NO_FMEMOPEN
     json_src f;
     f.src.b = json;
     f.b_end = json+strlen(json);
 
     return _xs_json_load(&f, maxdepth);
+#else
+    FILE *f;
+    xs_val *v = NULL;
+
+    if ((f = fmemopen((char *)json, strlen(json), "r")) != NULL) {
+        v = xs_json_load_full(f, maxdepth);
+        fclose(f);
+    }
+
+    return v;
+#endif
 }
 
 

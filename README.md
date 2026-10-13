@@ -105,7 +105,7 @@ sudo pkg set-mediator -V 3 openssl
 Build and install:
 
 ```sh
-make CC=gcc LDFLAGS=-lsocket
+make CC=gcc CFLAGS=-DNO_FMEMOPEN LDFLAGS=-lsocket
 sudo make install-illumos
 ```
 
