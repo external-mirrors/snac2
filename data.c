@@ -736,7 +736,7 @@ int index_desc_first(FILE *f, char md5[MD5_HEX_SIZE], int skip)
 int index_asc_first(FILE *f,char md5[MD5_HEX_SIZE], const char *seek_md5)
 /* reads the first entry of an ascending index, starting from a given md5 */
 {
-    fseek(f, SEEK_SET, 0);
+    fseek(f, 0, SEEK_SET);
     while (fread(md5, MD5_HEX_SIZE, 1, f)) {
         md5[MD5_HEX_SIZE - 1] = '\0';
         if (strcmp(md5,seek_md5) == 0) {
