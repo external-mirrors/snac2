@@ -3951,7 +3951,7 @@ int mastoapi_post_handler(const xs_dict *req, const char *q_path,
 
                                     int c = 0;
                                     while (xs_list_next(choices, &v, &c)) {
-                                        int io           = atoi(v);
+                                        int io           = xs_number_get_l(v);
                                         const xs_dict *o = xs_list_get(opts, io);
 
                                         if (o) {
