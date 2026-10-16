@@ -1,5 +1,9 @@
 # Release Notes
 
+## UNRELEASED
+
+Mastodon API: Fixed error in voting code (contributed by uilebheist).
+
 ## 2.96
 
 Accounts can be marked as cool; anytime a cool account posts something, a notification will be sent.
