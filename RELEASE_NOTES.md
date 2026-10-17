@@ -2,6 +2,8 @@
 
 ## UNRELEASED
 
+Quote-posting your own posts is now allowed (do it by adding `RE: https://example.com/you/post-id` in its own line in a post body).
+
 Mastodon API: Fixed error in voting code (contributed by uilebheist).
 
 ## 2.96
