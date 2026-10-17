@@ -2331,6 +2331,29 @@ xs_dict *msg_note(snac *snac, const xs_str *content, const xs_val *rcpts,
         msg = xs_dict_set(msg, "replies", replies);
     }
 
+    {
+        /* quote-posting your own posts */
+        xs *own_link = xs_regex_select_n(content, "RE: https?:/" "/[^ \r\n]+", 1);
+
+        if (xs_list_len(own_link) >= 1) {
+            /* strip the RE: */
+            xs *url = xs_replace_n(xs_list_get(own_link, 0), "RE: ", "", 1);
+
+            /* get the object */
+            xs *obj = NULL;
+            if (valid_status(object_get(url, &obj))) {
+                /* only allowed with your own posts */
+                const char *atto = get_atto(obj);
+                const char *id   = xs_dict_get(obj, "id");
+
+                if (xs_is_string(atto) && xs_is_string(id) && strcmp(atto, snac->actor) == 0) {
+                    msg = xs_dict_set(msg, "quoteUri", id);
+                    msg = xs_dict_set(msg, "quoteUrl", id);
+                }
+            }
+        }
+    }
+
     return msg;
 }
 
