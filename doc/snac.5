@@ -42,9 +42,10 @@ int main(int argc, char *argv[])
 ```
 .Ed
 .It links
-Standalone URLs are converted to links. Also, from version 2.54,
-markdown-style links in the form of [link label](url) are also
-supported.
+Standalone URLs are converted to links. Markdown-style links in the
+form of [link label](url) are also supported. Also, if you write,
+in a single line, an URL to your own post preceded by the string RE:,
+it's embedded as a quoted post.
 .It attached images
 Standalone URLs for which the final extension is recognized as an
 image (.jpg, .gif, .png, etc), are converted to ActivityPub image
