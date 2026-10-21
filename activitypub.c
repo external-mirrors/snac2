@@ -2342,11 +2342,12 @@ xs_dict *msg_note(snac *snac, const xs_str *content, const xs_val *rcpts,
 
     {
         /* quote-posting your own posts */
-        xs *own_link = xs_regex_select_n(content, "RE: https?:/" "/[^ \r\n]+", 1);
+        xs *own_link = xs_regex_select_n(content, "RE: ?https?:/" "/[^ \r\n]+", 1);
 
         if (xs_list_len(own_link) >= 1) {
             /* strip the RE: */
-            xs *url = xs_replace_n(xs_list_get(own_link, 0), "RE: ", "", 1);
+            xs *url = xs_replace_n(xs_list_get(own_link, 0), "RE:", "", 1);
+            url = xs_strip_i(url);
 
             /* get the object */
             xs *obj = NULL;
