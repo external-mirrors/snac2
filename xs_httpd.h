@@ -90,7 +90,8 @@ xs_dict *xs_httpd_request(FILE *f, xs_str **payload, int *p_size)
     else if ((v = xs_dict_get(req, "transfer-encoding")) != NULL &&
              xs_startswith(v, "chunked")) {
         /* handle chunked transfer encoding */
-        xs_str *body = xs_str_new(NULL);
+        char *body = NULL;
+        *p_size = 0;
 
         for (;;) {
             xs *line = xs_strip_i(xs_readline(f));
@@ -103,16 +104,17 @@ xs_dict *xs_httpd_request(FILE *f, xs_str **payload, int *p_size)
 
             /* read chunk data */
             xs *chunk = xs_read(f, &chunk_size);
-            if (chunk == NULL)
+            if (chunk == NULL || chunk_size <= 0)
                 break;
 
-            body = xs_append_m(body, chunk, chunk_size);
+            body = xs_realloc(body, *p_size + chunk_size);
+            memcpy(body + *p_size, chunk, chunk_size);
+            *p_size += chunk_size;
 
             /* read trailing \r\n after chunk data */
             xs *dummy = xs_readline(f);
         }
 
-        *p_size = xs_size(body) - 1; /* subtract trailing null */
         *payload = body;
     }
 
