@@ -416,10 +416,6 @@ int oauth_post_handler(const xs_dict *req, const char *q_path,
                 else
                     rsp = xs_dict_append(rsp, "scope", "");
 
-                *body  = xs_json_dumps(rsp, 4);
-                *ctype = "application/json";
-                status = HTTP_STATUS_OK;
-
                 const char *uid = xs_dict_get(app, "uid");
 
                 if (xs_is_string(uid)) {
@@ -434,9 +430,14 @@ int oauth_post_handler(const xs_dict *req, const char *q_path,
                     token = xs_dict_append(token, "code",          code);
 
                     token_add(tokid, token);
+
+                    *body  = xs_json_dumps(rsp, 4);
+                    *ctype = "application/json";
+                    status = HTTP_STATUS_OK;
                 }
                 else {
                     srv_debug(1, xs_fmt("oauth token: invalid uid"));
+                    app_del(cid);
                     status = HTTP_STATUS_BAD_REQUEST;
                 }
             }
