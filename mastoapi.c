@@ -4699,12 +4699,19 @@ void mastoapi_purge(void)
     const xs_str *v;
 
     time_t mt = time(NULL) - 3600;
+    time_t yo = time(NULL) - 3600 * 24 * 365;
 
     while (xs_list_iter(&p, &v)) {
         xs *cid = xs_replace(v, ".json", "");
         xs *fn  = _app_fn(cid);
+        double d = mtime(fn);
 
-        if (mtime(fn) < mt) {
+        if (d < yo) {
+            unlink(fn);
+            srv_debug(1, xs_fmt("purge stale app: %s", fn));
+        }
+        else
+        if (d < mt) {
             /* get the app */
             xs *app = app_get(cid);
 
@@ -4730,8 +4737,14 @@ void mastoapi_purge(void)
             FILE *f;
 
             xs *fn = xs_fmt("%s/token/%s", srv_basedir, v);
+            double d = mtime(fn);
 
-            if (mtime(fn) < mt) {
+            if (d < yo) {
+                unlink(fn);
+                srv_debug(1, xs_fmt("purge stale token: %s", fn));
+            }
+            else
+            if (d < mt) {
                 if ((f = fopen(fn, "r")) != NULL) {
                     xs *token = xs_json_load(f);
                     fclose(f);
