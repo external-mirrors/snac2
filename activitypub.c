@@ -390,15 +390,6 @@ xs_list *get_attachments(const xs_dict *msg)
                             }
                         }
                     }
-                    else
-                    if (xs_is_string(mtype) && strcmp(mtype, "video/mp4") == 0) {
-                        const char *h = xs_dict_get(v, "href");
-
-                        if (xs_is_string(h)) {
-                            href = xs_dict_get(v, "href");
-                            type = mtype;
-                        }
-                    }
                 }
             }
         }
