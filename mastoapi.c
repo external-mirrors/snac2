@@ -422,17 +422,23 @@ int oauth_post_handler(const xs_dict *req, const char *q_path,
 
                 const char *uid = xs_dict_get(app, "uid");
 
-                srv_debug(1, xs_fmt("oauth token: "
+                if (xs_is_string(uid)) {
+                    srv_debug(1, xs_fmt("oauth token: "
                                 "successful login for %s, new token %s", uid, tokid));
 
-                xs *token = xs_dict_new();
-                token = xs_dict_append(token, "token",         tokid);
-                token = xs_dict_append(token, "client_id",     cid);
-                token = xs_dict_append(token, "client_secret", csec);
-                token = xs_dict_append(token, "uid",           uid);
-                token = xs_dict_append(token, "code",          code);
+                    xs *token = xs_dict_new();
+                    token = xs_dict_append(token, "token",         tokid);
+                    token = xs_dict_append(token, "client_id",     cid);
+                    token = xs_dict_append(token, "client_secret", csec);
+                    token = xs_dict_append(token, "uid",           uid);
+                    token = xs_dict_append(token, "code",          code);
 
-                token_add(tokid, token);
+                    token_add(tokid, token);
+                }
+                else {
+                    srv_debug(1, xs_fmt("oauth token: invalid uid"));
+                    status = HTTP_STATUS_BAD_REQUEST;
+                }
             }
         }
         else {
