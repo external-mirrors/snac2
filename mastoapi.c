@@ -3452,8 +3452,10 @@ int mastoapi_post_handler(const xs_dict *req, const char *q_path,
             status = HTTP_STATUS_OK;
 
             app = xs_dict_append(app, "code", "");
-            app = xs_dict_append(app, "remote-addr", xs_dict_get(req, "remote-addr"));
             app = xs_dict_append(app, "user-agent", xs_dict_get(req, "user-agent"));
+            app = xs_dict_append(app, "remote-addr", xs_or(
+                xs_dict_get(req, "remote-addr"),
+                xs_dict_get(req, "x-forwarded-for")));
 
             app_add(cid, app);
 
