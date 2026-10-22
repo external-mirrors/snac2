@@ -3399,7 +3399,7 @@ int mastoapi_post_handler(const xs_dict *req, const char *q_path,
     if (strcmp(cmd, "/v1/apps") == 0) { /** **/
         const char *name  = xs_dict_get(args, "client_name");
         const char *ruri  = xs_dict_get(args, "redirect_uris");
-        const char *scope = xs_dict_get(args, "scope");
+        const char *scope = xs_dict_get(args, "scopes");
 
         /* Ice Cubes sends these values as query parameters, so try these */
         if (name == NULL && ruri == NULL && scope == NULL) {
@@ -3407,7 +3407,7 @@ int mastoapi_post_handler(const xs_dict *req, const char *q_path,
             args = xs_dup(xs_dict_get(req, "q_vars"));
             name  = xs_dict_get(args, "client_name");
             ruri  = xs_dict_get(args, "redirect_uris");
-            scope = xs_dict_get(args, "scope");
+            scope = xs_dict_get(args, "scopes");
         }
 
         if (xs_type(ruri) == XSTYPE_LIST)
@@ -3441,19 +3441,19 @@ int mastoapi_post_handler(const xs_dict *req, const char *q_path,
             app = xs_dict_append(app, "vapid_key",     vkey);
             app = xs_dict_append(app, "id",            id);
             app = xs_dict_append(app, "client_secret_expires_at", xs_stock(0));
-            app = xs_dict_append(app, "scope",         scope);
 
-            app = xs_dict_append(app, "remote-addr", xs_dict_get(req, "remote-addr"));
-            app = xs_dict_append(app, "user-agent", xs_dict_get(req, "user-agent"));
+            if (xs_is_string(scope)) {
+                xs *l = xs_split(scope, " ");
+                app = xs_dict_append(app, "scopes", l);
+            }
 
             *body  = xs_json_dumps(app, 4);
             *ctype = "application/json";
             status = HTTP_STATUS_OK;
 
             app = xs_dict_append(app, "code", "");
-
-            if (scope)
-                app = xs_dict_append(app, "scope", scope);
+            app = xs_dict_append(app, "remote-addr", xs_dict_get(req, "remote-addr"));
+            app = xs_dict_append(app, "user-agent", xs_dict_get(req, "user-agent"));
 
             app_add(cid, app);
 
