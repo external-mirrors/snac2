@@ -3441,6 +3441,10 @@ int mastoapi_post_handler(const xs_dict *req, const char *q_path,
             app = xs_dict_append(app, "vapid_key",     vkey);
             app = xs_dict_append(app, "id",            id);
             app = xs_dict_append(app, "client_secret_expires_at", xs_stock(0));
+            app = xs_dict_append(app, "scope",         scope);
+
+            app = xs_dict_append(app, "remote-addr", xs_dict_get(req, "remote-addr"));
+            app = xs_dict_append(app, "user-agent", xs_dict_get(req, "user-agent"));
 
             *body  = xs_json_dumps(app, 4);
             *ctype = "application/json";
