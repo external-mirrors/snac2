@@ -4,6 +4,8 @@
 
 Quote-posting your own posts is now allowed (do it by adding `RE: https://example.com/you/post-id` in its own line in a post body).
 
+The Mastodon API can now be disabled by setting the `mastodon_api` directive to `false` in `server.json` (no need to compile it out).
+
 Fixed a crash in chunked transfer encoding code (special thanks to Sergey Bronnikov for bringing this to my attention).
 
 Tweak to JSON loading code to circunvent `fmemopen()` issues on Illumos / OpenIndiana systems (contributed by aleteoryx).
