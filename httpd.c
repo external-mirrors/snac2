@@ -514,6 +514,11 @@ void httpd_connection(FILE *f)
         status = HTTP_STATUS_FOUND;
     }
 
+    int mastodon_api = 1;
+
+    if (xs_is_false(xs_dict_get(srv_config, "mastodon_api")))
+        mastodon_api = 0;
+
     if (strcmp(method, "GET") == 0 || strcmp(method, "HEAD") == 0) {
         /* cascade through */
         if (status == 0)
@@ -526,10 +531,10 @@ void httpd_connection(FILE *f)
             status = activitypub_get_handler(req, q_path, &body, &b_size, &ctype);
 
 #ifndef NO_MASTODON_API
-        if (status == 0)
+        if (status == 0 && mastodon_api)
             status = oauth_get_handler(req, q_path, &body, &b_size, &ctype);
 
-        if (status == 0)
+        if (status == 0 && mastodon_api)
             status = mastoapi_get_handler(req, q_path, &body, &b_size, &ctype, &link);
 #endif /* NO_MASTODON_API */
 
@@ -544,11 +549,11 @@ void httpd_connection(FILE *f)
                         payload, p_size, &body, &b_size, &ctype);
 
 #ifndef NO_MASTODON_API
-        if (status == 0)
+        if (status == 0 && mastodon_api)
             status = oauth_post_handler(req, q_path,
                         payload, p_size, &body, &b_size, &ctype);
 
-        if (status == 0)
+        if (status == 0 && mastodon_api)
             status = mastoapi_post_handler(req, q_path,
                         payload, p_size, &body, &b_size, &ctype);
 #endif
@@ -565,7 +570,7 @@ void httpd_connection(FILE *f)
     if (strcmp(method, "PUT") == 0) {
 
 #ifndef NO_MASTODON_API
-        if (status == 0)
+        if (status == 0 && mastodon_api)
             status = mastoapi_put_handler(req, q_path,
                         payload, p_size, &body, &b_size, &ctype);
 #endif
@@ -575,7 +580,7 @@ void httpd_connection(FILE *f)
     if (strcmp(method, "PATCH") == 0) {
 
 #ifndef NO_MASTODON_API
-        if (status == 0)
+        if (status == 0 && mastodon_api)
             status = mastoapi_patch_handler(req, q_path,
                         payload, p_size, &body, &b_size, &ctype);
 #endif
@@ -591,7 +596,7 @@ void httpd_connection(FILE *f)
     else
     if (strcmp(method, "DELETE") == 0) {
 #ifndef NO_MASTODON_API
-        if (status == 0)
+        if (status == 0 && mastodon_api)
             status = mastoapi_delete_handler(req, q_path,
                     payload, p_size, &body, &b_size, &ctype);
 #endif
