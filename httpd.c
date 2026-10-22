@@ -626,8 +626,10 @@ void httpd_connection(FILE *f)
     if (status == HTTP_STATUS_SEE_OTHER)
         headers = xs_dict_append(headers, "location", body);
 
-    if (status == HTTP_STATUS_FOUND)
-        headers = xs_dict_append(headers, "location", xs_fmt("%s%s", p, q_path));
+    if (status == HTTP_STATUS_FOUND) {
+        xs *s = xs_fmt("%s%s", p, q_path);
+        headers = xs_dict_append(headers, "location", s);
+    }
 
     if (status == HTTP_STATUS_UNAUTHORIZED && body) {
         xs *www_auth = xs_fmt("Basic realm=\"@%s@%s snac login\"",
