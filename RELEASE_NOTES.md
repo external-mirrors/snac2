@@ -4,7 +4,9 @@
 
 Quote-posting your own posts is now allowed (do it by adding `RE: https://example.com/you/post-id` in its own line in a post body).
 
-Fixed a crash in chunked transfer encoding code (thanks to Sergey Bronnikov for bringing this to my attention).
+Fixed a crash in chunked transfer encoding code (special thanks to Sergey Bronnikov for bringing this to my attention).
+
+Tweak to JSON loading code to circunvent `fmemopen()` issues on Illumos / OpenIndiana systems (contributed by aleteoryx).
 
 Mastodon API: Fixed error in voting code (contributed by uilebheist).
 
