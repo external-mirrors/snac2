@@ -10,7 +10,7 @@ Fixed a crash in chunked transfer encoding code (special thanks to Sergey Bronni
 
 Tweak to JSON loading code to circunvent `fmemopen()` issues on Illumos / OpenIndiana systems (contributed by aleteoryx).
 
-Mastodon API: Fixed error in voting code (contributed by uilebheist).
+Mastodon API: Fixed error in voting code (contributed by uilebheist), more aggressive old data purging.
 
 ## 2.96
 
