@@ -4438,10 +4438,20 @@ void purge_static(snac *user)
     if (cnt <= 0)
         return;
 
-    xs *tl = timeline_simple_list(user, "public", 0, XS_ALL, NULL);
+    xs *posts = xs_list_new();
+    xs *indexes = xs_list_append(xs_list_new(), "public", "draft", "sched");
+    const char *index;
+
+    /* concat posts from all these indexes */
+    xs_list_foreach(indexes, index) {
+        xs *fn = xs_fmt("%s/%s.idx", user->basedir, index);
+        xs *l = index_list(fn, XS_ALL);
+        posts = xs_list_cat(posts, l);
+    }
+
     const char *md5;
 
-    xs_list_foreach(tl, md5) {
+    xs_list_foreach(posts, md5) {
         if (cnt <= 0)
             break;
 
