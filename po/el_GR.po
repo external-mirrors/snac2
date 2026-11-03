@@ -12,7 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.10\n"
 
 #: html.c:627
 msgid "Sensitive content: "
@@ -701,7 +701,7 @@ msgstr "Αποκλεισμένες ετικέτες..."
 
 #: html.c:667
 msgid "Optional URL to reply to"
-msgstr ""
+msgstr "Προαιρετικό URL για απάντηση"
 
 #: html.c:849
 msgid ""
@@ -710,6 +710,10 @@ msgid ""
 "Option 3...\n"
 "..."
 msgstr ""
+"Επιλογή 1...\n"
+"Επιλογή 2...\n"
+"Επιλογή 3...\n"
+"..."
 
 #: html.c:1768
 msgid "Bot API key"
@@ -717,11 +721,11 @@ msgstr ""
 
 #: html.c:1774
 msgid "Chat id"
-msgstr ""
+msgstr "ID συνομιλίας"
 
 #: html.c:1782
 msgid "ntfy server - full URL (example: https://ntfy.sh/YourTopic)"
-msgstr ""
+msgstr "διακομιστής ntfy - πλήρες URL (παράδειγμα: https://ntfy.sh/YourTopic)"
 
 #: html.c:1788
 msgid "ntfy token - if needed"
@@ -729,75 +733,75 @@ msgstr ""
 
 #: html.c:3577
 msgid "pinned"
-msgstr ""
+msgstr "καρφιτσωμένο"
 
 #: html.c:3601
 msgid "bookmarks"
-msgstr ""
+msgstr "σελιδοδείκτες"
 
 #: html.c:3613
 msgid "drafts"
-msgstr ""
+msgstr "προσχέδια"
 
 #: html.c:733
 msgid "Scheduled post..."
-msgstr ""
+msgstr "Προγραμματισμένη δημοσίευση..."
 
 msgid "Post date and time:"
-msgstr ""
+msgstr "Ημερομήνια και ώρα δημοσίευσης:"
 
 #: html.c:3624 html.c:5275
 msgid "Scheduled posts"
-msgstr ""
+msgstr "Προγραμματισμένες δημοσιεύσεις"
 
 #: html.c:3625
 msgid "scheduled posts"
-msgstr ""
+msgstr "προγραμματισμένες δημοσιεύσεις"
 
 #: html.c:727
 #, c-format
 msgid "Post date and time (timezone: %s):"
-msgstr ""
+msgstr "Ημερομηνία και ώρα δημοσίευσης (ζώνη ώρας: %s):"
 
 #: html.c:1852
 msgid "Time zone:"
-msgstr ""
+msgstr "Ζώνη ώρας:"
 
 #: html.c:708
 msgid "Language:"
-msgstr ""
+msgstr "Γλώσσα:"
 
 #: html.c:1790
 msgid "Notify webhook:"
-msgstr ""
+msgstr "Ειδοποίηση webhook:"
 
 #: html.c:1796
 msgid "http://example.com/webhook"
-msgstr ""
+msgstr "http://example.com/webhook"
 
 #: html.c:1857
 msgid "Languages you usually post in:"
-msgstr ""
+msgstr "Γλώσσες στις οποίες δημοσιεύεις συνήθως:"
 
 #: html.c:1863 html.c:1872
 msgid "en fr es de_AT"
-msgstr ""
+msgstr "en fr es de_AT"
 
 #: html.c:521
 msgid "Visibility: "
-msgstr ""
+msgstr "Ορατότητα: "
 
 msgid "Public"
-msgstr ""
+msgstr "Δημόσιο"
 
 msgid "Unlisted"
 msgstr ""
 
 msgid "Followers-only"
-msgstr ""
+msgstr "Μόνο-ακόλουθοι"
 
 msgid "Direct Message"
-msgstr ""
+msgstr "Απευθείας Μήνυμα"
 
 #: html.c:581 html.c:2745 html.c:2770 html.c:5830
 msgid "EmojiUnreact"
@@ -817,35 +821,35 @@ msgstr ""
 
 #: html.c:1978
 msgid "Muted words..."
-msgstr ""
+msgstr "Λέξεις σε σίγαση..."
 
 #: html.c:1980
 msgid "One word per line, partial matches count"
-msgstr ""
+msgstr "Μία λέξη σε κάθε γραμμή, μετράνε και τα μερικά αποτελέσματα"
 
 #: html.c:2001
 msgid "Update muted words"
-msgstr ""
+msgstr "Ενημέρωση λέξεων σε σίγαση"
 
 #: html.c:2645
 msgid "Muted: "
-msgstr ""
+msgstr "Σε σίγαση: "
 
 #: html.c:4196
 msgid "Contact's posts"
-msgstr ""
+msgstr "Δημοσιεύσεις επαφής"
 
 #: html.c:4265
 msgid "More (x 10)..."
-msgstr ""
+msgstr "Περισσότερα (x 10)..."
 
 #: html.c:873
 msgid "End in 3 days"
-msgstr ""
+msgstr "Τελειώνει σε 3 ημέρες"
 
 #: html.c:876
 msgid "End in 1 year"
-msgstr ""
+msgstr "Τελειώνει σε 1 χρόνο"
 
 #: html.c:4359
 msgid "Likes"
@@ -857,23 +861,23 @@ msgstr ""
 
 #: html.c:4361
 msgid "Mentions"
-msgstr ""
+msgstr "Αναφορές"
 
 #: html.c:4362
 msgid "Announces"
-msgstr ""
+msgstr "Ανακοινώσεις"
 
 #: html.c:4363
 msgid "Follows"
-msgstr ""
+msgstr "Ακόλουθοι"
 
 #: html.c:4364
 msgid "Unfollows"
-msgstr ""
+msgstr "Άρση ακολούθων"
 
 #: html.c:4365
 msgid "Follow requests"
-msgstr ""
+msgstr "Αιτήματα ακολούθων"
 
 #: html.c:4366
 msgid "Blocks"
@@ -881,63 +885,63 @@ msgstr ""
 
 #: html.c:4367
 msgid "Polls"
-msgstr ""
+msgstr "Δημοσκοπήσεις"
 
 #: html.c:4373
 msgid "Save"
-msgstr ""
+msgstr "Αποθήκευση"
 
 #: html.c:4381
 msgid "Notifications filter..."
-msgstr ""
+msgstr "Φίλτρο ειδοποιήσεων..."
 
 #: data.c:46
 msgid "Jan"
-msgstr ""
+msgstr "Ιαν"
 
 #: data.c:47
 msgid "Feb"
-msgstr ""
+msgstr "Φεβ"
 
 #: data.c:48
 msgid "Mar"
-msgstr ""
+msgstr "Μαρ"
 
 #: data.c:49
 msgid "Apr"
-msgstr ""
+msgstr "Απρ"
 
 #: data.c:50
 msgid "May"
-msgstr ""
+msgstr "Μαι"
 
 #: data.c:51
 msgid "Jun"
-msgstr ""
+msgstr "Ιουν"
 
 #: data.c:52
 msgid "Jul"
-msgstr ""
+msgstr "Ιουλ"
 
 #: data.c:53
 msgid "Aug"
-msgstr ""
+msgstr "Αυγ"
 
 #: data.c:54
 msgid "Sep"
-msgstr ""
+msgstr "Σεπ"
 
 #: data.c:55
 msgid "Oct"
-msgstr ""
+msgstr "Οκτ"
 
 #: data.c:56
 msgid "Nov"
-msgstr ""
+msgstr "Νοε"
 
 #: data.c:57
 msgid "Dec"
-msgstr ""
+msgstr "Δεκ"
 
 #: html.c:1819
 msgid "Show unlisted posts in the public page and RSS feed"
@@ -945,7 +949,7 @@ msgstr ""
 
 #: html.c:1866
 msgid "Don't show posts written in these languages:"
-msgstr ""
+msgstr "Μη προβάλλεις δημοσιεύσεις γραμμένες σε αυτές τις γλώσσες:"
 
 #: html.c:3588 html.c:5230
 msgid "Liked, boosted or reacted posts"
@@ -953,12 +957,14 @@ msgstr ""
 
 #: html.c:3589
 msgid "admirations"
-msgstr ""
+msgstr "θαυμασμοί"
 
 #: html.c:1875
 msgid ""
 "Show a simpler web UI for browsers with these user agents (one per line):"
 msgstr ""
+"Δείξε ένα απλούστερο web UI για περιηγητές με αυτούς τους user agents (ένας "
+"ανά γραμμή):"
 
 #: html.c:4075 html.c:5921
 msgid "Unmark as cool"
@@ -966,7 +972,7 @@ msgstr ""
 
 #: html.c:4076
 msgid "No longer notify me whenever this user posts"
-msgstr ""
+msgstr "Μη με ειδοποιείς πλέον όταν δημοσιεύει αυτός ο χρήστης"
 
 #: html.c:4079 html.c:5917
 msgid "Mark as cool"
@@ -974,7 +980,7 @@ msgstr ""
 
 #: html.c:4080
 msgid "Notify me whenever this user posts"
-msgstr ""
+msgstr "Ειδοποίησε με όταν αυτός ο χρήστης δημοσιεύει"
 
 #: html.c:4368
 msgid "Webmentions"
