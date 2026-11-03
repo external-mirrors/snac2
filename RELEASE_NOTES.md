@@ -4,6 +4,8 @@
 
 Fixed bug in static media purging; sometimes, attachments from scheduled and/or draft posts were incorrectly deleted.
 
+Updated Greek translation (contributed by Dimitris T.).
+
 ## 2.97
 
 Quote-posting your own posts is now allowed (do it by adding `RE: https://example.com/you/post-id` in its own line in a post body).
