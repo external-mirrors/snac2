@@ -94,7 +94,7 @@ msgstr "Account amministratore"
 #: html.c:1082 html.c:1438 html.c:3897
 #, c-format
 msgid "%d following, %d followers"
-msgstr "%d seguiti, %d seguenti"
+msgstr "%d seguiti, %d seguaci"
 
 #: html.c:1179
 msgid "RSS"
@@ -250,11 +250,11 @@ msgstr "Tieni chiuse le discussioni"
 
 #: html.c:1815
 msgid "Follow requests must be approved"
-msgstr "Devi approvare le richieste dei seguenti"
+msgstr "Devi approvare le richieste dei seguaci"
 
 #: html.c:1817
 msgid "Publish follower and following metrics"
-msgstr "Rendi pubblici seguenti e seguiti"
+msgstr "Rendi pubblici seguaci e seguiti"
 
 #: html.c:1822
 msgid "Current location:"
@@ -322,7 +322,7 @@ msgstr "Aggancia questo post in cima alla timeline"
 
 #: html.c:2164
 msgid "Announce this post to your followers"
-msgstr "Annuncia questo post ai tuoi seguenti"
+msgstr "Annuncia questo post ai tuoi seguaci"
 
 #: html.c:2169 html.c:5882
 msgid "Unboost"
@@ -490,11 +490,11 @@ msgstr "Vecchi..."
 
 #: html.c:3471
 msgid "about this site"
-msgstr "descrizione"
+msgstr "Su questa istanza"
 
 #: html.c:3473
 msgid "powered by "
-msgstr "gestito da "
+msgstr "gestita con "
 
 #: html.c:3541
 msgid "Dismiss"
@@ -929,7 +929,7 @@ msgstr "Ott"
 
 #: data.c:56
 msgid "Nov"
-msgstr "Mov"
+msgstr "Nov"
 
 #: data.c:57
 msgid "Dec"
@@ -954,28 +954,29 @@ msgstr "apprezzati"
 #: html.c:1875
 msgid ""
 "Show a simpler web UI for browsers with these user agents (one per line):"
-msgstr ""
+msgstr "" 
+"Mostra una UI più semplice per i browser con questi user agent (uno per linea):"
 
 #: html.c:4075 html.c:5921
 msgid "Unmark as cool"
-msgstr ""
+msgstr "Non più cool"
 
 #: html.c:4076
 msgid "No longer notify me whenever this user posts"
-msgstr ""
+msgstr "Non notificarmi più i post di questo utente"
 
 #: html.c:4079 html.c:5917
 msgid "Mark as cool"
-msgstr ""
+msgstr "Segna come cool"
 
 #: html.c:4080
 msgid "Notify me whenever this user posts"
-msgstr ""
+msgstr "Notificami i post di questo utente"
 
 #: html.c:4368
 msgid "Webmentions"
-msgstr ""
+msgstr "Menzioni web"
 
 #: html.c:4369
 msgid "Posts from cool users"
-msgstr ""
+msgstr "Post degli utenti cool"
